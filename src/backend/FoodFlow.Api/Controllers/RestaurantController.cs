@@ -20,7 +20,7 @@ public class RestaurantController : ControllerBase
     public async Task<IActionResult> CreateRestaurant([FromBody] CreateRestaurantCommand command)
     {
         var restaurantId = await mediator.Send(command);
-        return CreatedAtAction(nameof(GetRestaurantById), new { id = restaurantId }, null);
+        return CreatedAtAction(nameof(GetRestaurantById), new { id = restaurantId });
     }
 
     [HttpGet("{id}")]

@@ -14,6 +14,6 @@ public class RestaurantRepo : BaseRepository<Restaurant>, IRestaurantRepository
     public Task<Restaurant?> GetByGstNumberAsync(string gstNumber, CancellationToken cancellationToken = default)
     {
         return this._dbSet.AsNoTracking()
-        .FirstOrDefaultAsync(cancellationToken);
+        .FirstOrDefaultAsync(e => e.GstNumber == gstNumber, cancellationToken);
     }
 }
