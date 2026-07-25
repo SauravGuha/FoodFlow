@@ -1,4 +1,5 @@
 
+using FoodFlow.Application.Queries.RestaurantQueries;
 using FoolFlow.Application.Commands.RestaurantCommands.CreateRestaurant;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -17,16 +18,16 @@ public class RestaurantController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateRestaurant([FromBody] CreateRestaurantCommand command)
+    public async Task<IActionResult> CreateRestaurant([FromBody] CreateRestaurantCommand command, CancellationToken cancellationToken)
     {
-        var restaurantId = await mediator.Send(command);
-        return CreatedAtAction(nameof(GetRestaurantById), new { id = restaurantId });
+        var restaurantId = await mediator.Send(command, cancellationToken);
+        return CreatedAtAction(nameof(GetRestaurantById), new { id = restaurantId }, null);
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetRestaurantById(Guid id)
+    public async Task<IActionResult> GetRestaurantById(Guid id, CancellationToken cancellationToken)
     {
-        // Implementation for retrieving a restaurant by ID would go here.
-        return Ok();
+        var restaurantInfo = await mediator.Send(new RestaurantRequest { Id = id }, cancellationToken);
+        return Ok(restaurantInfo);
     }
 }

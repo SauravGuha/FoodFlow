@@ -27,9 +27,15 @@ public class BaseRepository<T> : IBaseRepository<T> where T : BaseModel
         return Task.CompletedTask;
     }
 
-    public async Task<T?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<T?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default,
+    params string[] includeProps)
     {
-        return await this._dbSet.FindAsync(id, cancellationToken);
+        var query = this._dbSet.Where(e => e.Id == id);
+        foreach (var prop in includeProps)
+        {
+            query = query.Include(prop);
+        }
+        return await query.FirstOrDefaultAsync(cancellationToken);
     }
 
     public Task UpdateAsync(T entity, CancellationToken cancellationToken = default)
