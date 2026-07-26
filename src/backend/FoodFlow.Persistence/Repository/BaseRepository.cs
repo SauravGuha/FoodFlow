@@ -1,4 +1,5 @@
 
+using System.Linq.Expressions;
 using FoodFlow.Application.Common.Repositories;
 using FoodFlow.Domain.Models;
 using Microsoft.EntityFrameworkCore;
@@ -25,6 +26,21 @@ public class BaseRepository<T> : IBaseRepository<T> where T : BaseModel
     {
         this._dbSet.Remove(entity);
         return Task.CompletedTask;
+    }
+
+    public async Task<IEnumerable<T>> GetAllAsync<TKey>(Expression<Func<T, bool>>? condition,
+    Expression<Func<T, TKey>>? orderBy, CancellationToken cancellationToken = default)
+    {
+        var query = this._dbSet as IQueryable<T>;
+
+        if (condition != null)
+            query = query.Where(condition);
+
+        if (orderBy != null)
+            query = query.OrderBy(orderBy)
+            .ThenBy(t => t.CreatedAt);
+
+        return await query.ToListAsync(cancellationToken);
     }
 
     public async Task<T?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default,

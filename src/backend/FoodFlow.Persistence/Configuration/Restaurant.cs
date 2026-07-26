@@ -48,5 +48,9 @@ public class RestaurantConfiguration : BaseConfiguration<Restaurant>
         .WithOne()
         .HasForeignKey("RestaurantId")
         .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasIndex(r => r.Name);
+        builder.HasIndex(r => r.GstNumber);
+        builder.HasIndex(r => r.FNumber);
     }
 }

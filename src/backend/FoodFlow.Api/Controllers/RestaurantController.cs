@@ -1,4 +1,5 @@
 
+using FoodFlow.Application.DTOModels;
 using FoodFlow.Application.Queries.RestaurantQueries;
 using FoolFlow.Application.Commands.RestaurantCommands.CreateRestaurant;
 using MediatR;
@@ -29,5 +30,19 @@ public class RestaurantController : ControllerBase
     {
         var restaurantInfo = await mediator.Send(new RestaurantRequest { Id = id }, cancellationToken);
         return Ok(restaurantInfo);
+    }
+
+    [HttpGet("filtered")]
+    public async Task<ActionResult<List<RestaurantDto>>> GetFilteredRestaurants([FromQuery] FilteredRestaurantRequest request)
+    {
+        var result = await mediator.Send(request);
+        if (result == null || !result.Any())
+        {
+            return NotFound();
+        }
+
+        this.Response.Headers.Append("F-Total-Count", result.Count().ToString());
+
+        return Ok(result);
     }
 }

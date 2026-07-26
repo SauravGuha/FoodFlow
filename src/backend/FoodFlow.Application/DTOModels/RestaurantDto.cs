@@ -10,7 +10,8 @@ public class RestaurantDto
     public string GstNumber { get; set; } = null!;
     public string FNumber { get; set; } = null!;
     public string? Description { get; set; }
-    public RestaurantStatus Status { get; set; }
+    public string Status { get; set; } = null!;
+    public DateTime CreatedAt { get; set; }
     public RestaurantOwnerDto RestaurantOwner { get; set; } = null!;
 
     public List<BranchDto> Branches { get; set; } = null!;
