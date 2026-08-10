@@ -39,6 +39,8 @@ public class BaseRepository<T> : IBaseRepository<T> where T : BaseModel
         if (orderBy != null)
             query = query.OrderBy(orderBy)
             .ThenBy(t => t.CreatedAt);
+        else
+            query = query.OrderBy(t => t.CreatedAt);
 
         return await query.ToListAsync(cancellationToken);
     }
