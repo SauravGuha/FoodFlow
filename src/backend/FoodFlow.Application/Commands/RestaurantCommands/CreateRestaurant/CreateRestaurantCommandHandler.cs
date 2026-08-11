@@ -8,7 +8,7 @@ using MediatR;
 
 namespace FoodFlow.Application.Commands.RestaurantCommands.CreateRestaurant;
 
-public class CreateRestaurantCommandHandler : IRequestHandler<CreateRestaurantCommand, Guid>
+public class CreateRestaurantCommandHandler : IRequestHandler<CreateRestaurantCommand, Result<Guid>>
 {
     private readonly IRestaurantRepository restaurantRepository;
     private readonly IFoodFlowContext foodFlowContext;
@@ -21,11 +21,11 @@ public class CreateRestaurantCommandHandler : IRequestHandler<CreateRestaurantCo
         this.mapper = mapper;
     }
 
-    public async Task<Guid> Handle(CreateRestaurantCommand request, CancellationToken cancellationToken)
+    public async Task<Result<Guid>> Handle(CreateRestaurantCommand request, CancellationToken cancellationToken)
     {
         if (await this.restaurantRepository.GetByGstNumberAsync(request.Gst, cancellationToken) != null)
         {
-            throw new InvalidOperationException($"A restaurant with GST number {request.Gst} already exists.");
+            return Result<Guid>.SetError($"A restaurant with GST number {request.Gst} already exists.", 409);
         }
 
         var restaurantOwner = this.mapper.Map<RestaurantOwner>(request.RestaurantOwner);
@@ -36,6 +36,6 @@ public class CreateRestaurantCommandHandler : IRequestHandler<CreateRestaurantCo
         await this.foodFlowContext.SaveChangesAsync(cancellationToken);
 
 
-        return restaurant.Id;
+        return Result<Guid>.SetSuccess(restaurant.Id, null, 201);
     }
 }

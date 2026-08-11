@@ -2,10 +2,11 @@
 
 using MediatR;
 using FoodFlow.Application.DTOModels;
+using FoodFlow.Application.Common;
 
 namespace FoolFlow.Application.Commands.RestaurantCommands.CreateRestaurant;
 
-public class CreateRestaurantCommand : IRequest<Guid>
+public class CreateRestaurantCommand : IRequest<Result<Guid>>
 {
     public string Name { get; set; } = null!;
     public string Gst { get; set; } = null!;
