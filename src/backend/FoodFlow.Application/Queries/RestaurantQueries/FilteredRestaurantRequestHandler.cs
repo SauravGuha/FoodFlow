@@ -30,7 +30,9 @@ public class FilteredRestaurantRequestHandler : IRequestHandler<FilteredRestaura
         {
             var propertyExpression = Expression.Property(parameter, nameof(Restaurant.Name));
             var nameValue = Expression.Constant(request.Name.Trim(' '));
-            condition = Expression.AndAlso(condition, Expression.Equal(propertyExpression, nameValue));
+            var containsMethod = typeof(string).GetMethod(nameof(string.Contains), new[] { typeof(string) })!;
+            var containsExpression = Expression.Call(propertyExpression, containsMethod, nameValue);
+            condition = Expression.AndAlso(condition, containsExpression);
         }
         var whereLambda = Expression.Lambda<Func<Restaurant, bool>>(condition, parameter);
 
