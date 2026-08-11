@@ -12,7 +12,8 @@ public interface IBaseRepository<T> where T : BaseModel
     Task UpdateAsync(T entity, CancellationToken cancellationToken = default);
     Task DeleteAsync(T entity, CancellationToken cancellationToken = default);
 
-    Task<IEnumerable<T>> GetAllAsync<TKey>(Expression<Func<T, bool>>? condition, Expression<Func<T, TKey>>? orderBy, CancellationToken cancellationToken = default);
+    Task<IEnumerable<T>> GetAllAsync<TKey>(Expression<Func<T, bool>>? condition, Expression<Func<T, TKey>>? orderBy,
+    int skip = 0, int take = 10, CancellationToken cancellationToken = default);
 
     Task<int> GetQueryCount<TKey>(Expression<Func<T, bool>>? condition, Expression<Func<T, TKey>>? orderBy, CancellationToken cancellationToken = default);
 }

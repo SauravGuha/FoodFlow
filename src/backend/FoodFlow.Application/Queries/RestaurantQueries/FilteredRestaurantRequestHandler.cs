@@ -37,10 +37,18 @@ public class FilteredRestaurantRequestHandler : IRequestHandler<FilteredRestaura
         var orderProperty = Expression.Property(parameter, nameof(Restaurant.Name));
         var orderBy = Expression.Lambda<Func<Restaurant, string>>(orderProperty, parameter);
 
-        var result = await this.restaurantRepository.GetAllAsync(whereLambda, orderBy, cancellationToken);
+        var result = await this.restaurantRepository.GetAllAsync(whereLambda, orderBy, request.Skip, request.Take,
+        cancellationToken);
         var total = await this.restaurantRepository.GetQueryCount(whereLambda, orderBy, cancellationToken);
+        request.Skip = request.Skip + request.Take;
+
+        var valueDictionary = new Dictionary<string, object>
+        {
+            {"next", CursorQueryHelper<FilteredRestaurantRequest>.GenerateQueryParams(request)},
+            {"total", total}
+        };
 
         return Result<IEnumerable<RestaurantDto>>.SetSuccess(this.mapper.Map<List<RestaurantDto>>(result),
-        total);
+        valueDictionary);
     }
 }

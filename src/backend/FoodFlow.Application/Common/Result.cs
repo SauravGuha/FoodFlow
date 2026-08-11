@@ -8,7 +8,7 @@ public class Result<T> where T : class
     public string Message { get; private set; } = null!;
     public T? Data { get; private set; }
 
-    public object? Values { get; private set; }
+    public object? Value { get; private set; }
 
     public static Result<T> SetSuccess(T data, object? values)
     {
@@ -17,7 +17,7 @@ public class Result<T> where T : class
             Status = true,
             Data = data,
             Message = "Operation successful",
-            Values = values
+            Value = values
         };
     }
 

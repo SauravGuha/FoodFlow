@@ -11,6 +11,10 @@ public class FilteredRestaurantRequest : IRequest<Result<IEnumerable<RestaurantD
     public string? Status { get; set; } // Assuming status is an indexed column
     #endregion
 
+    public int Take { get; set; } = 10;
+
+    public int Skip { get; set; } = 0;
+
     public RestaurantSortField SortBy { get; set; } = RestaurantSortField.Name;
 
     public SortDirection SortDirection { get; set; } = SortDirection.Asc;

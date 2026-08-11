@@ -58,7 +58,17 @@ public class RestaurantController : ControllerBase
             return NotFound();
         }
         // Add custom headers to the response
-        this.Response.Headers.Append("F-Total-Count", result.Values!.ToString());
+        if (result.Value != null)
+        {
+            var extraHeader = result.Value as Dictionary<string, object>;
+            if (extraHeader != null)
+            {
+                foreach (var h in extraHeader)
+                {
+                    this.Response.Headers[h.Key] = h.Value.ToString();
+                }
+            }
+        }
 
         return Ok(result.Data);
     }

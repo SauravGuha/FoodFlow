@@ -29,7 +29,7 @@ public class BaseRepository<T> : IBaseRepository<T> where T : BaseModel
     }
 
     public async Task<IEnumerable<T>> GetAllAsync<TKey>(Expression<Func<T, bool>>? condition,
-    Expression<Func<T, TKey>>? orderBy, CancellationToken cancellationToken = default)
+    Expression<Func<T, TKey>>? orderBy, int skip = 0, int take = 10, CancellationToken cancellationToken = default)
     {
         var query = this._dbSet as IQueryable<T>;
 
@@ -42,7 +42,7 @@ public class BaseRepository<T> : IBaseRepository<T> where T : BaseModel
         else
             query = query.OrderBy(t => t.CreatedAt);
 
-        return await query.ToListAsync(cancellationToken);
+        return await query.Skip(skip).Take(take).ToListAsync(cancellationToken);
     }
 
     public async Task<T?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default,
@@ -56,7 +56,8 @@ public class BaseRepository<T> : IBaseRepository<T> where T : BaseModel
         return await query.FirstOrDefaultAsync(cancellationToken);
     }
 
-    public async Task<int> GetQueryCount<TKey>(Expression<Func<T, bool>>? condition, Expression<Func<T, TKey>>? orderBy, CancellationToken cancellationToken = default)
+    public async Task<int> GetQueryCount<TKey>(Expression<Func<T, bool>>? condition, Expression<Func<T, TKey>>? orderBy,
+    CancellationToken cancellationToken = default)
     {
         var query = this._dbSet as IQueryable<T>;
 
