@@ -53,13 +53,13 @@ public class RestaurantController : ControllerBase
     public async Task<ActionResult<List<RestaurantDto>>> GetFilteredRestaurants([FromQuery] FilteredRestaurantRequest? request)
     {
         var result = await mediator.Send(request ?? new FilteredRestaurantRequest());
-        if (result == null || !result.Any())
+        if (result == null)
         {
             return NotFound();
         }
+        // Add custom headers to the response
+        this.Response.Headers.Append("F-Total-Count", result.Values!.ToString());
 
-        this.Response.Headers.Append("F-Total-Count", result.Count().ToString());
-
-        return Ok(result);
+        return Ok(result.Data);
     }
 }

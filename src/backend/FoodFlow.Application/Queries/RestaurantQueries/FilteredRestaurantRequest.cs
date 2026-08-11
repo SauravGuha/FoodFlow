@@ -1,7 +1,8 @@
+using FoodFlow.Application.Common;
 using FoodFlow.Application.DTOModels;
 using MediatR;
 
-public class FilteredRestaurantRequest : IRequest<IEnumerable<RestaurantDto>>
+public class FilteredRestaurantRequest : IRequest<Result<IEnumerable<RestaurantDto>>>
 {
     #region filterable/searchable
     public string? Name { get; set; } // Restaurant name

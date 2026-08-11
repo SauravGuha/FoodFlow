@@ -37,6 +37,9 @@ public class CreateRestaurantCommandValidator : AbstractValidator<CreateRestaura
             .EmailAddress().WithMessage("Invalid email format.");
 
         RuleFor(x => x.RestaurantOwner.PhoneNumber)
-            .NotEmpty().WithMessage("Restaurant owner phone number is required.");
+            .NotEmpty()
+            .WithMessage("Restaurant owner phone number is required.")
+            .Matches(@"^\+91-[6-9]\d{9}$")
+            .WithMessage("Invalid phone number format.");
     }
 }

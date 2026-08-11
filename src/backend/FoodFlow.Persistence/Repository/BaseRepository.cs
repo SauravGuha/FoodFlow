@@ -56,6 +56,23 @@ public class BaseRepository<T> : IBaseRepository<T> where T : BaseModel
         return await query.FirstOrDefaultAsync(cancellationToken);
     }
 
+    public async Task<int> GetQueryCount<TKey>(Expression<Func<T, bool>>? condition, Expression<Func<T, TKey>>? orderBy, CancellationToken cancellationToken = default)
+    {
+        var query = this._dbSet as IQueryable<T>;
+
+        if (condition != null)
+            query = query.Where(condition);
+
+        if (orderBy != null)
+            query = query.OrderBy(orderBy)
+            .ThenBy(t => t.CreatedAt);
+        else
+            query = query.OrderBy(t => t.CreatedAt);
+
+        return await query.CountAsync(cancellationToken);
+
+    }
+
     public Task UpdateAsync(T entity, CancellationToken cancellationToken = default)
     {
         this._dbSet.Update(entity);
