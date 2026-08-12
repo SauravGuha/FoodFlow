@@ -1,6 +1,7 @@
 
 namespace FoodFlow.Api;
 
+using System.Text.Json.Serialization;
 using FoodFlow.Api.Middlewares;
 using FoodFlow.Application;
 using FoodFlow.Persistence;
@@ -13,7 +14,12 @@ public class Program
 
         // Add services to the container.
 
-        builder.Services.AddControllers();
+        builder.Services.AddControllers()
+            .AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+            });
+
         // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
         builder.Services.AddOpenApi();
         builder.Services.AddProblemDetails();

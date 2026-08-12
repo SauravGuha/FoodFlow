@@ -27,7 +27,7 @@ public class UpdateRestaurantStatusCommandHandler : IRequestHandler<UpdateRestau
             return Result<Guid>.SetError($"Restaurant not found with ID {request.Id}", 404);
         }
 
-        restaurant.UpdateStatus(request.RestaurantStatus);
+        restaurant.UpdateStatus(request.Status);
         await foodFlowContext.SaveChangesAsync(cancellationToken);
 
         return Result<Guid>.SetSuccess(request.Id, null, 201);

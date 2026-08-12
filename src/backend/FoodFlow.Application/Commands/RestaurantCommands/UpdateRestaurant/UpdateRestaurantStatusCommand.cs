@@ -8,5 +8,5 @@ namespace FoodFlow.Application.Commands.RestaurantCommands;
 public class UpdateRestaurantStatusCommand : IRequest<Result<Guid>>
 {
     public Guid Id { get; set; }
-    public RestaurantStatus RestaurantStatus { get; set; }
+    public RestaurantStatus Status { get; set; }
 }
