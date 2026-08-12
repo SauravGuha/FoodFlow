@@ -1,6 +1,8 @@
 using FoodFlow.Api.Controller;
+using FoodFlow.Application.Commands.RestaurantCommands;
 using FoodFlow.Application.Commands.RestaurantCommands.UpdateRestaurant;
 using FoodFlow.Application.Queries.RestaurantQueries;
+using FoodFlow.Domain.Models.RestaurantModels;
 using FoolFlow.Application.Commands.RestaurantCommands.CreateRestaurant;
 using Microsoft.AspNetCore.Mvc;
 
@@ -80,4 +82,19 @@ public class RestaurantController : AppController
         var operationResult = await this.Mediator.Send(command, cancellationToken);
         return this.ReturnResult(operationResult);
     }
+
+
+    /// <summary>
+    /// Updates the status of an existing restaurant.
+    /// </summary>
+    /// <param name="updateRequest">The command containing restaurant ID and new status.</param>
+    /// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+    /// <returns>Returns the updated restaurant ID in the response.</returns>
+    [HttpPatch]
+    public async Task<IActionResult> UpdateRestaurantStatus([FromBody] UpdateRestaurantStatusCommand updateRequest, CancellationToken cancellationToken)
+    {
+        var result = await this.Mediator.Send(updateRequest, cancellationToken);
+        return ReturnResult(result);
+    }
 }
+
