@@ -1,3 +1,4 @@
+
 using FoodFlow.Api.Controller;
 using FoodFlow.Application.Commands.CuisineCommands.CreateCuisine;
 using FoodFlow.Application.Commands.CuisineCommands.DeleteCuisine;
@@ -5,7 +6,6 @@ using FoodFlow.Application.Commands.RestaurantCommands;
 using FoodFlow.Application.Commands.RestaurantCommands.UpdateRestaurant;
 using FoodFlow.Application.Queries.CuisineQueries;
 using FoodFlow.Application.Queries.RestaurantQueries;
-using FoodFlow.Domain.Models.RestaurantModels;
 using FoolFlow.Application.Commands.RestaurantCommands.CreateRestaurant;
 using Microsoft.AspNetCore.Mvc;
 
