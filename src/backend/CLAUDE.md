@@ -91,7 +91,7 @@ After making changes:
 
 1. Build the affected project(s).
 2. Run relevant tests if available.
-3. Check compiler errors and warnings introduced by the change.
+3. Check compiler errors and warnings introduced by the change. Ignore warnings for deprecated libraries
 4. If the database schema changed, review the generated migration.
 
 Do not claim a change is working without appropriate verification.

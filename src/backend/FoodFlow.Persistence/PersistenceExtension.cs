@@ -17,6 +17,7 @@ public static class PersistenceExtension
 
         services.AddScoped<IRestaurantRepository, RestaurantRepo>();
         services.AddScoped<ICuisineRepository, CuisineRepo>();
+        services.AddScoped<IBranchRepository, BranchRepo>();
         services.AddScoped<IFoodFlowContext>(sp => sp.GetRequiredService<FoodFlowContext>());
 
         return services;
