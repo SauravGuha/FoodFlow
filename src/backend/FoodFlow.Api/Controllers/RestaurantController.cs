@@ -1,5 +1,6 @@
 using FoodFlow.Api.Controller;
 using FoodFlow.Application.Commands.CuisineCommands.CreateCuisine;
+using FoodFlow.Application.Commands.CuisineCommands.DeleteCuisine;
 using FoodFlow.Application.Commands.RestaurantCommands;
 using FoodFlow.Application.Commands.RestaurantCommands.UpdateRestaurant;
 using FoodFlow.Application.Queries.CuisineQueries;
@@ -126,6 +127,15 @@ public class RestaurantController : AppController
     {
         var result = await this.Mediator.Send(new CuisineRequest { RestaurantId = id }, cancellationToken);
         return this.ReturnResult(result);
+    }
+
+    [HttpDelete(template: "{restaurantId}/cuisine/{id}")]
+    public async Task<IActionResult> DeleteRestaurantCuisine(Guid restaurantId, Guid id,
+    CancellationToken cancellationToken)
+    {
+        var command = new DeleteCuisineCommand { RestaurantId = restaurantId, CuisineId = id };
+        var operationResult = await this.Mediator.Send(command, cancellationToken);
+        return this.ReturnResult(operationResult);
     }
 }
 
