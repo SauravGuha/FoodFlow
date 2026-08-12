@@ -1,6 +1,9 @@
 using FoodFlow.Api.Controller;
+using FoodFlow.Application.Commands.CuisineCommands.CreateCuisine;
+using FoodFlow.Application.Commands.CuisineCommands.DeleteCuisine;
 using FoodFlow.Application.Commands.RestaurantCommands;
 using FoodFlow.Application.Commands.RestaurantCommands.UpdateRestaurant;
+using FoodFlow.Application.Queries.CuisineQueries;
 using FoodFlow.Application.Queries.RestaurantQueries;
 using FoodFlow.Domain.Models.RestaurantModels;
 using FoolFlow.Application.Commands.RestaurantCommands.CreateRestaurant;
@@ -95,6 +98,44 @@ public class RestaurantController : AppController
     {
         var result = await this.Mediator.Send(updateRequest, cancellationToken);
         return ReturnResult(result);
+    }
+
+    /// <summary>
+    /// Creates a new cuisine for a restaurant.
+    /// </summary>
+    /// <param name="command">The command containing cuisine details.</param>
+    /// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+    /// <returns>Returns the created cuisine ID in the response.</returns>
+    [HttpPost("cuisines")]
+    public async Task<IActionResult> CreateCuisine([FromBody] CreateCuisineCommand command, CancellationToken cancellationToken)
+    {
+        var operationResult = await this.Mediator.Send(command, cancellationToken);
+        if (operationResult.Status)
+            return CreatedAtAction(nameof(GetRestaurantCuisines), new { id = command.RestaurantId }, null);
+        else
+            return this.ReturnResult(operationResult);
+    }
+
+    /// <summary>
+    /// Retrieves all cuisines for a specific restaurant.
+    /// </summary>
+    /// <param name="id">The unique identifier of the restaurant.</param>
+    /// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+    /// <returns>Returns the list of cuisines for the restaurant, or a 404 Not Found if the restaurant doesn't exist.</returns>
+    [HttpGet("{id}/cuisines")]
+    public async Task<IActionResult> GetRestaurantCuisines(Guid id, CancellationToken cancellationToken)
+    {
+        var result = await this.Mediator.Send(new CuisineRequest { RestaurantId = id }, cancellationToken);
+        return this.ReturnResult(result);
+    }
+
+    [HttpDelete(template: "{restaurantId}/cuisine/{id}")]
+    public async Task<IActionResult> DeleteRestaurantCuisine(Guid restaurantId, Guid id,
+    CancellationToken cancellationToken)
+    {
+        var command = new DeleteCuisineCommand { RestaurantId = restaurantId, CuisineId = id };
+        var operationResult = await this.Mediator.Send(command, cancellationToken);
+        return this.ReturnResult(operationResult);
     }
 }
 

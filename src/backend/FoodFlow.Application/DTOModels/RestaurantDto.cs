@@ -14,7 +14,7 @@ public class RestaurantDto
     public DateTime CreatedAt { get; set; }
     public RestaurantOwnerDto RestaurantOwner { get; set; } = null!;
 
-    public List<BranchDto> Branches { get; set; } = null!;
+    //public List<BranchDto> Branches { get; set; } = null!;
 
-    public List<Cuisine> Cuisines { get; set; } = null!;
+    //public List<Cuisine> Cuisines { get; set; } = null!;
 }

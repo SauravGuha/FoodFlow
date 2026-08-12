@@ -16,6 +16,7 @@ public static class PersistenceExtension
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
         services.AddScoped<IRestaurantRepository, RestaurantRepo>();
+        services.AddScoped<ICuisineRepository, CuisineRepo>();
         services.AddScoped<IFoodFlowContext>(sp => sp.GetRequiredService<FoodFlowContext>());
 
         return services;
