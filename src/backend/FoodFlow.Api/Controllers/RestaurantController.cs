@@ -1,4 +1,5 @@
 using FoodFlow.Api.Controller;
+using FoodFlow.Application.Commands.CuisineCommands.CreateCuisine;
 using FoodFlow.Application.Commands.RestaurantCommands;
 using FoodFlow.Application.Commands.RestaurantCommands.UpdateRestaurant;
 using FoodFlow.Application.Queries.RestaurantQueries;
@@ -95,6 +96,22 @@ public class RestaurantController : AppController
     {
         var result = await this.Mediator.Send(updateRequest, cancellationToken);
         return ReturnResult(result);
+    }
+
+    /// <summary>
+    /// Creates a new cuisine for a restaurant.
+    /// </summary>
+    /// <param name="command">The command containing cuisine details.</param>
+    /// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+    /// <returns>Returns the created cuisine ID in the response.</returns>
+    [HttpPost("cuisines")]
+    public async Task<IActionResult> CreateCuisine([FromBody] CreateCuisineCommand command, CancellationToken cancellationToken)
+    {
+        var operationResult = await this.Mediator.Send(command, cancellationToken);
+        if (operationResult.Status)
+            return CreatedAtAction(nameof(GetRestaurantById), new { id = operationResult.Data }, null);
+        else
+            return this.ReturnResult(operationResult);
     }
 }
 
