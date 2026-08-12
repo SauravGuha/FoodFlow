@@ -2,6 +2,7 @@ using FoodFlow.Api.Controller;
 using FoodFlow.Application.Commands.CuisineCommands.CreateCuisine;
 using FoodFlow.Application.Commands.RestaurantCommands;
 using FoodFlow.Application.Commands.RestaurantCommands.UpdateRestaurant;
+using FoodFlow.Application.Queries.CuisineQueries;
 using FoodFlow.Application.Queries.RestaurantQueries;
 using FoodFlow.Domain.Models.RestaurantModels;
 using FoolFlow.Application.Commands.RestaurantCommands.CreateRestaurant;
@@ -109,9 +110,22 @@ public class RestaurantController : AppController
     {
         var operationResult = await this.Mediator.Send(command, cancellationToken);
         if (operationResult.Status)
-            return CreatedAtAction(nameof(GetRestaurantById), new { id = operationResult.Data }, null);
+            return CreatedAtAction(nameof(GetRestaurantCuisines), new { id = command.RestaurantId }, null);
         else
             return this.ReturnResult(operationResult);
+    }
+
+    /// <summary>
+    /// Retrieves all cuisines for a specific restaurant.
+    /// </summary>
+    /// <param name="id">The unique identifier of the restaurant.</param>
+    /// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+    /// <returns>Returns the list of cuisines for the restaurant, or a 404 Not Found if the restaurant doesn't exist.</returns>
+    [HttpGet("{id}/cuisines")]
+    public async Task<IActionResult> GetRestaurantCuisines(Guid id, CancellationToken cancellationToken)
+    {
+        var result = await this.Mediator.Send(new CuisineRequest { RestaurantId = id }, cancellationToken);
+        return this.ReturnResult(result);
     }
 }
 
