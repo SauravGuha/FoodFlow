@@ -3,6 +3,7 @@ using AutoMapper;
 using FoodFlow.Application.Commands.RestaurantCommands.UpdateRestaurant;
 using FoodFlow.Application.Common;
 using FoodFlow.Application.Common.Repositories;
+using FoodFlow.Domain.Models.RestaurantModels;
 using MediatR;
 
 namespace FoodFlow.Application.Handlers.RestaurantCommands.UpdateRestaurant;
@@ -27,7 +28,12 @@ public class UpdateRestaurantCommandHandler : IRequestHandler<UpdateRestaurantCo
         {
             return Result<Guid>.SetError($"Restaurant not found with ID {request.Id}", 404);
         }
-        this.mapper.Map(request, restaurant);
+        restaurant.UpdateDescription(request.Description);
+        restaurant.UpdateFNumber(request.FNumber);
+        restaurant.UpdateGstNumber(request.Gst);
+        restaurant.UpdateName(request.Name);
+        restaurant.UpdateRestaurantOwner(mapper.Map<RestaurantOwner>(request.RestaurantOwner));
+
         await this.foodFlowContext.SaveChangesAsync(cancellationToken);
 
         return Result<Guid>.SetSuccess(restaurant.Id, null, 201);

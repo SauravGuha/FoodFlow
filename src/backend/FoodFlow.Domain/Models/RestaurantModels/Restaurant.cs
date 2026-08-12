@@ -71,9 +71,10 @@ public class Restaurant : BaseModel
         _cuisines.Remove(cuisine);
     }
 
-    public void UpdateDescription(string description)
+    public void UpdateDescription(string? description)
     {
-        Description = description;
+        if (!string.IsNullOrWhiteSpace(description))
+            Description = description;
     }
 
     public void UpdateStatus(RestaurantStatus status)

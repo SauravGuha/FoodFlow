@@ -1,8 +1,7 @@
 using FoodFlow.Api.Controller;
-using FoodFlow.Application.DTOModels;
+using FoodFlow.Application.Commands.RestaurantCommands.UpdateRestaurant;
 using FoodFlow.Application.Queries.RestaurantQueries;
 using FoolFlow.Application.Commands.RestaurantCommands.CreateRestaurant;
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FoodFlow.Api.Controllers;
@@ -67,5 +66,18 @@ public class RestaurantController : AppController
         }
 
         return this.ReturnResult(result);
+    }
+
+    /// <summary>
+    /// Updates an existing restaurant.
+    /// </summary>
+    /// <param name="command">The command containing updated restaurant details.</param>
+    /// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+    /// <returns>Returns the updated restaurant ID in the response.</returns>
+    [HttpPut]
+    public async Task<IActionResult> UpdateRestaurant([FromBody] UpdateRestaurantCommand command, CancellationToken cancellationToken)
+    {
+        var operationResult = await this.Mediator.Send(command, cancellationToken);
+        return this.ReturnResult(operationResult);
     }
 }
