@@ -6,7 +6,7 @@ using FoodFlow.Application.DTOModels;
 using FoodFlow.Domain.Models.RestaurantModels;
 using MediatR;
 
-namespace FoodFlow.Application.Queries.RestaurantQueries;
+namespace FoodFlow.Application.Queries.RestaurantQueries.FilteredRestaurant;
 
 public class FilteredRestaurantRequestHandler : IRequestHandler<FilteredRestaurantRequest, Result<IEnumerable<RestaurantDto>>>
 {

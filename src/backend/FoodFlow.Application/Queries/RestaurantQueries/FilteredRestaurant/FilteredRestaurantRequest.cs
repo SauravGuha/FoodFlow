@@ -2,6 +2,8 @@ using FoodFlow.Application.Common;
 using FoodFlow.Application.DTOModels;
 using MediatR;
 
+namespace FoodFlow.Application.Queries.RestaurantQueries.FilteredRestaurant;
+
 public class FilteredRestaurantRequest : IRequest<Result<IEnumerable<RestaurantDto>>>
 {
     #region filterable/searchable

@@ -6,6 +6,8 @@ using FoodFlow.Application.Commands.RestaurantCommands.UpdateRestaurant;
 using FoodFlow.Application.Commands.RestaurantCommands.UpdateRestaurantStatus;
 using FoodFlow.Application.Queries.CuisineQueries;
 using FoodFlow.Application.Queries.RestaurantQueries;
+using FoodFlow.Application.Queries.RestaurantQueries.FilteredRestaurant;
+using FoodFlow.Application.Queries.RestaurantQueries.RestaurantBranch;
 using FoolFlow.Application.Commands.RestaurantCommands.CreateRestaurant;
 using Microsoft.AspNetCore.Mvc;
 
@@ -136,6 +138,13 @@ public class RestaurantController : AppController
         var command = new DeleteCuisineCommand { RestaurantId = restaurantId, CuisineId = id };
         var operationResult = await this.Mediator.Send(command, cancellationToken);
         return this.ReturnResult(operationResult);
+    }
+
+    [HttpGet("{id}/branches")]
+    public async Task<IActionResult> GetRestaurantBranches(Guid id, CancellationToken token)
+    {
+        var result = await this.Mediator.Send(new RestaurantBranchRequest { RestaurantId = id }, token);
+        return ReturnResult(result);
     }
 }
 
