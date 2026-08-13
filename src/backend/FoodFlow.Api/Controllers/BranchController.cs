@@ -1,6 +1,7 @@
 
 using FoodFlow.Api.Controller;
 using FoodFlow.Application.Commands.BranchCommands.CreateBranch;
+using FoodFlow.Application.Queries.BranchQueries;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FoodFlow.Api.Controllers;
@@ -19,8 +20,21 @@ public class BranchController : AppController
     {
         var operationResult = await Mediator.Send(command, cancellationToken);
         if (operationResult.Status)
-            return CreatedAtAction(nameof(CreateBranch), new { id = operationResult.Data }, null);
+            return CreatedAtAction(nameof(GetBranchById), new { id = operationResult.Data }, null);
         else
             return ReturnResult(operationResult);
+    }
+
+    /// <summary>
+    /// Retrieves a branch by ID.
+    /// </summary>
+    /// <param name="id">The unique identifier of the branch.</param>
+    /// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+    /// <returns>Returns the branch details if found, otherwise returns a 404 Not Found.</returns>
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetBranchById(Guid id, CancellationToken cancellationToken)
+    {
+        var result = await Mediator.Send(new BranchRequest { Id = id }, cancellationToken);
+        return ReturnResult(result);
     }
 }
