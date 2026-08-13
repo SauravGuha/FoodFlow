@@ -2,8 +2,8 @@
 using FoodFlow.Api.Controller;
 using FoodFlow.Application.Commands.CuisineCommands.CreateCuisine;
 using FoodFlow.Application.Commands.CuisineCommands.DeleteCuisine;
-using FoodFlow.Application.Commands.RestaurantCommands;
 using FoodFlow.Application.Commands.RestaurantCommands.UpdateRestaurant;
+using FoodFlow.Application.Commands.RestaurantCommands.UpdateRestaurantStatus;
 using FoodFlow.Application.Queries.CuisineQueries;
 using FoodFlow.Application.Queries.RestaurantQueries;
 using FoolFlow.Application.Commands.RestaurantCommands.CreateRestaurant;

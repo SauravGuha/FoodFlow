@@ -1,12 +1,9 @@
+using FoodFlow.Application.Commands.RestaurantCommands.UpdateRestaurantStatus;
 using FoodFlow.Application.Common;
 using FoodFlow.Application.Common.Repositories;
-using FoodFlow.Domain.Models.RestaurantModels;
 using MediatR;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace FoodFlow.Application.Commands.RestaurantCommands;
+namespace FoodFlow.Application.Commands.RestaurantCommands.UpdateRestaurantStatus;
 
 public class UpdateRestaurantStatusCommandHandler : IRequestHandler<UpdateRestaurantStatusCommand, Result<Guid>>
 {

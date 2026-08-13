@@ -2,6 +2,7 @@
 using FoodFlow.Api.Controller;
 using FoodFlow.Application.Commands.BranchCommands.CreateBranch;
 using FoodFlow.Application.Commands.BranchCommands.UpdateBranch;
+using FoodFlow.Application.Commands.BranchCommands.UpdateBranchStatus;
 using FoodFlow.Application.Queries.BranchQueries;
 using Microsoft.AspNetCore.Mvc;
 
@@ -43,6 +44,19 @@ public class BranchController : AppController
     public async Task<IActionResult> UpdateBranch([FromBody] UpdateBranchCommand updateBranchCommand, CancellationToken token)
     {
         var result = await Mediator.Send(updateBranchCommand, token);
+        return ReturnResult(result);
+    }
+
+    /// <summary>
+    /// Updates the status of an existing branch.
+    /// </summary>
+    /// <param name="updateRequest">The command containing branch ID and new status.</param>
+    /// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+    /// <returns>Returns the updated branch ID in the response.</returns>
+    [HttpPatch]
+    public async Task<IActionResult> UpdateBranchStatus([FromBody] UpdateBranchStatusCommand updateRequest, CancellationToken cancellationToken)
+    {
+        var result = await Mediator.Send(updateRequest, cancellationToken);
         return ReturnResult(result);
     }
 }
