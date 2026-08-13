@@ -1,6 +1,7 @@
 
 using FoodFlow.Api.Controller;
 using FoodFlow.Application.Commands.BranchCommands.CreateBranch;
+using FoodFlow.Application.Commands.BranchCommands.UpdateBranch;
 using FoodFlow.Application.Queries.BranchQueries;
 using Microsoft.AspNetCore.Mvc;
 
@@ -35,6 +36,13 @@ public class BranchController : AppController
     public async Task<IActionResult> GetBranchById(Guid id, CancellationToken cancellationToken)
     {
         var result = await Mediator.Send(new BranchRequest { Id = id }, cancellationToken);
+        return ReturnResult(result);
+    }
+
+    [HttpPut]
+    public async Task<IActionResult> UpdateBranch([FromBody] UpdateBranchCommand updateBranchCommand, CancellationToken token)
+    {
+        var result = await Mediator.Send(updateBranchCommand, token);
         return ReturnResult(result);
     }
 }
