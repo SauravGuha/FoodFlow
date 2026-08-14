@@ -9,9 +9,9 @@ public enum FoodCategory
     undescribed
 }
 
-public class InventoryItem : BaseModel
+public class Item : BaseModel
 {
-    public InventoryItem(string name, string description, string sku, Guid restaurantId, Guid cuisineId)
+    public Item(string name, string description, string sku, Guid restaurantId, Guid cuisineId)
     {
         Name = name;
         Description = description;
@@ -38,7 +38,7 @@ public class InventoryItem : BaseModel
 
     public void AddBranchInventory(BranchInventory branchInventory)
     {
-        if (_branchInventories.Any(e => e.InventoryItemId == this.Id && branchInventory.BranchId == e.BranchId))
+        if (_branchInventories.Any(e => e.ItemId == this.Id && branchInventory.BranchId == e.BranchId))
             throw new ArgumentException("Cannot add duplicate branchinventory");
 
         this._branchInventories.Add(branchInventory);

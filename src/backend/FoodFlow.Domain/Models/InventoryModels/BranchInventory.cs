@@ -1,15 +1,17 @@
 
+using FoodFlow.Domain.Models.RestaurantModels;
+
 namespace FoodFlow.Domain.Models.InventoryModels;
 
 public class BranchInventory : BaseModel
 {
-    public BranchInventory(Guid inventoryItemId, Guid branchId)
+    public BranchInventory(Guid itemId, Guid branchId)
     {
-        this.InventoryItemId = inventoryItemId;
+        this.ItemId = itemId;
         this.BranchId = branchId;
     }
 
-    public Guid InventoryItemId { get; private set; }
+    public Guid ItemId { get; private set; }
 
     public Guid BranchId { get; private set; }
 
