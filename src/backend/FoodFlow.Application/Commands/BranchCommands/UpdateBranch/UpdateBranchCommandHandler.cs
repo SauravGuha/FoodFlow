@@ -6,6 +6,8 @@ using MediatR;
 
 namespace FoodFlow.Application.Commands.BranchCommands.UpdateBranch;
 
+// UpdateBranchCommandHandler implements the action for updating branch details.
+// This handler processes updates to name, contact info, and operating hours.
 public class UpdateBranchCommandHandler : IRequestHandler<UpdateBranchCommand, Result<Guid>>
 {
     private readonly IBranchRepository branchRepository;
