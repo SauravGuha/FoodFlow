@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace FoodFlow.Application.Queries.RestaurantQueries;
+namespace FoodFlow.Application.Queries.RestaurantQueries.FilteredRestaurant;
 
 public class FilteredRestaurantRequestValidator : AbstractValidator<FilteredRestaurantRequest>
 {

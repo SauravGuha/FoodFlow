@@ -6,7 +6,7 @@ using FoodFlow.Application.DTOModels;
 using FoodFlow.Domain.Models.RestaurantModels;
 using MediatR;
 
-namespace FoodFlow.Application.Queries.RestaurantQueries;
+namespace FoodFlow.Application.Queries.RestaurantQueries.FilteredRestaurant;
 
 public class FilteredRestaurantRequestHandler : IRequestHandler<FilteredRestaurantRequest, Result<IEnumerable<RestaurantDto>>>
 {
@@ -34,9 +34,17 @@ public class FilteredRestaurantRequestHandler : IRequestHandler<FilteredRestaura
             var containsExpression = Expression.Call(propertyExpression, containsMethod, nameValue);
             condition = Expression.AndAlso(condition, containsExpression);
         }
+        if (!string.IsNullOrWhiteSpace(request.Status))
+        {
+            var statusProp = Expression.Property(parameter, nameof(Restaurant.Status));
+            var value = Expression.Constant(request.Status.Trim(' '));
+            condition = Expression.AndAlso(condition, Expression.Equal(statusProp, value));
+        }
         var whereLambda = Expression.Lambda<Func<Restaurant, bool>>(condition, parameter);
 
         var orderProperty = Expression.Property(parameter, nameof(Restaurant.Name));
+        if (request.SortBy == RestaurantSortField.Status)
+            orderProperty = Expression.Property(parameter, nameof(Restaurant.Status));
         var orderBy = Expression.Lambda<Func<Restaurant, string>>(orderProperty, parameter);
 
         var result = await this.restaurantRepository.GetAllAsync(whereLambda, orderBy, request.Skip, request.Take,

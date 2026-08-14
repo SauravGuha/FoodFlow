@@ -100,7 +100,7 @@ public sealed record OperatingHours
 {
     public IReadOnlyDictionary<DayOfWeek, IReadOnlyCollection<TimeSlot>> Schedule { get; private set; }
 
-    public OperatingHours(Dictionary<DayOfWeek, IReadOnlyCollection<TimeSlot>> schedule)
+    public OperatingHours(IReadOnlyDictionary<DayOfWeek, IReadOnlyCollection<TimeSlot>> schedule)
     {
         Schedule = schedule;
     }
