@@ -41,9 +41,9 @@ public class BranchController : AppController
     }
 
     [HttpPut]
-    public async Task<IActionResult> UpdateBranch([FromBody] UpdateBranchCommand updateBranchCommand, CancellationToken token)
+    public async Task<IActionResult> UpdateBranch([FromBody] UpdateBranchCommand updateBranchCommand, CancellationToken cancellationToken)
     {
-        var result = await Mediator.Send(updateBranchCommand, token);
+        var result = await Mediator.Send(updateBranchCommand, cancellationToken);
         return ReturnResult(result);
     }
 
