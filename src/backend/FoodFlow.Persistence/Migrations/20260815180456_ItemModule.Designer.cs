@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FoodFlow.Persistence.Migrations
 {
     [DbContext(typeof(FoodFlowContext))]
-    [Migration("20260814092437_ItemEntity")]
-    partial class ItemEntity
+    [Migration("20260815180456_ItemModule")]
+    partial class ItemModule
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -49,6 +49,12 @@ namespace FoodFlow.Persistence.Migrations
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -289,13 +295,13 @@ namespace FoodFlow.Persistence.Migrations
                     b.HasOne("FoodFlow.Domain.Models.RestaurantModels.Cuisine", null)
                         .WithMany()
                         .HasForeignKey("CuisineId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("FoodFlow.Domain.Models.RestaurantModels.Restaurant", null)
                         .WithMany()
                         .HasForeignKey("RestaurantId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 

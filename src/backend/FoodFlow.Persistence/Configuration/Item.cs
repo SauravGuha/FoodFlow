@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace FoodFlow.Persistence.Configuration;
 
-public class InventoryItemConfiguration : BaseConfiguration<Item>
+public class ItemConfiguration : BaseConfiguration<Item>
 {
     public override void Configure(EntityTypeBuilder<Item> builder)
     {
@@ -27,13 +27,13 @@ public class InventoryItemConfiguration : BaseConfiguration<Item>
         .WithMany()
         .HasForeignKey(e => e.RestaurantId)
         .IsRequired()
-        .OnDelete(Microsoft.EntityFrameworkCore.DeleteBehavior.Cascade);
+        .OnDelete(Microsoft.EntityFrameworkCore.DeleteBehavior.Restrict);
 
         builder.HasOne<Cuisine>()
         .WithMany()
         .HasForeignKey(e => e.CuisineId)
         .IsRequired()
-        .OnDelete(Microsoft.EntityFrameworkCore.DeleteBehavior.Cascade);
+        .OnDelete(Microsoft.EntityFrameworkCore.DeleteBehavior.Restrict);
 
         builder.HasIndex(e =>
         new

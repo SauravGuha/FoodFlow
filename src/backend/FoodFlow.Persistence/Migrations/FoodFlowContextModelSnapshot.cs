@@ -292,13 +292,13 @@ namespace FoodFlow.Persistence.Migrations
                     b.HasOne("FoodFlow.Domain.Models.RestaurantModels.Cuisine", null)
                         .WithMany()
                         .HasForeignKey("CuisineId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("FoodFlow.Domain.Models.RestaurantModels.Restaurant", null)
                         .WithMany()
                         .HasForeignKey("RestaurantId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
