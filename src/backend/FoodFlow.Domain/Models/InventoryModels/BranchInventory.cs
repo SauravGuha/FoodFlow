@@ -11,6 +11,8 @@ public class BranchInventory : BaseModel
         this.BranchId = branchId;
     }
 
+    public byte[] RowVersion { get; private set; } = [];
+
     public Guid ItemId { get; private set; }
 
     public Guid BranchId { get; private set; }

@@ -34,28 +34,31 @@ Treat `$ARGUMENTS` as the requested domain model name.
 
 1. Locate the requested domain model in `FoodFlow.Domain`.
 
-2. Use RestaurantRepo as the primary reference. Only inspect BaseRepository and DI registration if required.
+2. Use RestaurantRepo as the primary reference. Only inspect BaseRepository
 
-3. Inspect `BaseRepository<T>` and determine what functionality it already provides.
+3. Register newly created repo for it is interface DI if required in `FoodFlow.Persistence`
 
-4. Determine whether the requested entity actually requires a dedicated repository.
+4. Inspect `BaseRepository<T>` and determine what functionality it already provides.
 
-5. Create the repository interface in the existing repository-interface location, following the project's naming and namespace conventions.
+5. Determine whether the requested entity actually requires a dedicated repository.
 
-6. Create the repository implementation in the existing repository implementation location.
+6. Create the repository interface in the existing repository-interface location, following the project's naming and namespace conventions.
 
-7. Reuse `BaseRepository<T>` and existing repository abstractions instead of duplicating functionality.
+7. Create the repository implementation in the existing repository implementation location.
 
-8. Do not introduce a new repository pattern or abstraction.
+8. Reuse `BaseRepository<T>` and existing repository abstractions instead of duplicating functionality.
 
-9. Match the existing:
-   - Naming conventions
-   - Namespace structure
-   - Constructor/DI pattern
-   - Async conventions
-   - Method naming
-   - Access modifiers
-   - Dependency injection conventions
+9. Do not introduce a new repository pattern or abstraction.
+
+10. Match the existing:
+
+- Naming conventions
+- Namespace structure
+- Constructor/DI pattern
+- Async conventions
+- Method naming
+- Access modifiers
+- Dependency injection conventions
 
 10. Only add entity-specific methods when the existing use cases require functionality that the base repository does not provide.
 

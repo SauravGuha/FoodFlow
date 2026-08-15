@@ -22,5 +22,8 @@ public class BranchInventoryConfiguration : BaseConfiguration<BranchInventory>
         .HasForeignKey(e => e.BranchId)
         .IsRequired()
         .OnDelete(Microsoft.EntityFrameworkCore.DeleteBehavior.Cascade);
+
+        builder.Property(e => e.RowVersion)
+        .IsRowVersion();
     }
 }
