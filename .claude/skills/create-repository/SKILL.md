@@ -36,13 +36,13 @@ Treat `$ARGUMENTS` as the requested domain model name.
 
 2. Use RestaurantRepo as the primary reference. Only inspect BaseRepository
 
-3. Register newly created repo for it is interface DI if required in `FoodFlow.Persistence`
+3. Register newly created repo for it's interface to services if required in `FoodFlow.Persistence`
 
 4. Inspect `BaseRepository<T>` and determine what functionality it already provides.
 
 5. Determine whether the requested entity actually requires a dedicated repository.
 
-6. Create the repository interface in the existing repository-interface location, following the project's naming and namespace conventions.
+6. Create the repository interface in the existing repository-interface location (D:\source\repo\FoodFlow\src\backend\FoodFlow.Application\Common\Repositories), following the project's naming and namespace conventions.
 
 7. Create the repository implementation in the existing repository implementation location.
 
