@@ -1,3 +1,4 @@
+
 using FoodFlow.Application.Commands.ItemCommands;
 using FoodFlow.Application.Queries.ItemQueries;
 using Microsoft.AspNetCore.Mvc;
@@ -7,7 +8,12 @@ namespace FoodFlow.Api.Controller;
 [Route("api/[controller]")]
 public class ItemController : AppController
 {
-
+    /// <summary>
+    /// Creates a new item.
+    /// </summary>
+    /// <param name="command">The command containing item details.</param>
+    /// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+    /// <returns>Returns the created item ID in the response.</returns>
     [HttpPost]
     public async Task<IActionResult> CreateItem([FromBody] CreateItemCommand command, CancellationToken cancellationToken)
     {
@@ -18,6 +24,12 @@ public class ItemController : AppController
             return ReturnResult(operationResult);
     }
 
+    /// <summary>
+    /// Retrieves an item by ID.
+    /// </summary>
+    /// <param name="id">The unique identifier of the item.</param>
+    /// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+    /// <returns>Returns the item details if found, otherwise returns a 404 Not Found.</returns>
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetItembyId(Guid id, CancellationToken cancellationToken)
     {
