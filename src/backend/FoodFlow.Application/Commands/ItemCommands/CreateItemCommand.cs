@@ -17,5 +17,5 @@ public class CreateItemCommand : IRequest<Result<Guid>>
 
     public Guid CuisineId { get; set; }
 
-    public string Category { get; private set; } = default!;
+    public string Category { get; set; } = default!;
 }
