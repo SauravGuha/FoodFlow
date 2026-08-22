@@ -29,10 +29,42 @@ Generate and POST at least 50 random, valid records for the model supplied as `$
 
 ## Endpoint Discovery
 
-- Inspect controllers for `[HttpPost]` and `[HttpGet]` actions and combine controller and action routes to determine the actual URL.
-- A `GET /{id}` endpoint is not a list endpoint. A foreign-key dependency requires an endpoint that returns multiple existing records.
-- For nested list endpoints, inspect the action and request type to determine required route/query parameters.
-- Parse the project's standard API result wrapper when present; use its `Data` collection and record `Id` values.
+## Endpoint Discovery
+
+Use this exact procedure. Do not infer or invent endpoint URLs.
+
+### 1. Find application URL
+
+Read exactly:
+
+`src/backend/FoodFlow.Api/Properties/launchSettings.json`
+
+Find the profile used for local execution and read its `applicationUrl`.
+
+Use the HTTPS URL when both HTTP and HTTPS are available.
+
+### 2. Find the model's create endpoint
+
+Given model `<Model>`:
+
+1. Find the controller whose class name is `<Model>Controller`.
+2. Read its class-level `[Route(...)]`.
+3. Find the action that accepts the model's create command/DTO.
+4. Read its `[HttpPost(...)]` attribute.
+5. Combine the controller route and action route.
+6. The resulting route is the POST endpoint.
+
+Do not use domain-model names, command names, repository names, or conventional URLs to guess the endpoint.
+
+Example:
+
+```csharp
+[Route("api/[controller]")]
+public class RestaurantController : AppController
+{
+    [HttpPost]
+    public ... CreateItem(...)
+}
 
 ## Completion
 

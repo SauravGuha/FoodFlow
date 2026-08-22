@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace FoodFlow.Api.Controller;
 
 [ApiController]
+[Route("api/[controller]")]
 public class AppController : ControllerBase
 {
     private IMediator mediator = null!;
@@ -26,6 +27,12 @@ public class AppController : ControllerBase
             return StatusCode(result.StatusCode, result.Data);
         else
             return StatusCode(result.StatusCode, new { error = result.Message });
+    }
+
+    [HttpHead]
+    public IActionResult EndpointActive()
+    {
+        return Ok();
     }
 
 }
