@@ -10,11 +10,13 @@ public class CreateItemCommandHandler : IRequestHandler<CreateItemCommand, Resul
 {
     private readonly IItemRepository itemRepository;
     private readonly ICuisineRepository cuisineRepository;
+    private readonly IFoodFlowContext foodFlowContext;
 
-    public CreateItemCommandHandler(IItemRepository itemRepository, ICuisineRepository cuisineRepository)
+    public CreateItemCommandHandler(IItemRepository itemRepository, ICuisineRepository cuisineRepository, IFoodFlowContext foodFlowContext)
     {
         this.itemRepository = itemRepository;
         this.cuisineRepository = cuisineRepository;
+        this.foodFlowContext = foodFlowContext;
     }
     public async Task<Result<Guid>> Handle(CreateItemCommand request, CancellationToken cancellationToken)
     {
@@ -31,6 +33,7 @@ public class CreateItemCommandHandler : IRequestHandler<CreateItemCommand, Resul
                 return Result<Guid>.SetError("Invalid or invalid cuisine", 400);
             var item = new Item(request.Name, request.Description, request.Sku, request.RestaurantId, request.CuisineId);
             await this.itemRepository.AddAsync(item, cancellationToken);
+            await this.foodFlowContext.SaveChangesAsync(cancellationToken);
             return Result<Guid>.SetSuccess(item.Id, 201);
         }
     }

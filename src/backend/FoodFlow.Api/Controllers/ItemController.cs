@@ -1,6 +1,7 @@
 
 using FoodFlow.Application.Commands.ItemCommands;
 using FoodFlow.Application.Queries.ItemQueries;
+using FoodFlow.Application.Queries.ItemQueries.FilteredItem;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FoodFlow.Api.Controller;
@@ -35,5 +36,30 @@ public class ItemController : AppController
     {
         var result = await Mediator.Send(new GetItemByIdQuery { Id = id }, cancellationToken);
         return ReturnResult(result);
+    }
+
+
+    [HttpGet(template: "filtered")]
+    public async Task<IActionResult> GetFilteredItem([FromBody] FilteredItemRequest? request, CancellationToken token)
+    {
+        var result = await Mediator.Send(request ?? new FilteredItemRequest());
+        if (result == null)
+        {
+            return NotFound();
+        }
+        // Add custom headers to the response
+        if (result.Value != null)
+        {
+            var extraHeader = result.Value as Dictionary<string, object>;
+            if (extraHeader != null)
+            {
+                foreach (var h in extraHeader)
+                {
+                    this.Response.Headers[h.Key] = h.Value.ToString();
+                }
+            }
+        }
+
+        return this.ReturnResult(result);
     }
 }
