@@ -11,7 +11,7 @@ Generate and POST at least 50 random, valid records for the model supplied as `$
 
 ## Rules
 
-1. Inspect the model, its create command/DTO, validator, domain constructor/rules, and EF configuration before generating data.
+1. Inspect the model, its create command/DTO, validator, domain constructor/rules.
 2. Find the model's POST resource URL from its API controller. Do not invent an endpoint.
 3. Find the API base URL from the project's launch settings or existing configuration. Prefer the HTTP URL when both HTTP and HTTPS are available locally.
 4. Verify the API is reachable before creating records. If it is not running, report the error and stop.

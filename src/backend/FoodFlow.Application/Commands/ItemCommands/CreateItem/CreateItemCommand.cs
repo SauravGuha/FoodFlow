@@ -1,9 +1,8 @@
 
 using FoodFlow.Application.Common;
-using FoodFlow.Domain.Models.InventoryModels;
 using MediatR;
 
-namespace FoodFlow.Application.Commands.ItemCommands;
+namespace FoodFlow.Application.Commands.ItemCommands.CreateItem;
 
 public class CreateItemCommand : IRequest<Result<Guid>>
 {

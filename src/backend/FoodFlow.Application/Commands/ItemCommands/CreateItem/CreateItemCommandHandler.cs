@@ -4,7 +4,7 @@ using FoodFlow.Application.Common.Repositories;
 using FoodFlow.Domain.Models.InventoryModels;
 using MediatR;
 
-namespace FoodFlow.Application.Commands.ItemCommands;
+namespace FoodFlow.Application.Commands.ItemCommands.CreateItem;
 
 public class CreateItemCommandHandler : IRequestHandler<CreateItemCommand, Result<Guid>>
 {
