@@ -13,4 +13,8 @@ public class FilteredItemRequest : IRequest<Result<IEnumerable<ItemDto>>>
     public string? CategoryName { get; set; } = default!;
 
     public string? Name { get; set; } = default!;
+
+    public int Take { get; set; } = 10;
+
+    public int Skip { get; set; } = 0;
 }

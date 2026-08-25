@@ -51,7 +51,8 @@ public class FilteredItemRequestHandler : IRequestHandler<FilteredItemRequest, R
         }
         var lmabda = Expression.Lambda<Func<Item, bool>>(condition, parameter);
 
-        var result = await this.itemRepository.GetAllAsync(lmabda, item => item.CreatedAt, cancellationToken: cancellationToken);
+        var result = await this.itemRepository.GetAllAsync(lmabda, item => item.CreatedAt, take: request.Take,
+        skip: request.Skip, cancellationToken: cancellationToken);
 
         return Result<IEnumerable<ItemDto>>.SetSuccess(mapper.Map<IEnumerable<ItemDto>>(result), null);
     }
