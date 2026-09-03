@@ -1,4 +1,5 @@
 
+using FoodFlow.Application.Commands.InventoryCommands.AddBranchInventory;
 using FoodFlow.Application.Commands.ItemCommands.CreateItem;
 using FoodFlow.Application.Queries.ItemQueries;
 using FoodFlow.Application.Queries.ItemQueries.FilteredItem;
@@ -62,4 +63,15 @@ public class ItemController : AppController
 
         return this.ReturnResult(result);
     }
+
+    [HttpPost(template: "iteminventory")]
+    public async Task<IActionResult> CreateItemInventory([FromBody] AddBranchInventoryCommand command, CancellationToken token)
+    {
+        var operationResult = await Mediator.Send(command, token);
+        if (operationResult.Status)
+            return CreatedAtAction(nameof(GetItembyId), new { id = command.ItemId }, null);
+        else
+            return ReturnResult(operationResult);
+    }
+
 }
