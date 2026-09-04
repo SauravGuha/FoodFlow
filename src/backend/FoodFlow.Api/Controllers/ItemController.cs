@@ -1,4 +1,5 @@
 
+using FoodFlow.Application.Commands.AddStock;
 using FoodFlow.Application.Commands.InventoryCommands.AddBranchInventory;
 using FoodFlow.Application.Commands.ItemCommands.CreateItem;
 using FoodFlow.Application.Queries.ItemQueries;
@@ -39,7 +40,12 @@ public class ItemController : AppController
         return ReturnResult(result);
     }
 
-
+    /// <summary>
+    /// Retrieves a filtered list of items based on the provided request.
+    /// </summary>
+    /// <param name="request"></param>
+    /// <param name="token"></param>
+    /// <returns></returns>
     [HttpGet(template: "filtered")]
     public async Task<IActionResult> GetFilteredItem([FromBody] FilteredItemRequest? request, CancellationToken token)
     {
@@ -64,8 +70,30 @@ public class ItemController : AppController
         return this.ReturnResult(result);
     }
 
+    /// <summary>
+    /// Creates an inventory item for a branch.
+    /// </summary>
+    /// <param name="command"></param>
+    /// <param name="token"></param>
+    /// <returns></returns>
     [HttpPost(template: "iteminventory")]
     public async Task<IActionResult> CreateItemInventory([FromBody] AddBranchInventoryCommand command, CancellationToken token)
+    {
+        var operationResult = await Mediator.Send(command, token);
+        if (operationResult.Status)
+            return CreatedAtAction(nameof(GetItembyId), new { id = command.ItemId }, null);
+        else
+            return ReturnResult(operationResult);
+    }
+
+    /// <summary>
+    /// Updates the stock of a branch for an item.
+    /// </summary>
+    /// <param name="command"></param>
+    /// <param name="token"></param>
+    /// <returns></returns>
+    [HttpPut(template: "iteminventory")]
+    public async Task<IActionResult> UpdateBranchStock([FromBody] AddStockCommand command, CancellationToken token)
     {
         var operationResult = await Mediator.Send(command, token);
         if (operationResult.Status)
