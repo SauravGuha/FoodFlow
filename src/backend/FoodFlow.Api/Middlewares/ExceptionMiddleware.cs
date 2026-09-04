@@ -1,8 +1,12 @@
 
 using System.ComponentModel.DataAnnotations;
+using System.Data;
 
 namespace FoodFlow.Api.Middlewares;
 
+/// <summary>
+/// Middleware that handles exceptions and returns appropriate responses.
+/// </summary>
 public class ExceptionMiddleware : IMiddleware
 {
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
@@ -10,6 +14,11 @@ public class ExceptionMiddleware : IMiddleware
         try
         {
             await next(context);
+        }
+        catch (DBConcurrencyException)
+        {
+            context.Response.StatusCode = 409;
+            await context.Response.WriteAsJsonAsync(new { error = "The record has been modified by another user." });
         }
         catch (ValidationException ex)
         {

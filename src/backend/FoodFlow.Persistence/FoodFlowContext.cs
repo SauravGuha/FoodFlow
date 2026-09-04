@@ -1,5 +1,6 @@
 
 using FoodFlow.Application.Common;
+using FoodFlow.Domain.Models.InventoryModels;
 using FoodFlow.Domain.Models.RestaurantModels;
 using Microsoft.EntityFrameworkCore;
 
