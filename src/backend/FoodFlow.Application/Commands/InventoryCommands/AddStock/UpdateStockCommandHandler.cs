@@ -5,14 +5,14 @@ using MediatR;
 
 namespace FoodFlow.Application.Commands.AddStock;
 
-public class AddStockCommandHandler : IRequestHandler<AddStockCommand, Result<Unit>>
+public class UpdateStockCommandHandler : IRequestHandler<UpdateStockCommand, Result<Unit>>
 {
     private readonly IFoodFlowContext context;
     private readonly IBranchInventoryRepository branchInventoryRepository;
     private readonly IItemRepository itemRepository;
     private readonly IBranchRepository branchRepository;
 
-    public AddStockCommandHandler(IBranchInventoryRepository branchInventoryRepository,
+    public UpdateStockCommandHandler(IBranchInventoryRepository branchInventoryRepository,
     IItemRepository itemRepository, IBranchRepository branchRepository, IFoodFlowContext foodFlowContext)
     {
         this.context = foodFlowContext;
@@ -20,7 +20,7 @@ public class AddStockCommandHandler : IRequestHandler<AddStockCommand, Result<Un
         this.itemRepository = itemRepository;
         this.branchRepository = branchRepository;
     }
-    public async Task<Result<Unit>> Handle(AddStockCommand request, CancellationToken cancellationToken)
+    public async Task<Result<Unit>> Handle(UpdateStockCommand request, CancellationToken cancellationToken)
     {
         var item = await itemRepository.GetByIdAsync(request.ItemId, cancellationToken);
         if (item == null)
@@ -45,7 +45,10 @@ public class AddStockCommandHandler : IRequestHandler<AddStockCommand, Result<Un
             return Result<Unit>.SetError("Item does not exist in the branch", 400);
         }
         var branchItemInventory = existingItems.First();
-        branchItemInventory.AddQuantity(request.Quantity);
+        if (request.Quantity < 0)
+            branchItemInventory.RemoveQuantity(Math.Abs(request.Quantity));
+        else
+            branchItemInventory.AddQuantity(request.Quantity);
 
         await this.branchInventoryRepository.UpdateAsync(branchItemInventory, cancellationToken: cancellationToken);
         await context.SaveChangesAsync(cancellationToken);

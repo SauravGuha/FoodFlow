@@ -4,7 +4,7 @@ using MediatR;
 
 namespace FoodFlow.Application.Commands.AddStock;
 
-public class AddStockCommand : IRequest<Result<Unit>>
+public class UpdateStockCommand : IRequest<Result<Unit>>
 {
     public Guid BranchId { get; set; }
 

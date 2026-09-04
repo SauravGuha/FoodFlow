@@ -93,8 +93,25 @@ public class ItemController : AppController
     /// <param name="token"></param>
     /// <returns></returns>
     [HttpPut(template: "iteminventory")]
-    public async Task<IActionResult> UpdateBranchStock([FromBody] AddStockCommand command, CancellationToken token)
+    public async Task<IActionResult> AddBranchStock([FromBody] UpdateStockCommand command, CancellationToken token)
     {
+        var operationResult = await Mediator.Send(command, token);
+        if (operationResult.Status)
+            return CreatedAtAction(nameof(GetItembyId), new { id = command.ItemId }, null);
+        else
+            return ReturnResult(operationResult);
+    }
+
+    /// <summary>
+    /// Removes the stock of a branch for an item.
+    /// </summary>
+    /// <param name="command"></param>
+    /// <param name="token"></param>
+    /// <returns></returns>
+    [HttpPut(template: "removeitembranchstock")]
+    public async Task<IActionResult> RemoveBranchStock([FromBody] UpdateStockCommand command, CancellationToken token)
+    {
+        command.Quantity = -command.Quantity;
         var operationResult = await Mediator.Send(command, token);
         if (operationResult.Status)
             return CreatedAtAction(nameof(GetItembyId), new { id = command.ItemId }, null);
