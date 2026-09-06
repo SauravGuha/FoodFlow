@@ -4,6 +4,7 @@ using FoodFlow.Application.Commands.BranchCommands.CreateBranch;
 using FoodFlow.Application.Commands.BranchCommands.UpdateBranch;
 using FoodFlow.Application.Commands.BranchCommands.UpdateBranchStatus;
 using FoodFlow.Application.Queries.BranchQueries;
+using FoodFlow.Application.Queries.BranchQueries.GetBranchInventory;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FoodFlow.Api.Controllers;
@@ -57,6 +58,18 @@ public class BranchController : AppController
     public async Task<IActionResult> UpdateBranchStatus([FromBody] UpdateBranchStatusCommand updateRequest, CancellationToken cancellationToken)
     {
         var result = await Mediator.Send(updateRequest, cancellationToken);
+        return ReturnResult(result);
+    }
+
+    /// <summary>
+    /// Gets the inventory of a branch.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    [HttpGet("{id}/inventory")]
+    public async Task<IActionResult> GetBranchInventory(Guid id)
+    {
+        var result = await this.Mediator.Send(new GetBranchItemQuery { BranchId = id });
         return ReturnResult(result);
     }
 }
