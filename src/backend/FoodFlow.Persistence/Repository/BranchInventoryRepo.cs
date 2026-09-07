@@ -14,14 +14,35 @@ public class BranchInventoryRepo : BaseRepository<BranchInventory>, IBranchInven
     public async Task<IEnumerable<ItemBranchInventory>> GetItemBranchInventory(Guid branchId)
     {
         var itemTable = this._context.Set<Item>();
-        var result = await this._dbSet.Join(itemTable, bi => bi.ItemId, it => it.Id, (bi, it) => new ItemBranchInventory
+        var result = await this._dbSet
+        .Join(itemTable, bi => bi.ItemId, it => it.Id, (bi, it) => new ItemBranchInventory
         {
             BranchId = bi.BranchId,
             ItemId = bi.ItemId,
             InventoryId = bi.Id,
             Quantity = bi.Quantity,
             ItemName = it.Name
-        }).ToListAsync();
+        })
+        .Where(bi => bi.BranchId == branchId)
+        .ToListAsync();
+
+        return result!;
+    }
+
+    public async Task<IEnumerable<ItemBranchInventory>> GetItemBranchInventory(Guid branchId, int quantity)
+    {
+        var itemTable = this._context.Set<Item>();
+        var result = await this._dbSet
+        .Join(itemTable, bi => bi.ItemId, it => it.Id, (bi, it) => new ItemBranchInventory
+        {
+            BranchId = bi.BranchId,
+            ItemId = bi.ItemId,
+            InventoryId = bi.Id,
+            Quantity = bi.Quantity,
+            ItemName = it.Name
+        })
+        .Where(bi => bi.Quantity < quantity && bi.BranchId == branchId)
+        .ToListAsync();
 
         return result!;
     }
