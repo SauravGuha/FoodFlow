@@ -131,6 +131,13 @@ public class RestaurantController : AppController
         return this.ReturnResult(result);
     }
 
+    /// <summary>
+    /// Deletes a cuisine for a specific restaurant.
+    /// </summary>
+    /// <param name="restaurantId"> The unique identifier of the restaurant. </param>
+    /// <param name="id"> The unique identifier of the cuisine. </param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     [HttpDelete(template: "{restaurantId}/cuisine/{id}")]
     public async Task<IActionResult> DeleteRestaurantCuisine(Guid restaurantId, Guid id,
     CancellationToken cancellationToken)
@@ -140,6 +147,12 @@ public class RestaurantController : AppController
         return this.ReturnResult(operationResult);
     }
 
+    /// <summary>
+    /// Retrieves all branches for a specific restaurant.
+    /// </summary>
+    /// <param name="id"> The unique identifier of the restaurant. </param>
+    /// <param name="token"></param>
+    /// <returns></returns>
     [HttpGet("{id}/branches")]
     public async Task<IActionResult> GetRestaurantBranches(Guid id, CancellationToken token)
     {

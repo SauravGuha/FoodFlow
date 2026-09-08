@@ -4,6 +4,7 @@ using FoodFlow.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FoodFlow.Persistence.Migrations
 {
     [DbContext(typeof(FoodFlowContext))]
-    partial class FoodFlowContextModelSnapshot : ModelSnapshot
+    [Migration("20260908130103_BranchInventoryPrice")]
+    partial class BranchInventoryPrice
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -122,7 +125,8 @@ namespace FoodFlow.Persistence.Migrations
 
                     b.HasIndex("CuisineId");
 
-                    b.HasIndex("RestaurantId", "CuisineId");
+                    b.HasIndex("RestaurantId", "CuisineId")
+                        .IsUnique();
 
                     b.ToTable("Item");
                 });

@@ -40,7 +40,6 @@ public class ItemConfiguration : BaseConfiguration<Item>
         {
             e.RestaurantId,
             e.CuisineId
-        })
-        .IsUnique();
+        });
     }
 }

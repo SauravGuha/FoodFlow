@@ -39,7 +39,8 @@ public class BranchInventoryRepo : BaseRepository<BranchInventory>, IBranchInven
             ItemId = bi.ItemId,
             InventoryId = bi.Id,
             Quantity = bi.Quantity,
-            ItemName = it.Name
+            ItemName = it.Name,
+            Price = bi.Price
         })
         .Where(bi => bi.Quantity < quantity && bi.BranchId == branchId)
         .ToListAsync();

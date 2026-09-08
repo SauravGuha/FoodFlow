@@ -8,4 +8,6 @@ public class ItemBranchInventory
     public string ItemName { get; set; } = string.Empty;
     public Guid BranchId { get; set; }
     public decimal Quantity { get; set; }
+
+    public decimal Price { get; set; }
 }

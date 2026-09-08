@@ -49,7 +49,7 @@ public class AddBranchInventoryCommandHandler : IRequestHandler<AddBranchInvento
             return Result<Guid>.SetError($"Item already exists in the branch", 409);
         }
 
-        var itemInventory = new BranchInventory(request.ItemId, request.BranchId);
+        var itemInventory = new BranchInventory(request.ItemId, request.BranchId, request.Price);
         await branchInventoryRepository.AddAsync(itemInventory, cancellationToken);
         await foodFlowContext.SaveChangesAsync(cancellationToken);
         return Result<Guid>.SetSuccess(itemInventory.Id, null);
