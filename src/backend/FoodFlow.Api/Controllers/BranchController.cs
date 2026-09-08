@@ -4,6 +4,8 @@ using FoodFlow.Application.Commands.BranchCommands.CreateBranch;
 using FoodFlow.Application.Commands.BranchCommands.UpdateBranch;
 using FoodFlow.Application.Commands.BranchCommands.UpdateBranchStatus;
 using FoodFlow.Application.Queries.BranchQueries;
+using FoodFlow.Application.Queries.BranchQueries.GetBranchInventory;
+using FoodFlow.Application.Queries.BranchQueries.GetBranchLowInventoryItem;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FoodFlow.Api.Controllers;
@@ -59,4 +61,34 @@ public class BranchController : AppController
         var result = await Mediator.Send(updateRequest, cancellationToken);
         return ReturnResult(result);
     }
+
+    /// <summary>
+    /// Gets the inventory of a branch.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    [HttpGet("{id}/inventory")]
+    public async Task<IActionResult> GetBranchInventory(Guid id)
+    {
+        var result = await this.Mediator.Send(new GetBranchItemQuery { BranchId = id });
+        return ReturnResult(result);
+    }
+
+    /// <summary>
+    /// Gets the low inventory item of a branch.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="quantity"></param>
+    /// <returns></returns>
+    [HttpGet("{id}/lowinventory/{quantity}")]
+    public async Task<IActionResult> GetBranchLowInventoryItem(Guid id, int quantity)
+    {
+        var result = await this.Mediator.Send(new GetBranchLowInventoryItemQuery
+        {
+            BranchId = id,
+            Quantity = quantity
+        });
+        return ReturnResult(result);
+    }
+
 }

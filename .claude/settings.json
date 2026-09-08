@@ -1,5 +1,5 @@
 {
   "permissions": {
-    "deny": ["git *", "Bash(rm -rf *)"]
+    "deny": ["Bash(git *)", "Bash(rm -rf *)"]
   }
 }

@@ -46,7 +46,7 @@ public class RestaurantController : AppController
     }
 
     /// <summary>
-    /// Retrieves a filtered list of restaurants based on query parameters.
+    /// Retrieves a filtered list of restaurants based on query parameters. If body is empty, returns array of RestaurantDto
     /// </summary>
     /// <param name="request">The filtered restaurant request containing query parameters.</param>
     /// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>

@@ -2,107 +2,58 @@
 
 ## Architecture
 
-The backend follows Clean Architecture:
+- `FoodFlow.Domain`: domain entities and business rules.
+- `FoodFlow.Application`: use cases, CQRS, DTOs, validation, mappings.
+- `FoodFlow.Persistence`: EF Core, repositories, database configuration.
+- `FoodFlow.Api`: HTTP/API concerns.
 
-- `FoodFlow.Domain` — domain entities and business rules
-- `FoodFlow.Application` — use cases, CQRS, DTOs, validation, mappings
-- `FoodFlow.Persistence` — EF Core, repositories, database configuration
-- `FoodFlow.Api` — HTTP/API concerns
-
-Dependency direction must remain inward:
-
-`Api → Application → Domain`
-
-`Persistence → Application/Domain`
-
-Domain must not depend on Application, Persistence, or Api.
+Keep dependencies inward: `Api → Application → Domain`; `Persistence → Application/Domain`. Domain must not depend on outer layers.
 
 ## Patterns
 
-- CQRS is implemented with MediatR.
-- Commands represent state-changing operations.
-- Queries represent read operations.
-- FluentValidation is integrated through a MediatR pipeline.
-- EF Core is used for persistence.
+- CQRS uses MediatR; commands change state, queries read state.
+- FluentValidation runs through the MediatR pipeline.
+- Keep controllers thin and delegate to MediatR.
 - Follow existing repository and mapping patterns.
-- Controllers should remain thin and delegate application work to MediatR.
 
-## Existing Implementation
+## Existing Patterns
 
-The Restaurant module is the primary reference implementation.
+Restaurant is the primary reference. Before implementing similar functionality, inspect its Domain, Application, Persistence, and Api code; reuse existing abstractions and patterns without blindly copying domain behavior.
 
-Before implementing similar functionality:
-
-1. Inspect the existing Restaurant implementation across Domain, Application, Persistence, and Api.
-2. Follow its established patterns.
-3. Reuse existing abstractions where appropriate.
-4. Do not introduce a new pattern unless there is a clear reason.
-
-Do not blindly copy Restaurant code; understand the differences in domain behavior.
-
-## Domain Rules
-
-Business rules belong in the Domain model where appropriate.
-
-Do not bypass domain methods by directly manipulating state when an existing domain method represents the operation.
-
-For example, Restaurant currently manages its cuisines and branches through domain behavior.
-
-Preserve existing domain invariants unless the requirements explicitly change them.
+Business rules belong in the Domain. Preserve domain invariants and use existing domain methods instead of directly manipulating state.
 
 ## EF Core
 
-- Entity configurations belong in `FoodFlow.Persistence/Configuration`.
-- Follow the existing `IEntityTypeConfiguration<T>` pattern.
-- `FoodFlowContext` discovers configurations through `ApplyConfigurationsFromAssembly`.
-- Keep filtering, ordering, paging, and counting database-side.
-- Avoid premature `ToList()`/materialization.
-- Review generated SQL when query performance is relevant.
-- Database model changes require an appropriate EF Core migration.
+- Put entity configurations in `FoodFlow.Persistence/Configuration` using `IEntityTypeConfiguration<T>`.
+- `FoodFlowContext` discovers configurations with `ApplyConfigurationsFromAssembly`.
+- Keep filtering, ordering, paging, and counting database-side; avoid premature materialization.
+- Review generated SQL when query performance matters.
+- Schema changes require an EF Core migration.
+- Before adding a repository/abstraction, check whether `BaseRepository<T>` already provides the required operation.
 
-Before creating a new repository or abstraction, check whether the existing `BaseRepository<T>` already supports the required operation.
+## Validation, DTOs & Mapping
 
-## Validation
+- Use FluentValidation for application request validation; keep domain invariants in the Domain.
+- DTOs belong in Application; do not expose domain entities directly from API endpoints.
+- Follow the existing mapping approach; do not introduce another mapping library/pattern.
 
-Use FluentValidation for application request validation.
+## Changes
 
-Do not move business rules into validators merely because they can be checked there. Domain invariants must remain protected by the domain model.
-
-## DTOs and Mapping
-
-- DTOs belong in the Application layer.
-- Do not expose domain entities directly from API endpoints.
-- Inspect existing mapping configuration before adding manual mapping.
-- Follow the mapping approach already used by the project.
-- Do not introduce another mapping library or mapping pattern.
-
-## Code Changes
-
-- Prefer existing project conventions over personal preferences.
-- Keep changes focused on the requested task.
-- Do not refactor unrelated code.
-- Do not introduce abstractions without a concrete need.
-- Do not change architecture without discussing it first.
+- Prefer project conventions over personal preferences.
+- Keep changes focused; do not refactor unrelated code or add abstractions without a concrete need.
+- Discuss architectural changes first.
 - Do not commit or push unless explicitly asked.
 
 ## Verification
 
-After making changes:
+After changes:
+1. Build affected projects.
+2. Run relevant tests when available.
+3. Check introduced errors/warnings; ignore warnings for deprecated libraries.
+4. If the schema changed, review the migration.
 
-1. Build the affected project(s).
-2. Run relevant tests if available.
-3. Check compiler errors and warnings introduced by the change. Ignore warnings for deprecated libraries
-4. If the database schema changed, review the generated migration.
+Do not claim verification without performing it.
 
-Do not claim a change is working without appropriate verification.
+## Learning
 
-## Learning Context
-
-This is also a learning project.
-
-For meaningful architectural or design decisions:
-
-- Explain the reasoning.
-- Explain important trade-offs.
-- Recommend an approach rather than silently changing architecture.
-- Prefer teaching the existing codebase's patterns over introducing unnecessary new ones.
+This is also a learning project. For meaningful architectural/design decisions, explain reasoning and trade-offs and recommend rather than silently changing architecture. Prefer teaching existing patterns over unnecessary new ones.

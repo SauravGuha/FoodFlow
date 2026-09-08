@@ -9,7 +9,7 @@ public class FoodFlowContextFactory : IDesignTimeDbContextFactory<FoodFlowContex
     public FoodFlowContext CreateDbContext(string[] args)
     {
         var optionsBuilder = new DbContextOptionsBuilder<FoodFlowContext>();
-        optionsBuilder.UseSqlServer("Server=localhost;Database=FoodFlowDB;User Id=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=True;");
+        optionsBuilder.UseSqlServer("Server=localhost;Database=FoodFlowDB;User Id=sa;Password=@Bcd.1234;TrustServerCertificate=True;");
         return new FoodFlowContext(optionsBuilder.Options);
     }
 }
