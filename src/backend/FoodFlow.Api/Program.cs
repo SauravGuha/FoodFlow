@@ -27,6 +27,15 @@ public class Program
         builder.Services.AddScoped<ExceptionMiddleware>();
         builder.Services.AddApplication();
         builder.Services.AddPersistence(builder.Configuration);
+        builder.Services.AddCors(corsOption =>
+        {
+            corsOption.AddDefaultPolicy(builder =>
+            {
+                builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+            });
+        });
 
         var app = builder.Build();
 
@@ -36,7 +45,11 @@ public class Program
             app.MapOpenApi();
         }
 
-        app.UseHttpsRedirection();
+        if (!app.Environment.IsDevelopment())
+        {
+            app.UseHttpsRedirection();
+        }
+        app.UseCors();
 
         app.UseAuthorization();
 
