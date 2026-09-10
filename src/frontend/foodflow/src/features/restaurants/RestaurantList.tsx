@@ -2,7 +2,8 @@ import { useContext, useEffect, useState } from "react";
 import type { Restaurant } from "../../common/types";
 import { getRestaurants } from "../../common/utilities/apiHelper";
 import LoaderContext from "../../common/utilities/appContext";
-import { Button, Table } from "react-bootstrap";
+import { Table } from "react-bootstrap";
+import { Link } from "react-router";
 
 export default function RestaurantList() {
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
@@ -34,13 +35,13 @@ export default function RestaurantList() {
 
       <tbody>
         {restaurants.map((r) => (
-          <tr>
+          <tr key={r.id}>
             <td>{r.name}</td>
             <td>{r.description}</td>
             <td>{r.status}</td>
             <td>{r.restaurantOwner.name}</td>
             <td>
-              <Button size="sm">Edit</Button>
+              <Link to={`${r.id}`}>View</Link>
             </td>
           </tr>
         ))}

@@ -3,8 +3,12 @@ import type { Branch, Cuisine, Restaurant } from "../../common/types";
 import { useContext, useEffect, useState } from "react";
 import { getRestuarantDetails } from "../../common/utilities/apiHelper";
 import LoaderContext from "../../common/utilities/appContext";
+import { useParams } from "react-router";
 
-export default function RestaurantDetails({ id }: { id: string }) {
+export default function RestaurantDetails() {
+  const { id } = useParams();
+  if (!id) return <>Id not found...</>;
+
   const [restaurant, setRestaurant] = useState<Restaurant | undefined>(
     undefined,
   );
