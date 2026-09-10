@@ -25,8 +25,9 @@ export default function RestaurantList() {
       <thead>
         <tr>
           <th>Name</th>
-          <th>Cuisines</th>
-          <th>Branches</th>
+          <th>Description</th>
+          <th>Status</th>
+          <th>Owner</th>
           <th>Actions</th>
         </tr>
       </thead>
@@ -35,7 +36,9 @@ export default function RestaurantList() {
         {restaurants.map((r) => (
           <tr>
             <td>{r.name}</td>
-            <td>{r.cuisines.join(", ")}</td>
+            <td>{r.description}</td>
+            <td>{r.status}</td>
+            <td>{r.restaurantOwner.name}</td>
             <td>
               <Button size="sm">Edit</Button>
             </td>

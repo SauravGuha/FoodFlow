@@ -26,3 +26,7 @@ instance.interceptors.request.use(
 export const getRestaurants = async function () {
   return await instance.get<Restaurant[]>("/restaurant/filtered");
 };
+
+export const getRestuarantDetails = async function (id: string) {
+  return await instance.get<Restaurant>(`/restaurant/${id}`);
+};
