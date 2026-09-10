@@ -25,17 +25,87 @@ export default function RestaurantDetails() {
       .then((res) => {
         setRestaurant(res.data);
         // Populate branch and cuisine lists from the fetched restaurant data
-        if (restaurant?.branches && restaurant?.cuisines) {
-          setBranches(restaurant.branches);
-          setCuisines(restaurant.cuisines);
+        if (res.data?.branches && res.data?.cuisines) {
+          setBranches(res.data.branches);
+          setCuisines(res.data.cuisines);
         }
       })
       .finally(() => setLoading(false));
   }, [id]);
 
+  if (!restaurant) return <></>;
+
   return (
     <Tabs defaultActiveKey="details">
-      <Tab eventKey="details" title="Details"></Tab>
+      {/* ---------- Details Tab ---------- */}
+      <Tab eventKey="details" title="Details">
+        {
+          // Card‑style container with a little spacing
+          <div className="p-4 border rounded-lg bg-white shadow-sm">
+            {/* Restaurant name – big heading */}
+            <h2 className="text-xl font-bold mb-3">{restaurant.name}</h2>
+
+            {/* Owner contact info */}
+            <div className="mb-4">
+              <p>
+                <strong>Owner:</strong>{" "}
+                {restaurant.restaurantOwner?.name ?? "N/A"}
+              </p>
+              <p>
+                <strong>Email:</strong>{" "}
+                {restaurant.restaurantOwner?.email ?? "N/A"}
+              </p>
+              <p>
+                <strong>Phone:</strong>{" "}
+                {restaurant.restaurantOwner?.phoneNumber ?? "N/A"}
+              </p>
+            </div>
+
+            {/* GST / F‑Number */}
+            <div className="mb-4">
+              <p>
+                <strong>GST Number:</strong> {restaurant.gstNumber}
+              </p>
+              <p>
+                <strong>F-Number:</strong> {restaurant.fNumber}
+              </p>
+            </div>
+
+            {/* Description */}
+            <div className="mb-3">
+              <p>{restaurant.description}</p>
+            </div>
+
+            {/* Status badge – Active / Inactive / Pending */}
+            <div className="flex items-center justify-between mb-4">
+              <span
+                className={`inline-flex items-center rounded-full w-6 h-6 ${
+                  restaurant.status === "Active"
+                    ? "bg-green-500 text-white"
+                    : restaurant.status === "Inactive"
+                      ? "bg-red-500 text-white"
+                      : "bg-yellow-500 text-white"
+                }`}
+              >
+                {restaurant.status}
+              </span>
+            </div>
+
+            {/* Cuisine list */}
+            <div className="flex flex-wrap gap-2">
+              {restaurant.cuisines.map((c) => (
+                <a
+                  key={c.id}
+                  href={`/restaurants/${c.restaurantId}`}
+                  className="text-decoration-none"
+                >
+                  {c.name}
+                </a>
+              ))}
+            </div>
+          </div>
+        }
+      </Tab>
 
       <Tab eventKey="branches" title="Branches">
         <div>
