@@ -96,6 +96,12 @@ export default function RestaurantDetails() {
       </Tab>
 
       <Tab eventKey="branches" title="Branches">
+        <div className="d-flex justify-content-between align-items-center mb-3">
+          <h2>Branches</h2>
+          <Link to="/branches/new" className="btn btn-primary">
+            Add Branch
+          </Link>
+        </div>
         <div>
           {branches.length === 0 ? (
             <p>No branches found.</p>
