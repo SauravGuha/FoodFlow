@@ -1,5 +1,5 @@
 import axios from "axios";
-import type { Restaurant } from "../types";
+import type { Branch, Restaurant } from "../types";
 
 const delayer = function (value: number) {
   return new Promise((resolve) => {
@@ -37,4 +37,8 @@ export const addUpdateRestaurant = async function (data: Restaurant) {
   } else {
     return await instance.post(`/restaurant`, data);
   }
+};
+
+export const getBranchDetails = async function (id: string) {
+  return await instance.get<Branch>(`/branch/${id}`);
 };

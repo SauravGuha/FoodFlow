@@ -11,7 +11,6 @@ import {
 export default function RestaurantForm() {
   const { id } = useParams();
   const [isloading, setIsLoading] = useState<boolean>(false);
-  const operation = id ? "Update" : "Add";
   const [restaurant, setRestaurant] = useState<Restaurant>({
     id: "",
     name: "",

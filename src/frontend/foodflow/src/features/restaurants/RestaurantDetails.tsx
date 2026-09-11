@@ -98,7 +98,10 @@ export default function RestaurantDetails() {
       <Tab eventKey="branches" title="Branches">
         <div className="d-flex justify-content-between align-items-center mb-3">
           <h2>Branches</h2>
-          <Link to="/branches/new" className="btn btn-primary">
+          <Link
+            to={`/restaurants/${restaurant.id}/branches/new`}
+            className="btn btn-primary"
+          >
             Add Branch
           </Link>
         </div>
@@ -113,6 +116,7 @@ export default function RestaurantDetails() {
                     <th>Name</th>
                     <th>Address</th>
                     <th>Hours</th>
+                    <th>Action</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -127,6 +131,14 @@ export default function RestaurantDetails() {
                       <td>
                         {/* {b.operatingHours.schedule.Monday.startTime} –{" "}
                         {b.operatingHours.schedule.Monday.endTime} */}
+                      </td>
+                      <td>
+                        <Link
+                          to={`/restaurants/${restaurant.id}/branches/${b.id}`}
+                          className="btn btn-primary"
+                        >
+                          Edit
+                        </Link>
                       </td>
                     </tr>
                   ))}
