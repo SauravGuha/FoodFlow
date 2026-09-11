@@ -85,7 +85,10 @@ public class RestaurantController : AppController
     public async Task<IActionResult> UpdateRestaurant([FromBody] UpdateRestaurantCommand command, CancellationToken cancellationToken)
     {
         var operationResult = await this.Mediator.Send(command, cancellationToken);
-        return this.ReturnResult(operationResult);
+        if (operationResult.Status)
+            return CreatedAtAction(nameof(GetRestaurantById), new { id = operationResult.Data }, null);
+        else
+            return this.ReturnResult(operationResult);
     }
 
 

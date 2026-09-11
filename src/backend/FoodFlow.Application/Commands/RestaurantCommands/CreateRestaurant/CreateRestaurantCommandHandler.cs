@@ -23,13 +23,13 @@ public class CreateRestaurantCommandHandler : IRequestHandler<CreateRestaurantCo
 
     public async Task<Result<Guid>> Handle(CreateRestaurantCommand request, CancellationToken cancellationToken)
     {
-        if (await this.restaurantRepository.GetByGstNumberAsync(request.Gst, cancellationToken) != null)
+        if (await this.restaurantRepository.GetByGstNumberAsync(request.GstNumber, cancellationToken) != null)
         {
-            return Result<Guid>.SetError($"A restaurant with GST number {request.Gst} already exists.", 409);
+            return Result<Guid>.SetError($"A restaurant with GST number {request.GstNumber} already exists.", 409);
         }
 
         var restaurantOwner = this.mapper.Map<RestaurantOwner>(request.RestaurantOwner);
-        var restaurant = new Restaurant(request.Name, request.Gst, request.FNumber, restaurantOwner, description: request.Description);
+        var restaurant = new Restaurant(request.Name, request.GstNumber, request.FNumber, restaurantOwner, description: request.Description);
 
         //database insertion logic
         await this.restaurantRepository.AddAsync(restaurant, cancellationToken);

@@ -30,3 +30,11 @@ export const getRestaurants = async function () {
 export const getRestuarantDetails = async function (id: string) {
   return await instance.get<Restaurant>(`/restaurant/${id}`);
 };
+
+export const addUpdateRestaurant = async function (data: Restaurant) {
+  if (data.id) {
+    return await instance.put(`/restaurant`, data);
+  } else {
+    return await instance.post(`/restaurant`, data);
+  }
+};

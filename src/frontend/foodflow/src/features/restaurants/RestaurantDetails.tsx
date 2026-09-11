@@ -3,7 +3,7 @@ import type { Branch, Cuisine, Restaurant } from "../../common/types";
 import { useContext, useEffect, useState } from "react";
 import { getRestuarantDetails } from "../../common/utilities/apiHelper";
 import LoaderContext from "../../common/utilities/appContext";
-import { useParams } from "react-router";
+import { Link, useParams } from "react-router";
 
 export default function RestaurantDetails() {
   const { id } = useParams();
@@ -42,6 +42,7 @@ export default function RestaurantDetails() {
         {
           // Card‑style container with a little spacing
           <div className="p-4 border rounded-lg bg-white shadow-sm">
+            <Link to={`/restaurants/${restaurant.id}/edit`}>Edit</Link>
             {/* Restaurant name – big heading */}
             <h2 className="text-xl font-bold mb-3">{restaurant.name}</h2>
 

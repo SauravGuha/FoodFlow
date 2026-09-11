@@ -30,7 +30,7 @@ public class UpdateRestaurantCommandHandler : IRequestHandler<UpdateRestaurantCo
         }
         restaurant.UpdateDescription(request.Description);
         restaurant.UpdateFNumber(request.FNumber);
-        restaurant.UpdateGstNumber(request.Gst);
+        restaurant.UpdateGstNumber(request.GstNumber);
         restaurant.UpdateName(request.Name);
         restaurant.UpdateRestaurantOwner(mapper.Map<RestaurantOwner>(request.RestaurantOwner));
 

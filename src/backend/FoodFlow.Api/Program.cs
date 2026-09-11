@@ -33,7 +33,8 @@ public class Program
             {
                 builder.AllowAnyOrigin()
                     .AllowAnyMethod()
-                    .AllowAnyHeader();
+                    .AllowAnyHeader()
+                    .WithExposedHeaders("Location"); ;
             });
         });
 

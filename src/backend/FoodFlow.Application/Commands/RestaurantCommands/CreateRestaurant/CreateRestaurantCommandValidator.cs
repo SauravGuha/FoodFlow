@@ -13,7 +13,7 @@ public class CreateRestaurantCommandValidator : AbstractValidator<CreateRestaura
             .NotEmpty().WithMessage("Restaurant name is required.")
             .MaximumLength(100).WithMessage("Restaurant name cannot exceed 100 characters.");
 
-        RuleFor(x => x.Gst)
+        RuleFor(x => x.GstNumber)
             .NotEmpty().WithMessage("GST number is required.")
             .Matches(@"^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$")
             .WithMessage("Invalid GST number format.");
