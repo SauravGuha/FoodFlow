@@ -22,30 +22,38 @@ export default function RestaurantList() {
   }, []);
 
   return (
-    <Table striped bordered hover>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Description</th>
-          <th>Status</th>
-          <th>Owner</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-
-      <tbody>
-        {restaurants.map((r) => (
-          <tr key={r.id}>
-            <td>{r.name}</td>
-            <td>{r.description}</td>
-            <td>{r.status}</td>
-            <td>{r.restaurantOwner.name}</td>
-            <td>
-              <Link to={`${r.id}`}>View</Link>
-            </td>
+    <>
+      <div className="d-flex justify-content-between align-items-center mb-3">
+        <h2>Restaurants</h2>
+        <Link to="/restaurants/new" className="btn btn-primary">
+          Add Restaurant
+        </Link>
+      </div>
+      <Table striped bordered hover>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>Owner</th>
+            <th>Actions</th>
           </tr>
-        ))}
-      </tbody>
-    </Table>
+        </thead>
+
+        <tbody>
+          {restaurants.map((r) => (
+            <tr key={r.id}>
+              <td>{r.name}</td>
+              <td>{r.description}</td>
+              <td>{r.status}</td>
+              <td>{r.restaurantOwner.name}</td>
+              <td>
+                <Link to={`${r.id}`}>View</Link>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
+    </>
   );
 }

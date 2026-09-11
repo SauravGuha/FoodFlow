@@ -91,19 +91,6 @@ export default function RestaurantDetails() {
                 {restaurant.status}
               </span>
             </div>
-
-            {/* Cuisine list */}
-            <div className="flex flex-wrap gap-2">
-              {restaurant.cuisines.map((c) => (
-                <a
-                  key={c.id}
-                  href={`/restaurants/${c.restaurantId}`}
-                  className="text-decoration-none"
-                >
-                  {c.name}
-                </a>
-              ))}
-            </div>
           </div>
         }
       </Tab>

@@ -10,6 +10,7 @@ import {
 
 export default function RestaurantForm() {
   const { id } = useParams();
+  const [isloading, setIsLoading] = useState<boolean>(false);
   const operation = id ? "Update" : "Add";
   const [restaurant, setRestaurant] = useState<Restaurant>({
     id: "",
@@ -30,11 +31,15 @@ export default function RestaurantForm() {
   useEffect(() => {
     if (id) {
       setLoading(true);
+      setIsLoading(true);
       getRestuarantDetails(id)
         .then((res) => {
           setRestaurant(res.data);
         })
-        .finally(() => setLoading(false));
+        .finally(() => {
+          setLoading(false);
+          setIsLoading(false);
+        });
     }
   }, []);
 
@@ -61,6 +66,8 @@ export default function RestaurantForm() {
       navigate("/restaurants");
     }
   }
+
+  if (isloading) return <></>;
 
   return (
     <div className="container-fluid">
