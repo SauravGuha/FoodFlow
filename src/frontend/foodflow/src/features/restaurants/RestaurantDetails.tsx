@@ -7,8 +7,6 @@ import { Link, useParams } from "react-router";
 
 export default function RestaurantDetails() {
   const { id } = useParams();
-  if (!id) return <>Id not found...</>;
-
   const [restaurant, setRestaurant] = useState<Restaurant | undefined>(
     undefined,
   );
@@ -18,6 +16,10 @@ export default function RestaurantDetails() {
   // State for branch and cuisine lists
   const [branches, setBranches] = useState<Branch[]>([]);
   const [cuisines, setCuisines] = useState<Cuisine[]>([]);
+  const [activeTab, setActiveTab] = useState(
+    sessionStorage.getItem("restaurant-details-tab") ?? "details",
+  );
+  if (!id) return <>Id not found...</>;
 
   useEffect(() => {
     setLoading(true);
@@ -35,8 +37,15 @@ export default function RestaurantDetails() {
 
   if (!restaurant) return <></>;
 
+  function handleTabSelect(key: string | null) {
+    if (!key) return;
+
+    setActiveTab(key);
+    sessionStorage.setItem("restaurant-details-tab", key);
+  }
+
   return (
-    <Tabs defaultActiveKey="details">
+    <Tabs activeKey={activeTab} onSelect={handleTabSelect}>
       {/* ---------- Details Tab ---------- */}
       <Tab eventKey="details" title="Details">
         {
