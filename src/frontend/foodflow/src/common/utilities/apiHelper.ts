@@ -2,6 +2,7 @@ import axios from "axios";
 import type {
   AddUpdateBranch,
   Branch,
+  Cuisine,
   Restaurant,
   UpdateBranchStatus,
 } from "../types";
@@ -58,4 +59,8 @@ export const addUpdateBranchDetails = async function (data: AddUpdateBranch) {
 
 export const updateBranchStatus = async function (data: UpdateBranchStatus) {
   return await instance.patch(`/branch`, data);
+};
+
+export const createCuisine = async function (data: Cuisine) {
+  return await instance.post("/restaurant/cuisines", data);
 };

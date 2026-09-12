@@ -150,6 +150,15 @@ export default function RestaurantDetails() {
       </Tab>
 
       <Tab eventKey="cuisines" title="Cuisines">
+        <div className="d-flex justify-content-between align-items-center mb-3">
+          <h2>Cuisines</h2>
+          <Link
+            to={`/restaurants/${restaurant.id}/cuisines/new`}
+            className="btn btn-primary"
+          >
+            Add Cuisine
+          </Link>
+        </div>
         <div>
           {cuisines.length === 0 ? (
             <p>No cuisines found.</p>
