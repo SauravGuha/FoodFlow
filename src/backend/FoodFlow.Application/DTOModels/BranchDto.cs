@@ -1,3 +1,5 @@
+using FoodFlow.Domain.Models.RestaurantModels;
+
 namespace FoodFlow.Application.DTOModels;
 
 public class BranchDto
@@ -7,6 +9,8 @@ public class BranchDto
     public string PhoneNumber { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
     public Guid RestaurantId { get; set; }
+
+    public BranchStatus Status { get; set; }
 
     public AddressDto Address { get; set; } = new(); // Updated to include AddressDto
     public OperatingHoursDto OperatingHours { get; set; } = new(); // Updated to include OperatingHoursDto

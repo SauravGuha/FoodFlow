@@ -14,6 +14,7 @@ export interface Branch {
   restaurantId: string;
   address: Address;
   operatingHours: OperatingHours;
+  status: string;
 }
 
 export interface Address {
@@ -78,4 +79,9 @@ export interface AddUpdateBranch {
   phoneNumber: string;
   email: string;
   operatingHours: OperatingHours;
+}
+
+export interface UpdateBranchStatus {
+  id: string;
+  status: string;
 }

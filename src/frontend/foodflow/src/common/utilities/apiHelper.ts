@@ -1,5 +1,10 @@
 import axios from "axios";
-import type { AddUpdateBranch, Branch, Restaurant } from "../types";
+import type {
+  AddUpdateBranch,
+  Branch,
+  Restaurant,
+  UpdateBranchStatus,
+} from "../types";
 
 const delayer = function (value: number) {
   return new Promise((resolve) => {
@@ -49,4 +54,8 @@ export const addUpdateBranchDetails = async function (data: AddUpdateBranch) {
   } else {
     return await instance.post(`/branch`, data);
   }
+};
+
+export const updateBranchStatus = async function (data: UpdateBranchStatus) {
+  return await instance.patch(`/branch`, data);
 };

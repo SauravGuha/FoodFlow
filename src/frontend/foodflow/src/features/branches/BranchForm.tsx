@@ -5,6 +5,7 @@ import LoaderContext from "../../common/utilities/appContext";
 import {
   addUpdateBranchDetails,
   getBranchDetails,
+  updateBranchStatus,
 } from "../../common/utilities/apiHelper";
 import type {
   Address,
@@ -91,6 +92,17 @@ export default function BranchForm() {
     navigate("/restaurants/" + id);
   }
 
+  async function handleStatusChange(
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) {
+    const newStatus = event.target.checked ? "Active" : "Inactive";
+    await updateBranchStatus({ id: branch.id, status: newStatus });
+    setBranch((prevBranch) => ({
+      ...prevBranch,
+      status: newStatus,
+    }));
+  }
+
   if (isloading) {
     return <>Loading...</>;
   }
@@ -102,6 +114,23 @@ export default function BranchForm() {
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h2>{branchId ? "Update" : "Add"} Branch</h2>
       </div>
+
+      {branchId && (
+        <Col md={6} className="mb-3">
+          <Form.Group controlId="branchStatus">
+            <Form.Label>Status</Form.Label>
+
+            <Form.Check
+              type="switch"
+              id="branch-status"
+              name="status"
+              label={branch.status === "Active" ? "Active" : "Inactive"}
+              defaultChecked={branch.status === "Active"}
+              onChange={handleStatusChange}
+            />
+          </Form.Group>
+        </Col>
+      )}
 
       <Card>
         <Card.Body>
