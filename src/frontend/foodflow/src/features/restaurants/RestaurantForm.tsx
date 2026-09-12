@@ -7,6 +7,7 @@ import {
   addUpdateRestaurant,
   getRestuarantDetails,
 } from "../../common/utilities/apiHelper";
+import SaveButton from "../../components/common/SaveButton";
 
 export default function RestaurantForm() {
   const { id } = useParams();
@@ -184,10 +185,7 @@ export default function RestaurantForm() {
                 Cancel
               </Link>
 
-              <Button type="submit" variant="primary" disabled={submitting}>
-                {submitting ? <Spinner size="sm" /> : <></>}
-                Save
-              </Button>
+              <SaveButton submitting={submitting} />
             </div>
           </Form>
         </Card.Body>

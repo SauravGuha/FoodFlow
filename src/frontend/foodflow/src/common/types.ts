@@ -65,3 +65,17 @@ export interface Restaurant {
   branches: Branch[];
   cuisines: Cuisine[];
 }
+
+export interface AddUpdateBranch {
+  id?: string;
+  restaurantId: string;
+  name: string;
+  street: string;
+  city: string;
+  state: string;
+  zipCode: string;
+  country: string;
+  phoneNumber: string;
+  email: string;
+  operatingHours: OperatingHours;
+}

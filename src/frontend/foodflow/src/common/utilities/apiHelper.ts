@@ -1,5 +1,5 @@
 import axios from "axios";
-import type { Branch, Restaurant } from "../types";
+import type { AddUpdateBranch, Branch, Restaurant } from "../types";
 
 const delayer = function (value: number) {
   return new Promise((resolve) => {
@@ -13,7 +13,7 @@ const instance = axios.create({
 
 instance.interceptors.request.use(
   async function (config) {
-    await delayer(2);
+    await delayer(1);
     // Do something before request is sent
     return config;
   },
@@ -41,4 +41,12 @@ export const addUpdateRestaurant = async function (data: Restaurant) {
 
 export const getBranchDetails = async function (id: string) {
   return await instance.get<Branch>(`/branch/${id}`);
+};
+
+export const addUpdateBranchDetails = async function (data: AddUpdateBranch) {
+  if (data.id) {
+    return await instance.put(`/branch`, data);
+  } else {
+    return await instance.post(`/branch`, data);
+  }
 };

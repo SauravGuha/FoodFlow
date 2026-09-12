@@ -1,15 +1,20 @@
 import { useContext, useEffect, useState } from "react";
 import { Button, Card, Col, Form, Row } from "react-bootstrap";
-import { useParams } from "react-router";
+import { Link, useNavigate, useParams } from "react-router";
 import LoaderContext from "../../common/utilities/appContext";
-import { getBranchDetails } from "../../common/utilities/apiHelper";
+import {
+  addUpdateBranchDetails,
+  getBranchDetails,
+} from "../../common/utilities/apiHelper";
 import type {
   Address,
+  AddUpdateBranch,
   Branch,
   OperatingHours,
   OperatingTime,
   WeeklySchedule,
 } from "../../common/types";
+import SaveButton from "../../components/common/SaveButton";
 
 export default function BranchForm() {
   const { id, branchId } = useParams();
@@ -43,21 +48,54 @@ export default function BranchForm() {
   }
   const loaderContext = useContext(LoaderContext);
   const { setLoading } = loaderContext!;
+  const [isloading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     if (branchId) {
       setLoading(true);
+      setIsLoading(true);
       getBranchDetails(branchId)
         .then((response) => setBranch(response.data))
-        .finally(() => setLoading(false));
+        .finally(() => {
+          setLoading(false);
+          setIsLoading(false);
+        });
     }
   }, []);
 
-  function handleSubmit(event: React.SubmitEvent<HTMLFormElement>) {
+  const navigate = useNavigate();
+  const [submitting, setSubmitting] = useState<boolean>(false);
+  async function handleSubmit(event: React.SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
 
     // API behaviour will be implemented by you.
+    const formData = new FormData(event.target);
+    const branchObject = {
+      name: formData.get("name")!.toString(),
+      city: formData.get("city")!.toString(),
+      state: formData.get("state")!.toString(),
+      street: formData.get("street")!.toString(),
+      zipCode: formData.get("zipCode")!.toString(),
+      country: formData.get("country")!.toString(),
+      id: branch.id,
+      operatingHours: branch.operatingHours,
+      restaurantId: id,
+      email: formData.get("email")!.toString(),
+      phoneNumber: formData.get("phoneNumber")!.toString(),
+    } as AddUpdateBranch;
+
+    // Add the rest of the fields to the branch object.
+    setSubmitting(true);
+    await addUpdateBranchDetails(branchObject);
+    setSubmitting(false);
+    navigate("/restaurants/" + id);
   }
+
+  if (isloading) {
+    return <>Loading...</>;
+  }
+
+  const operatingHoursSchedule = Object.entries(branch.operatingHours.schedule);
 
   return (
     <div className="container-fluid">
@@ -80,6 +118,28 @@ export default function BranchForm() {
                     name="name"
                     placeholder="Enter branch name"
                     defaultValue={branch.name}
+                  />
+                </Form.Group>
+              </Col>
+              <Col md={6} className="mb-3">
+                <Form.Group controlId="phoneNumber">
+                  <Form.Label>Phone Number</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="phoneNumber"
+                    placeholder="Enter branch phone number"
+                    defaultValue={branch.phoneNumber}
+                  />
+                </Form.Group>
+              </Col>
+              <Col md={6} className="mb-3">
+                <Form.Group controlId="email">
+                  <Form.Label>Email</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="email"
+                    placeholder="Enter branch email"
+                    defaultValue={branch.email}
                   />
                 </Form.Group>
               </Col>
@@ -152,15 +212,57 @@ export default function BranchForm() {
               </Col>
             </Row>
 
+            <hr />
+
+            <Card.Title className="mb-4">Operating Hours</Card.Title>
+
+            {operatingHoursSchedule.map((day) => (
+              <Row key={day[0]} className="align-items-end mb-3">
+                <Col md={3}>
+                  <Form.Label>{day[0]}</Form.Label>
+                </Col>
+
+                <Col md={4}>
+                  <Form.Group controlId={`${day[0]}-startTime`}>
+                    <Form.Label>Opening Time</Form.Label>
+                    <Form.Control
+                      type="time"
+                      name={`operatingHours.${day[0]}.startTime`}
+                      defaultValue={day[1][0]?.startTime}
+                    />
+                  </Form.Group>
+                </Col>
+
+                <Col md={4}>
+                  <Form.Group controlId={`${day[0]}-endTime`}>
+                    <Form.Label>Closing Time</Form.Label>
+                    <Form.Control
+                      type="time"
+                      name={`operatingHours.${day[0]}.endTime`}
+                      defaultValue={day[1][0]?.endTime}
+                    />
+                  </Form.Group>
+                </Col>
+
+                <Col md={1}>
+                  <Button
+                    type="button"
+                    variant="outline-primary"
+                    title={`Add another time period for ${day}`}
+                  >
+                    +
+                  </Button>
+                </Col>
+              </Row>
+            ))}
+
             {/* Actions */}
             <div className="d-flex justify-content-end gap-2 mt-4">
-              <Button type="button" variant="secondary">
+              <Link to={`/restaurants/${id}`} className="btn btn-secondary">
                 Cancel
-              </Button>
+              </Link>
 
-              <Button type="submit" variant="primary">
-                Save Branch
-              </Button>
+              <SaveButton submitting={submitting} />
             </div>
           </Form>
         </Card.Body>
