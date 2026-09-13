@@ -44,6 +44,7 @@ export default function ItemList() {
               <th>Description</th>
               <th>ResturnantId</th>
               <th>CuisineId</th>
+              <th>Category</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -62,6 +63,7 @@ export default function ItemList() {
                   <td>{item.description}</td>
                   <td>{item.restaurantId}</td>
                   <td>{item.cuisineId}</td>
+                  <td>{item.categoryName}</td>
                   <td>
                     <Link to={``} className="btn btn-sm btn-outline-primary">
                       Edit
