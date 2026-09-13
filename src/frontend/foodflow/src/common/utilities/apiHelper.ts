@@ -3,6 +3,7 @@ import type {
   AddUpdateBranch,
   Branch,
   Cuisine,
+  Item,
   Restaurant,
   UpdateBranchStatus,
 } from "../types";
@@ -63,4 +64,14 @@ export const updateBranchStatus = async function (data: UpdateBranchStatus) {
 
 export const createCuisine = async function (data: Cuisine) {
   return await instance.post("/restaurant/cuisines", data);
+};
+
+export const getItems = async function (restaurantId?: string | null) {
+  if (restaurantId) {
+    return await instance.get<Item[]>(
+      `/item/filtered?restaurantId=${restaurantId}`,
+    );
+  } else {
+    return await instance.get<Item[]>(`/item/filtered`);
+  }
 };

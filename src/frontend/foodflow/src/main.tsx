@@ -10,6 +10,7 @@ import RestaurantDetails from "./features/restaurants/RestaurantDetails.tsx";
 import RestaurantForm from "./features/restaurants/RestaurantForm.tsx";
 import BranchForm from "./features/branches/BranchForm.tsx";
 import CuisineForm from "./features/cuisines/CuisineForm.tsx";
+import ItemList from "./features/item/ItemList.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -33,6 +34,7 @@ createRoot(document.getElementById("root")!).render(
             path="/restaurants/:id/cuisines/new"
             element={<CuisineForm />}
           />
+          <Route path="items/:restaurantId?" element={<ItemList />} />
         </Route>
       </Routes>
     </BrowserRouter>

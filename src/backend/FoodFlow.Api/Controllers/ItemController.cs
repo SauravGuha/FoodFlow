@@ -47,7 +47,7 @@ public class ItemController : AppController
     /// <param name="token"></param>
     /// <returns></returns>
     [HttpGet(template: "filtered")]
-    public async Task<IActionResult> GetFilteredItem([FromBody] FilteredItemRequest? request, CancellationToken token)
+    public async Task<IActionResult> GetFilteredItem([FromQuery] FilteredItemRequest? request, CancellationToken token)
     {
         var result = await Mediator.Send(request ?? new FilteredItemRequest());
         if (result == null)

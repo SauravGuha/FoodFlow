@@ -85,3 +85,13 @@ export interface UpdateBranchStatus {
   id: string;
   status: string;
 }
+
+export interface Item {
+  id?: string;
+  name: string;
+  description: string;
+  sku: string;
+  restaurantId: string;
+  cuisineId: string;
+  categoryName: string;
+}
