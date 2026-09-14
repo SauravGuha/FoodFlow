@@ -31,6 +31,10 @@ instance.interceptors.request.use(
   },
 );
 
+instance.interceptors.response.use((response) => {
+  return response;
+});
+
 export const getRestaurants = async function () {
   return await instance.get<Restaurant[]>("/restaurant/filtered");
 };
@@ -67,14 +71,14 @@ export const createCuisine = async function (data: Cuisine) {
   return await instance.post("/restaurant/cuisines", data);
 };
 
-export const getItems = async function (restaurantId?: string | null) {
-  if (restaurantId) {
-    return await instance.get<Item[]>(
-      `/item/filtered?restaurantId=${restaurantId}`,
-    );
-  } else {
-    return await instance.get<Item[]>(`/item/filtered`);
-  }
+export const getItems = async function (
+  restaurantId?: string | null,
+  cuisineId?: string | null,
+  categoryName?: string | null,
+) {
+  return await instance.get<Item[]>(
+    `/item/filtered?${restaurantId ? "restauranid=" + restaurantId + "&" : ""}${cuisineId ? "cuisineid=" + cuisineId + "&" : ""}${categoryName ? "categoryName=" + categoryName : ""}`,
+  );
 };
 
 export const getRestaurantList = async function () {

@@ -14,29 +14,39 @@ export default function ItemList() {
   const [showFilters, setShowFilters] = useState(false);
   const restaurantid = searchParams.get("restaurantid");
   const cuisineid = searchParams.get("cuisineid");
+  const categoryname = searchParams.get("categoryname");
   const [items, setItems] = useState<Item[]>([]);
   const [restaurants, setRestaurants] = useState<RestaurantList[]>([]);
   const [cuisines, setCuisines] = useState<Cuisine[]>([]);
+  const categories = ["undescribed", "nonveg", "veg", "pureveg"];
 
   const loaderContext = useContext(LoaderContext);
   const { setLoading, loaderStatus } = loaderContext!;
 
   useEffect(() => {
     setLoading(true);
-    getItems(restaurantid)
-      .then((response) => {
+    const promiseArray = [];
+    promiseArray.push(
+      getItems(restaurantid, cuisineid, categoryname).then((response) => {
         setItems(response.data);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, [restaurantid]);
-
-  useEffect(() => {
-    getRestaurantList()
-      .then((response) => setRestaurants(response.data))
-      .catch((err) => alert(err));
-  }, []);
+      }),
+    );
+    promiseArray.push(
+      getRestaurantList()
+        .then((response) => setRestaurants(response.data))
+        .catch((err) => alert(err)),
+    );
+    if (restaurantid) {
+      promiseArray.push(
+        getRestaurantCuisines(restaurantid).then((response) => {
+          setCuisines(response.data);
+        }),
+      );
+    }
+    Promise.all(promiseArray).finally(() => {
+      setLoading(false);
+    });
+  }, [restaurantid, cuisineid, categoryname]);
 
   const navigate = useNavigate();
   async function applyHandle(e: React.MouseEvent<HTMLButtonElement>) {
@@ -50,7 +60,7 @@ export default function ItemList() {
       //get the selected option
       const restaurantId = restaurant.value;
       if (restaurantId) {
-        url = url + `?restaurantId=${restaurantId}`;
+        url = url + `?restaurantid=${restaurantId}`;
       }
       const cuisine = document.querySelector(
         "#cuisineFilter",
@@ -58,6 +68,23 @@ export default function ItemList() {
       //get the selected option
       const cuisineId = cuisine.value;
       if (cuisineId) {
+        if (url.includes("?")) {
+          url = url + `&cuisineid=${cuisineId}`;
+        } else {
+          url = url + `?cuisineid=${cuisineId}`;
+        }
+      }
+      const category = document.querySelector(
+        "#categoryFilter",
+      ) as HTMLSelectElement;
+      //get the selected option
+      const categoryName = category.value;
+      if (categoryName) {
+        if (url.includes("?")) {
+          url = url + `&categoryname=${categoryName}`;
+        } else {
+          url = url + `?categoryname=${categoryName}`;
+        }
       }
       navigate(url);
     }
@@ -134,7 +161,11 @@ export default function ItemList() {
                       <option value="">All Cuisines</option>
 
                       {cuisines.map((cuisine) => (
-                        <option key={cuisine.id} value={cuisine.id}>
+                        <option
+                          key={cuisine.id}
+                          value={cuisine.id}
+                          selected={cuisine.id == cuisineid}
+                        >
                           {cuisine.name}
                         </option>
                       ))}
@@ -148,9 +179,16 @@ export default function ItemList() {
 
                     <Form.Select name="category">
                       <option value="">All Categories</option>
-                      <option value="Food">Food</option>
-                      <option value="Beverage">Beverage</option>
-                      <option value="Dessert">Dessert</option>
+
+                      {categories.map((cat) => (
+                        <option
+                          value={cat}
+                          key={cat}
+                          selected={cat == categoryname}
+                        >
+                          {cat}
+                        </option>
+                      ))}
                     </Form.Select>
                   </Form.Group>
                 </Col>

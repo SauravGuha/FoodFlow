@@ -56,7 +56,6 @@ export default function ItemForm() {
     e.preventDefault();
     const formData = new FormData(e.target);
     for (const [key, value] of formData.entries()) {
-      console.log(key, value);
       item[key] = value;
     }
     await createRestaurantItem(item);

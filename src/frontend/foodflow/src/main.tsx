@@ -35,7 +35,7 @@ createRoot(document.getElementById("root")!).render(
             path="/restaurants/:id/cuisines/new"
             element={<CuisineForm />}
           />
-          <Route path="items/:restaurantId?" element={<ItemList />} />
+          <Route path="items" element={<ItemList />} />
           <Route path="items/new" element={<ItemForm />} />
           <Route path="items/:id/edit" element={<ItemForm />} />
         </Route>

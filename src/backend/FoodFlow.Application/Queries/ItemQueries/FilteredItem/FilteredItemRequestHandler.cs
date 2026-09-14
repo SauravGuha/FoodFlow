@@ -44,10 +44,14 @@ public class FilteredItemRequestHandler : IRequestHandler<FilteredItemRequest, R
         }
         if (!string.IsNullOrWhiteSpace(request.CategoryName))
         {
-            var property = Expression.Property(parameter, nameof(Item.Category));
-            var containsMethod = typeof(string).GetMethod(nameof(string.Contains), new[] { typeof(string) });
-            var likeExpression = Expression.Call(property, containsMethod!, Expression.Constant(request.CategoryName.Trim()));
-            condition = Expression.AndAlso(condition, likeExpression);
+            if (Enum.TryParse(request.CategoryName, out FoodCategory category))
+            {
+                var property = Expression.Property(parameter, nameof(Item.Category));
+                var categoryExpression = Expression.Equal(property, Expression.Constant(category));
+                condition = Expression.AndAlso(condition, categoryExpression);
+            }
+            else
+                return Result<IEnumerable<ItemDto>>.SetError("Invalid category", 400);
         }
         var lmabda = Expression.Lambda<Func<Item, bool>>(condition, parameter);
 
