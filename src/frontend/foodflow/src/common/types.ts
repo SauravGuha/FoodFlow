@@ -95,3 +95,8 @@ export interface Item {
   cuisineId: string;
   categoryName: string;
 }
+
+export type RestaurantList = {
+  id: string;
+  name: string;
+};

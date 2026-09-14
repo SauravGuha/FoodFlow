@@ -5,6 +5,7 @@ import type {
   Cuisine,
   Item,
   Restaurant,
+  RestaurantList,
   UpdateBranchStatus,
 } from "../types";
 
@@ -74,4 +75,8 @@ export const getItems = async function (restaurantId?: string | null) {
   } else {
     return await instance.get<Item[]>(`/item/filtered`);
   }
+};
+
+export const getRestaurantList = async function () {
+  return await instance.get<RestaurantList[]>(`/item/restaurants`);
 };

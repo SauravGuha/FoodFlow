@@ -1,14 +1,17 @@
 import { useContext, useEffect, useState } from "react";
-import { Card, Table } from "react-bootstrap";
-import { Link, useSearchParams } from "react-router";
-import type { Item } from "../../common/types";
+import { Button, Card, Col, Form, Row, Table } from "react-bootstrap";
+import { Link, useNavigate, useSearchParams } from "react-router";
+import type { Item, RestaurantList } from "../../common/types";
 import LoaderContext from "../../common/utilities/appContext";
-import { getItems } from "../../common/utilities/apiHelper";
+import { getItems, getRestaurantList } from "../../common/utilities/apiHelper";
 
 export default function ItemList() {
   const [searchParams, setSearchParams] = useSearchParams();
+  const [showFilters, setShowFilters] = useState(false);
   const restaurantid = searchParams.get("restaurantid");
+  const cuisineid = searchParams.get("cuisineid");
   const [items, setItems] = useState<Item[]>([]);
+  const [restaurants, setRestaurants] = useState<RestaurantList[]>([]);
 
   const loaderContext = useContext(LoaderContext);
   const { setLoading, loaderStatus } = loaderContext!;
@@ -24,6 +27,31 @@ export default function ItemList() {
       });
   }, [restaurantid]);
 
+  useEffect(() => {
+    getRestaurantList()
+      .then((response) => setRestaurants(response.data))
+      .catch((err) => alert(err));
+  }, []);
+
+  const navigate = useNavigate();
+  async function applyHandle(e: React.MouseEvent<HTMLButtonElement>) {
+    e.preventDefault();
+    const filterButtonName = (e.target as HTMLButtonElement).innerText;
+    if (filterButtonName.toUpperCase() == "APPLY") {
+      const restaurant = document.querySelector(
+        "#restaurantFilter",
+      ) as HTMLSelectElement;
+      //get the selected option
+      const restaurantId = restaurant.value;
+      if (restaurantId) navigate(`/items?restaurantid=${restaurantId}`);
+      else navigate(`/items`);
+    }
+    if (filterButtonName.toUpperCase() == "CLEAR") {
+      setShowFilters(false);
+      navigate(`/items`);
+    }
+  }
+
   if (loaderStatus) return <>Loading...</>;
 
   return (
@@ -32,10 +60,86 @@ export default function ItemList() {
         <div className="d-flex justify-content-between align-items-center mb-3">
           <Card.Title className="mb-0">Items</Card.Title>
 
-          <Link to="" className="btn btn-primary">
-            Add Item
-          </Link>
+          <div className="d-flex gap-2">
+            <Button
+              variant="outline-secondary"
+              onClick={() => setShowFilters((value) => !value)}
+            >
+              Filter
+            </Button>
+
+            <Link to="" className="btn btn-primary">
+              Add Item
+            </Link>
+          </div>
         </div>
+
+        {showFilters && (
+          <Card className="mb-3">
+            <Card.Body>
+              <Row>
+                <Col md={4}>
+                  <Form.Group controlId="restaurantFilter">
+                    <Form.Label>Restaurant</Form.Label>
+
+                    <Form.Select name="restaurantId">
+                      <option value="">All Restaurants</option>
+
+                      {restaurants.map((restaurant) => (
+                        <option
+                          key={restaurant.id}
+                          value={restaurant.id}
+                          selected={restaurant.id == restaurantid}
+                        >
+                          {restaurant.name}
+                        </option>
+                      ))}
+                    </Form.Select>
+                  </Form.Group>
+                </Col>
+
+                <Col md={4}>
+                  <Form.Group controlId="cuisineFilter">
+                    <Form.Label>Cuisine</Form.Label>
+
+                    <Form.Select name="cuisineId">
+                      <option value="">All Cuisines</option>
+
+                      {/* {cuisines.map((cuisine) => (
+                        <option key={cuisine.id} value={cuisine.id}>
+                          {cuisine.name}
+                        </option>
+                      ))} */}
+                    </Form.Select>
+                  </Form.Group>
+                </Col>
+
+                <Col md={4}>
+                  <Form.Group controlId="categoryFilter">
+                    <Form.Label>Category</Form.Label>
+
+                    <Form.Select name="category">
+                      <option value="">All Categories</option>
+                      <option value="Food">Food</option>
+                      <option value="Beverage">Beverage</option>
+                      <option value="Dessert">Dessert</option>
+                    </Form.Select>
+                  </Form.Group>
+                </Col>
+              </Row>
+
+              <div className="d-flex justify-content-end gap-2 mt-3">
+                <Button variant="secondary" onClick={applyHandle}>
+                  Clear
+                </Button>
+
+                <Button variant="primary" onClick={applyHandle}>
+                  Apply
+                </Button>
+              </div>
+            </Card.Body>
+          </Card>
+        )}
 
         <Table striped bordered hover responsive>
           <thead>
