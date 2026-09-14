@@ -1,9 +1,13 @@
 import { useContext, useEffect, useState } from "react";
 import { Button, Card, Col, Form, Row, Table } from "react-bootstrap";
 import { Link, useNavigate, useSearchParams } from "react-router";
-import type { Item, RestaurantList } from "../../common/types";
+import type { Cuisine, Item, RestaurantList } from "../../common/types";
 import LoaderContext from "../../common/utilities/appContext";
-import { getItems, getRestaurantList } from "../../common/utilities/apiHelper";
+import {
+  getItems,
+  getRestaurantCuisines,
+  getRestaurantList,
+} from "../../common/utilities/apiHelper";
 
 export default function ItemList() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -12,6 +16,7 @@ export default function ItemList() {
   const cuisineid = searchParams.get("cuisineid");
   const [items, setItems] = useState<Item[]>([]);
   const [restaurants, setRestaurants] = useState<RestaurantList[]>([]);
+  const [cuisines, setCuisines] = useState<Cuisine[]>([]);
 
   const loaderContext = useContext(LoaderContext);
   const { setLoading, loaderStatus } = loaderContext!;
@@ -38,13 +43,23 @@ export default function ItemList() {
     e.preventDefault();
     const filterButtonName = (e.target as HTMLButtonElement).innerText;
     if (filterButtonName.toUpperCase() == "APPLY") {
+      let url = "/items";
       const restaurant = document.querySelector(
         "#restaurantFilter",
       ) as HTMLSelectElement;
       //get the selected option
       const restaurantId = restaurant.value;
-      if (restaurantId) navigate(`/items?restaurantid=${restaurantId}`);
-      else navigate(`/items`);
+      if (restaurantId) {
+        url = url + `?restaurantId=${restaurantId}`;
+      }
+      const cuisine = document.querySelector(
+        "#cuisineFilter",
+      ) as HTMLSelectElement;
+      //get the selected option
+      const cuisineId = cuisine.value;
+      if (cuisineId) {
+      }
+      navigate(url);
     }
     if (filterButtonName.toUpperCase() == "CLEAR") {
       setShowFilters(false);
@@ -53,6 +68,16 @@ export default function ItemList() {
   }
 
   if (loaderStatus) return <>Loading...</>;
+
+  function handleRestaurantChange(
+    event: React.ChangeEvent<HTMLSelectElement, HTMLSelectElement>,
+  ): void {
+    event.preventDefault();
+    const restaurantId = (event.target as HTMLSelectElement).value;
+    getRestaurantCuisines(restaurantId).then((response) => {
+      setCuisines(response.data);
+    });
+  }
 
   return (
     <Card>
@@ -68,7 +93,7 @@ export default function ItemList() {
               Filter
             </Button>
 
-            <Link to="" className="btn btn-primary">
+            <Link to="/items/new" className="btn btn-primary">
               Add Item
             </Link>
           </div>
@@ -82,7 +107,10 @@ export default function ItemList() {
                   <Form.Group controlId="restaurantFilter">
                     <Form.Label>Restaurant</Form.Label>
 
-                    <Form.Select name="restaurantId">
+                    <Form.Select
+                      name="restaurantId"
+                      onChange={handleRestaurantChange}
+                    >
                       <option value="">All Restaurants</option>
 
                       {restaurants.map((restaurant) => (
@@ -105,11 +133,11 @@ export default function ItemList() {
                     <Form.Select name="cuisineId">
                       <option value="">All Cuisines</option>
 
-                      {/* {cuisines.map((cuisine) => (
+                      {cuisines.map((cuisine) => (
                         <option key={cuisine.id} value={cuisine.id}>
                           {cuisine.name}
                         </option>
-                      ))} */}
+                      ))}
                     </Form.Select>
                   </Form.Group>
                 </Col>
@@ -169,7 +197,10 @@ export default function ItemList() {
                   <td>{item.cuisineId}</td>
                   <td>{item.categoryName}</td>
                   <td>
-                    <Link to={``} className="btn btn-sm btn-outline-primary">
+                    <Link
+                      to={`/items/${item.id}/edit`}
+                      className="btn btn-sm btn-outline-primary"
+                    >
                       Edit
                     </Link>
                   </td>

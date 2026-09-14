@@ -80,3 +80,19 @@ export const getItems = async function (restaurantId?: string | null) {
 export const getRestaurantList = async function () {
   return await instance.get<RestaurantList[]>(`/item/restaurants`);
 };
+
+export const getItemDetails = async function (id: string) {
+  return await instance.get<Item>(`/item/${id}`);
+};
+
+export const getRestaurantCuisines = async function (id: string) {
+  return await instance.get<Cuisine[]>(`/restaurant/${id}/cuisines`);
+};
+
+export const createRestaurantItem = async function (data: Item) {
+  if (data.id) {
+    return await instance.put(`/branch`, data);
+  } else {
+    return await instance.post(`/item`, data);
+  }
+};

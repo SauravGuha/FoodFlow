@@ -1,4 +1,5 @@
 export type RestaurantStatus = "Active" | "Inactive" | "Pending";
+export type Category = "undescribed" | "nonveg" | "veg" | "pureveg";
 
 export interface RestaurantOwner {
   name: string;
@@ -93,7 +94,7 @@ export interface Item {
   sku: string;
   restaurantId: string;
   cuisineId: string;
-  categoryName: string;
+  categoryName: Category;
 }
 
 export type RestaurantList = {

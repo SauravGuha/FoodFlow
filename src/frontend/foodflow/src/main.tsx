@@ -11,6 +11,7 @@ import RestaurantForm from "./features/restaurants/RestaurantForm.tsx";
 import BranchForm from "./features/branches/BranchForm.tsx";
 import CuisineForm from "./features/cuisines/CuisineForm.tsx";
 import ItemList from "./features/item/ItemList.tsx";
+import ItemForm from "./features/item/ItemForm.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -35,6 +36,8 @@ createRoot(document.getElementById("root")!).render(
             element={<CuisineForm />}
           />
           <Route path="items/:restaurantId?" element={<ItemList />} />
+          <Route path="items/new" element={<ItemForm />} />
+          <Route path="items/:id/edit" element={<ItemForm />} />
         </Route>
       </Routes>
     </BrowserRouter>

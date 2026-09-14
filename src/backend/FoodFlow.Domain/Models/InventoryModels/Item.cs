@@ -43,4 +43,9 @@ public class Item : BaseModel
 
         this._branchInventories.Add(branchInventory);
     }
+
+    public void UpdateItemCategory(FoodCategory foodCategory)
+    {
+        this.Category = foodCategory;
+    }
 }
