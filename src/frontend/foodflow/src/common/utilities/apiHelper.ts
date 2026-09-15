@@ -31,9 +31,18 @@ instance.interceptors.request.use(
   },
 );
 
-instance.interceptors.response.use((response) => {
-  return response;
-});
+instance.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  (error) => {
+    const message = error.message || "Unknown error";
+    const status = error.response?.status || "Unknown";
+
+    alert(`API request failed:\nStatus: ${status}\nMessage: ${message}`);
+    return Promise.reject(error);
+  },
+);
 
 export const getRestaurants = async function () {
   return await instance.get<Restaurant[]>("/restaurant/filtered");

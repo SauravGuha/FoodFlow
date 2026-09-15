@@ -34,7 +34,6 @@ export default function ItemList() {
     promiseArray.push(
       getRestaurantList()
         .then((response) => setRestaurants(response.data))
-        .catch((err) => alert(err)),
     );
     if (restaurantid) {
       promiseArray.push(
