@@ -19,7 +19,7 @@ export type UpdateBranchStockRequest = {
 };
 
 export const getBranchInventories = async function (branchId: string) {
-  return await instance.get<BranchInventoryItem>(`/branch/${branchId}/inventory`);
+  return await instance.get<BranchInventoryItem[]>(`/branch/${branchId}/inventory`);
 };
 
 export const createBranchInventory = async function (
