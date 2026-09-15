@@ -138,8 +138,8 @@ export default function RestaurantDetails() {
                         {b.address.country}
                       </td>
                       <td>
-                        {/* {b.operatingHours.schedule.Monday.startTime} –{" "}
-                        {b.operatingHours.schedule.Monday.endTime} */}
+                        {/* {b.operatingHours.schedule.Monday[0]?.startTime} –{" "}
+                        {b.operatingHours.schedule.Monday[0]?.endTime} */}
                       </td>
                       <td>
                         <Link
@@ -147,6 +147,12 @@ export default function RestaurantDetails() {
                           className="btn btn-primary"
                         >
                           Edit
+                        </Link>{" "}
+                        <Link
+                          to={`/restaurants/${restaurant.id}/branches/${b.id}/inventoryitems`}
+                          className="btn btn-primary"
+                        >
+                          Inventory
                         </Link>
                       </td>
                     </tr>

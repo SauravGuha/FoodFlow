@@ -12,6 +12,7 @@ import BranchForm from "./features/branches/BranchForm.tsx";
 import CuisineForm from "./features/cuisines/CuisineForm.tsx";
 import ItemList from "./features/item/ItemList.tsx";
 import ItemForm from "./features/item/ItemForm.tsx";
+import InventoryList from "./features/inventory/InventoryList.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -38,6 +39,10 @@ createRoot(document.getElementById("root")!).render(
           <Route path="items" element={<ItemList />} />
           <Route path="items/new" element={<ItemForm />} />
           <Route path="items/:id/edit" element={<ItemForm />} />
+          <Route
+            path="restaurants/:restaurantid/branches/:branchid/inventoryitems"
+            element={<InventoryList />}
+          />
         </Route>
       </Routes>
     </BrowserRouter>

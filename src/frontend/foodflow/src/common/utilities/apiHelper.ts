@@ -2,6 +2,7 @@ import axios from "axios";
 import type {
   AddUpdateBranch,
   Branch,
+  BranchInventoryItem,
   Cuisine,
   Item,
   Restaurant,
@@ -108,4 +109,12 @@ export const createRestaurantItem = async function (data: Item) {
   } else {
     return await instance.post(`/item`, data);
   }
+};
+
+export const getBranchInventories = async function (
+  branchid: string | null | undefined,
+) {
+  return await instance.get<BranchInventoryItem[]>(
+    `branch/${branchid}/inventory`,
+  );
 };

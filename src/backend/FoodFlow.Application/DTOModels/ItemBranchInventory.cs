@@ -17,4 +17,7 @@ public class ItemBranchInventory
     public FoodCategory Category { get; set; }
     public Guid CuisineId { get; set; }
     public string CuisineName { get; set; }
+    public Guid RestaurantId { get; set; }
+    public string RestaurantName { get; set; }
+    public string BranchName { get; set; }
 }

@@ -27,6 +27,7 @@ public class BranchInventoryRepo : BaseRepository<BranchInventory>, IBranchInven
         {
             ItemId = finalResult.i.Id,
             BranchId = finalResult.b.Id,
+            BranchName = finalResult.b.Name,
             InventoryId = finalResult.bi.Id,
             ItemName = finalResult.i.Name,
             Description = finalResult.i.Description,
@@ -35,7 +36,9 @@ public class BranchInventoryRepo : BaseRepository<BranchInventory>, IBranchInven
             Price = finalResult.bi.Price,
             Quantity = finalResult.bi.Quantity,
             CuisineId = finalResult.c.Id,
-            CuisineName = finalResult.c.Name
+            CuisineName = finalResult.c.Name,
+            RestaurantId = finalResult.r.Id,
+            RestaurantName = finalResult.r.Name
         });
 
         return result!;

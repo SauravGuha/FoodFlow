@@ -101,3 +101,20 @@ export type RestaurantList = {
   id: string;
   name: string;
 };
+
+export type BranchInventoryItem = {
+  itemId: string;
+  inventoryId: string;
+  itemName: string;
+  branchId: string;
+  quantity: number;
+  price: number;
+  description: string;
+  sku: string;
+  category: string;
+  cuisineId: string;
+  cuisineName: string;
+  restaurantId: string;
+  restaurantName: string;
+  branchName: string;
+};
