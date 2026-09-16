@@ -4,6 +4,7 @@ import Sidebar from "./components/layout/Sidebar";
 import { useState } from "react";
 import LoaderContext from "./common/utilities/appContext";
 import { Outlet } from "react-router";
+import { AuthProvider } from "./common/auth/AuthContext";
 
 function App() {
   const [showLoader, setShowLoader] = useState(false);
@@ -14,24 +15,26 @@ function App() {
 
   return (
     <>
-      <LoaderContext.Provider
-        value={{ setLoading: setLoaderUpdate, loaderStatus: showLoader }}
-      >
-        <AppNavbar />
+      <AuthProvider>
+        <LoaderContext.Provider
+          value={{ setLoading: setLoaderUpdate, loaderStatus: showLoader }}
+        >
+          <AppNavbar />
 
-        <Container fluid>
-          <Row>
-            <Col md={2}>
-              <Sidebar />
-            </Col>
-            <Col md={10}>
-              <div className="page-container">
-                <Outlet />
-              </div>
-            </Col>
-          </Row>
-        </Container>
-      </LoaderContext.Provider>
+          <Container fluid>
+            <Row>
+              <Col md={2}>
+                <Sidebar />
+              </Col>
+              <Col md={10}>
+                <div className="page-container">
+                  <Outlet />
+                </div>
+              </Col>
+            </Row>
+          </Container>
+        </LoaderContext.Provider>
+      </AuthProvider>
     </>
   );
 }

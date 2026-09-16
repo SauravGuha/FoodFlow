@@ -43,11 +43,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const login = () => {
-    keycloak.login();
+    keycloak.login({
+      redirectUri: window.location.origin,
+    });
   };
 
   const register = () => {
-    keycloak.register();
+    keycloak.register({
+      redirectUri: window.location.origin,
+    });
   };
 
   const logout = () => {

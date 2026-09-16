@@ -2,8 +2,10 @@ import { Container, Dropdown, Navbar } from "react-bootstrap";
 import Loading from "../common/Loading";
 import { useContext } from "react";
 import LoaderContext from "../../common/utilities/appContext";
+import { useAuth } from "../../common/auth/AuthContext";
 
 export default function AppNavbar() {
+  const { isAuthenticated } = useAuth();
   const loaderContext = useContext(LoaderContext);
   const { loaderStatus } = loaderContext!;
 
@@ -13,7 +15,7 @@ export default function AppNavbar() {
         <Navbar.Brand>FoodFlow</Navbar.Brand>
         <Loading value={loaderStatus} />
         <Dropdown>
-          <Navbar.Text>Admin</Navbar.Text>
+          <Navbar.Text>{isAuthenticated ? "Logout" : "Login"}</Navbar.Text>
         </Dropdown>
       </Container>
     </Navbar>

@@ -20,8 +20,8 @@ import Cart from "./features/customer/Cart/Cart.tsx";
 import keycloak from "./common/auth/keycloak.ts";
 
 await keycloak.init({
-  onLoad: "login-required",
-  //onLoad: "check-sso",
+  //onLoad: "login-required",
+  onLoad: "check-sso",
   pkceMethod: "S256",
 });
 
