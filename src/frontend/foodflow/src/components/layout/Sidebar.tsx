@@ -7,7 +7,7 @@ export default function Sidebar() {
       <Link to="/">Dashboard</Link>
       <Link to="/restaurants">Restaurants</Link>
       <Link to="/items">Items</Link>
-      <Link to="/branchmenu">Menu</Link>
+      <Link to="/customer/restaurants">Customer Restaurants</Link>
     </Nav>
   );
 }

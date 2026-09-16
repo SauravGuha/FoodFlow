@@ -2,7 +2,7 @@ import BranchList from "../../features/admin/branches/BranchList";
 import CuisineList from "../../features/admin/cuisines/CuisineList";
 import Dashboard from "../../features/admin/dashboard/Dashboard";
 import InventoryList from "../../features/admin/inventory/InventoryList";
-import RestaurantList from "../../features/admin/restaurants/RestaurantList";
+import RestaurantList from "../../features/admin/restaurants/Restaurants";
 
 type PageContainerProps = {
   feature: string;

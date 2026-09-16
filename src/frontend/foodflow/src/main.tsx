@@ -5,7 +5,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import App from "./App.tsx";
 import { BrowserRouter, Route, Routes } from "react-router";
 import Dashboard from "./features/admin/dashboard/Dashboard.tsx";
-import RestaurantList from "./features/admin/restaurants/RestaurantList.tsx";
 import RestaurantDetails from "./features/admin/restaurants/RestaurantDetails.tsx";
 import RestaurantForm from "./features/admin/restaurants/RestaurantForm.tsx";
 import BranchForm from "./features/admin/branches/BranchForm.tsx";
@@ -13,6 +12,9 @@ import CuisineForm from "./features/admin/cuisines/CuisineForm.tsx";
 import ItemList from "./features/admin/item/ItemList.tsx";
 import ItemForm from "./features/admin/item/ItemForm.tsx";
 import InventoryList from "./features/admin/inventory/InventoryList.tsx";
+import Restaurants from "./features/admin/restaurants/Restaurants.tsx";
+import RestaurantList from "./features/customer/RestaurantList.tsx";
+import BranchList from "./features/customer/BranchList.tsx";
 import BranchMenu from "./features/customer/Menu/BranchMenu.tsx";
 
 createRoot(document.getElementById("root")!).render(
@@ -21,7 +23,7 @@ createRoot(document.getElementById("root")!).render(
       <Routes>
         <Route path="/" element={<App />}>
           <Route index element={<Dashboard />} />
-          <Route path="restaurants" element={<RestaurantList />} />
+          <Route path="restaurants" element={<Restaurants />} />
           <Route path="restaurants/:id" element={<RestaurantDetails />} />
           <Route path="restaurants/new" element={<RestaurantForm />} />
           <Route path="restaurants/:id/edit" element={<RestaurantForm />} />
@@ -44,7 +46,12 @@ createRoot(document.getElementById("root")!).render(
             path="restaurants/:restaurantid/branches/:branchid/inventoryitems"
             element={<InventoryList />}
           />
-          <Route path="/branchmenu" element={<BranchMenu />} />
+          <Route path="/customer/restaurants" element={<RestaurantList />} />
+          <Route
+            path="/customer/restaurants/:id/branches"
+            element={<BranchList />}
+          />
+          <Route path="/customer/menu/:branchid" element={<BranchMenu />} />
         </Route>
       </Routes>
     </BrowserRouter>

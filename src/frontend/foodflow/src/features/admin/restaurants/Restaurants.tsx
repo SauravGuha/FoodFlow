@@ -5,7 +5,7 @@ import LoaderContext from "../../../common/utilities/appContext";
 import { Table } from "react-bootstrap";
 import { Link } from "react-router";
 
-export default function RestaurantList() {
+export default function Restaurants() {
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
   const loaderContext = useContext(LoaderContext);
   const { setLoading } = loaderContext!;
