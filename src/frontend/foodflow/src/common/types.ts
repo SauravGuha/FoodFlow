@@ -131,3 +131,12 @@ export type UpdateBranchStockRequest = {
   branchId: string;
   quantity: number;
 };
+
+export type CartItem = BranchInventoryItem & {
+  orderQuantity: number;
+};
+
+export type CartSummary = {
+  cartItems: CartItem[];
+  cartTotal: Number;
+};

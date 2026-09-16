@@ -9,16 +9,18 @@ import {
   InputGroup,
   Row,
 } from "react-bootstrap";
-import type { BranchInventoryItem } from "../../../common/types";
+import type { CartItem, CartSummary } from "../../../common/types";
 import { useParams } from "react-router";
 import { getBranchInventories } from "../../../common/utilities/apiHelper";
 import LoaderContext from "../../../common/utilities/appContext";
 
 export default function BranchMenu() {
   const { branchid } = useParams();
-  const [branchInventories, setBranchInventories] = useState<
-    BranchInventoryItem[]
-  >([]);
+  const [menuItems, setMenuItems] = useState<CartItem[]>([]);
+  const [cartSummary, setCartSummary] = useState<CartSummary>({
+    cartItems: [] as CartItem[],
+    cartTotal: 0,
+  });
   const loaderContext = useContext(LoaderContext);
   const { setLoading, loaderStatus } = loaderContext!;
 
@@ -26,7 +28,11 @@ export default function BranchMenu() {
     setLoading(true);
     getBranchInventories(branchid)
       .then((response) => {
-        setBranchInventories(response.data);
+        setMenuItems(
+          response.data.map((bi) => {
+            return { ...bi, orderQuantity: 0 } as CartItem;
+          }),
+        );
       })
       .finally(() => {
         setLoading(false);
@@ -34,6 +40,31 @@ export default function BranchMenu() {
   }, [branchid]);
 
   if (loaderStatus) return <>Loading...</>;
+
+  function handleQuantity(operation: string, bi: CartItem) {
+    const cartItem = menuItems.find((e) => e.inventoryId == bi.inventoryId);
+    if (cartItem) {
+      if (operation == "+") {
+        cartItem.orderQuantity += 1;
+      } else {
+        cartItem.orderQuantity -= 1;
+      }
+      const newMenuItems = [] as CartItem[];
+      menuItems.forEach((mi) => {
+        if (mi.inventoryId != cartItem.inventoryId) {
+          newMenuItems.push(mi);
+        } else {
+          newMenuItems.push(cartItem);
+        }
+      });
+      setMenuItems(newMenuItems);
+      cartSummary.cartItems = newMenuItems.filter((e) => e.orderQuantity > 0);
+      cartSummary.cartTotal = newMenuItems
+        .filter((e) => e.orderQuantity > 0)
+        .reduce((acc, cur) => acc + cur.price * cur.orderQuantity, 0);
+      setCartSummary({ ...cartSummary });
+    }
+  }
 
   return (
     <Container fluid className="py-3">
@@ -101,48 +132,8 @@ export default function BranchMenu() {
       <h5 className="mb-3">Menu</h5>
 
       <Row xs={1} md={2} lg={3} className="g-3">
-        {/* Menu Item */}
-        <Col>
-          <Card className="h-100 border-0 shadow-sm">
-            <Card.Body>
-              <div className="d-flex justify-content-between">
-                <div>
-                  <div className="mb-1">
-                    <span
-                      className="d-inline-block border border-success rounded-circle me-2"
-                      style={{
-                        width: 12,
-                        height: 12,
-                      }}
-                    />
-
-                    <strong>Margherita Pizza</strong>
-                  </div>
-
-                  <div className="fw-semibold mb-2">₹299</div>
-                </div>
-
-                <Badge bg="light" text="dark">
-                  Pizza
-                </Badge>
-              </div>
-
-              <p className="text-muted small mb-3">
-                Classic pizza with tomato sauce, mozzarella and fresh basil.
-              </p>
-
-              {/* Quantity / Add */}
-              <div className="d-flex justify-content-end">
-                <Button variant="outline-primary" size="sm">
-                  Add
-                </Button>
-              </div>
-            </Card.Body>
-          </Card>
-        </Col>
-
         {/* Example item with quantity */}
-        {branchInventories.map((bi) => (
+        {menuItems.map((bi) => (
           <Col>
             <Card className="h-100 border-0 shadow-sm">
               <Card.Body>
@@ -160,7 +151,7 @@ export default function BranchMenu() {
                       <strong>{bi.itemName}</strong>
                     </div>
 
-                    <div className="fw-semibold mb-2">₹249</div>
+                    <div className="fw-semibold mb-2">{bi.price}</div>
                   </div>
 
                   <Badge bg="light" text="dark">
@@ -172,13 +163,25 @@ export default function BranchMenu() {
 
                 <div className="d-flex justify-content-end">
                   <div className="d-flex align-items-center border rounded">
-                    <Button variant="light" size="sm">
+                    <Button
+                      variant="light"
+                      size="sm"
+                      onClick={() => {
+                        handleQuantity("-", bi);
+                      }}
+                    >
                       −
                     </Button>
 
-                    <span className="px-3 fw-semibold">2</span>
+                    <span className="px-3 fw-semibold">{bi.orderQuantity}</span>
 
-                    <Button variant="light" size="sm">
+                    <Button
+                      variant="light"
+                      size="sm"
+                      onClick={() => {
+                        handleQuantity("+", bi);
+                      }}
+                    >
                       +
                     </Button>
                   </div>
@@ -201,8 +204,10 @@ export default function BranchMenu() {
           <Card.Body className="py-2 px-3">
             <div className="d-flex align-items-center justify-content-between">
               <div>
-                <strong>2 items</strong>
-                <span className="text-muted ms-2">₹498</span>
+                <strong>{cartSummary.cartItems.length} items</strong>
+                <span className="text-muted ms-2">
+                  ₹ {cartSummary.cartTotal.toString()}
+                </span>
               </div>
 
               <Button variant="primary">View Cart →</Button>
