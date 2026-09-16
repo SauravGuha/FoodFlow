@@ -118,3 +118,16 @@ export type BranchInventoryItem = {
   restaurantName: string;
   branchName: string;
 };
+
+export type CreateBranchInventoryRequest = {
+  itemId: string;
+  branchId: string;
+  quantity: number;
+  price: number;
+};
+
+export type UpdateBranchStockRequest = {
+  itemId: string;
+  branchId: string;
+  quantity: number;
+};

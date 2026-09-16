@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
-import type { Restaurant } from "../../common/types";
-import { getRestaurants } from "../../common/utilities/apiHelper";
-import LoaderContext from "../../common/utilities/appContext";
+import type { Restaurant } from "../../../common/types";
+import { getRestaurants } from "../../../common/utilities/apiHelper";
+import LoaderContext from "../../../common/utilities/appContext";
 import { Table } from "react-bootstrap";
 import { Link } from "react-router";
 

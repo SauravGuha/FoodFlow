@@ -1,13 +1,13 @@
 import { useContext, useEffect, useState } from "react";
 import { Button, Card, Col, Form, Row, Table } from "react-bootstrap";
 import { Link, useNavigate, useSearchParams } from "react-router";
-import type { Cuisine, Item, RestaurantList } from "../../common/types";
-import LoaderContext from "../../common/utilities/appContext";
+import type { Cuisine, Item, RestaurantList } from "../../../common/types";
+import LoaderContext from "../../../common/utilities/appContext";
 import {
   getItems,
   getRestaurantCuisines,
   getRestaurantList,
-} from "../../common/utilities/apiHelper";
+} from "../../../common/utilities/apiHelper";
 
 export default function ItemList() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -32,8 +32,7 @@ export default function ItemList() {
       }),
     );
     promiseArray.push(
-      getRestaurantList()
-        .then((response) => setRestaurants(response.data))
+      getRestaurantList().then((response) => setRestaurants(response.data)),
     );
     if (restaurantid) {
       promiseArray.push(

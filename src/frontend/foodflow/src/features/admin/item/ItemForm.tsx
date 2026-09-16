@@ -1,14 +1,14 @@
 import { useContext, useEffect, useState } from "react";
 import { Button, Card, Col, Form, Row } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router";
-import type { Cuisine, Item, RestaurantList } from "../../common/types";
+import type { Cuisine, Item, RestaurantList } from "../../../common/types";
 import {
   createRestaurantItem,
   getItemDetails,
   getRestaurantCuisines,
   getRestaurantList,
-} from "../../common/utilities/apiHelper";
-import LoaderContext from "../../common/utilities/appContext";
+} from "../../../common/utilities/apiHelper";
+import LoaderContext from "../../../common/utilities/appContext";
 
 export default function ItemForm() {
   const { id } = useParams();

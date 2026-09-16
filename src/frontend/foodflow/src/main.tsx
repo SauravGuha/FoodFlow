@@ -4,15 +4,15 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 import App from "./App.tsx";
 import { BrowserRouter, Route, Routes } from "react-router";
-import Dashboard from "./features/dashboard/Dashboard.tsx";
-import RestaurantList from "./features/restaurants/RestaurantList.tsx";
-import RestaurantDetails from "./features/restaurants/RestaurantDetails.tsx";
-import RestaurantForm from "./features/restaurants/RestaurantForm.tsx";
-import BranchForm from "./features/branches/BranchForm.tsx";
-import CuisineForm from "./features/cuisines/CuisineForm.tsx";
-import ItemList from "./features/item/ItemList.tsx";
-import ItemForm from "./features/item/ItemForm.tsx";
-import InventoryList from "./features/inventory/InventoryList.tsx";
+import Dashboard from "./features/admin/dashboard/Dashboard.tsx";
+import RestaurantList from "./features/admin/restaurants/RestaurantList.tsx";
+import RestaurantDetails from "./features/admin/restaurants/RestaurantDetails.tsx";
+import RestaurantForm from "./features/admin/restaurants/RestaurantForm.tsx";
+import BranchForm from "./features/admin/branches/BranchForm.tsx";
+import CuisineForm from "./features/admin/cuisines/CuisineForm.tsx";
+import ItemList from "./features/admin/item/ItemList.tsx";
+import ItemForm from "./features/admin/item/ItemForm.tsx";
+import InventoryList from "./features/admin/inventory/InventoryList.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

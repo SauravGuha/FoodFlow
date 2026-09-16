@@ -1,13 +1,13 @@
 import { Button, Card, Col, Form, Row, Spinner } from "react-bootstrap";
 import { Link, useNavigate, useParams } from "react-router";
-import type { Restaurant, RestaurantOwner } from "../../common/types";
+import type { Restaurant, RestaurantOwner } from "../../../common/types";
 import { useContext, useEffect, useState } from "react";
-import LoaderContext from "../../common/utilities/appContext";
+import LoaderContext from "../../../common/utilities/appContext";
 import {
   addUpdateRestaurant,
   getRestuarantDetails,
-} from "../../common/utilities/apiHelper";
-import SaveButton from "../../components/common/SaveButton";
+} from "../../../common/utilities/apiHelper";
+import SaveButton from "../../../components/common/SaveButton";
 
 export default function RestaurantForm() {
   const { id } = useParams();

@@ -18,27 +18,28 @@ public class BranchInventoryRepo : BaseRepository<BranchInventory>, IBranchInven
         var restaurant = this._context.Set<Restaurant>();
         var cuisine = this._context.Set<Cuisine>();
         var branch = this._context.Set<Branch>();
-        var result = restaurant.Join(branch, r => r.Id, b => b.RestaurantId, (r, b) => new { r, b })
-        .Where(rb => rb.b.Id == branchId)
-        .Join(itemTable, rb => rb.r.Id, i => i.RestaurantId, (rb, i) => new { rb.r, rb.b, i })
-        .Join(this._dbSet, rbi => rbi.i.Id, bi => bi.ItemId, (rbi, bi) => new { rbi.r, rbi.b, rbi.i, bi })
-        .Join(cuisine, rbii => rbii.i.CuisineId, c => c.Id, (rbbii, c) => new { rbbii.r, rbbii.b, rbbii.i, rbbii.bi, c })
-        .Select(finalResult => new ItemBranchInventory
+
+        var result = this._dbSet.Where(e => e.BranchId == branchId)
+        .Join(itemTable, bi => bi.ItemId, it => it.Id, (bi, it) => new { bi, it })
+        .Join(branch, biit => biit.bi.BranchId, b => b.Id, (biit, b) => new { biit.bi, biit.it, b })
+        .Join(restaurant, biitb => biitb.it.RestaurantId, r => r.Id, (biitb, r) => new { biitb.bi, biitb.it, biitb.b, r })
+        .Join(cuisine, t => t.it.CuisineId, c => c.Id, (t, c) => new { t.bi, t.it, t.b, t.r, c })
+        .Select(finalresult => new ItemBranchInventory
         {
-            ItemId = finalResult.i.Id,
-            BranchId = finalResult.b.Id,
-            BranchName = finalResult.b.Name,
-            InventoryId = finalResult.bi.Id,
-            ItemName = finalResult.i.Name,
-            Description = finalResult.i.Description,
-            Sku = finalResult.i.Sku,
-            Category = finalResult.i.Category,
-            Price = finalResult.bi.Price,
-            Quantity = finalResult.bi.Quantity,
-            CuisineId = finalResult.c.Id,
-            CuisineName = finalResult.c.Name,
-            RestaurantId = finalResult.r.Id,
-            RestaurantName = finalResult.r.Name
+            BranchName = finalresult.b.Name,
+            BranchId = finalresult.bi.BranchId,
+            Category = finalresult.it.Category,
+            CuisineId = finalresult.it.CuisineId,
+            CuisineName = finalresult.c.Name,
+            Description = finalresult.it.Description,
+            InventoryId = finalresult.bi.Id,
+            ItemId = finalresult.bi.ItemId,
+            ItemName = finalresult.it.Name,
+            Price = finalresult.bi.Price,
+            Quantity = finalresult.bi.Quantity,
+            RestaurantId = finalresult.it.RestaurantId,
+            RestaurantName = finalresult.r.Name,
+            Sku = finalresult.it.Sku
         });
 
         return result!;

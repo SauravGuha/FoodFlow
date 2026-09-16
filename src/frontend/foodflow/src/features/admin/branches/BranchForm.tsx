@@ -1,12 +1,12 @@
 import { useContext, useEffect, useState } from "react";
 import { Button, Card, Col, Form, Row } from "react-bootstrap";
 import { Link, useNavigate, useParams } from "react-router";
-import LoaderContext from "../../common/utilities/appContext";
+import LoaderContext from "../../../common/utilities/appContext";
 import {
   addUpdateBranchDetails,
   getBranchDetails,
   updateBranchStatus,
-} from "../../common/utilities/apiHelper";
+} from "../../../common/utilities/apiHelper";
 import type {
   Address,
   AddUpdateBranch,
@@ -14,8 +14,8 @@ import type {
   OperatingHours,
   OperatingTime,
   WeeklySchedule,
-} from "../../common/types";
-import SaveButton from "../../components/common/SaveButton";
+} from "../../../common/types";
+import SaveButton from "../../../components/common/SaveButton";
 
 export default function BranchForm() {
   const { id, branchId } = useParams();

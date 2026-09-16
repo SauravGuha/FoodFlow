@@ -1,8 +1,8 @@
-import BranchList from "../../features/branches/BranchList";
-import CuisineList from "../../features/cuisines/CuisineList";
-import Dashboard from "../../features/dashboard/Dashboard";
-import InventoryList from "../../features/inventory/InventoryList";
-import RestaurantList from "../../features/restaurants/RestaurantList";
+import BranchList from "../../features/admin/branches/BranchList";
+import CuisineList from "../../features/admin/cuisines/CuisineList";
+import Dashboard from "../../features/admin/dashboard/Dashboard";
+import InventoryList from "../../features/admin/inventory/InventoryList";
+import RestaurantList from "../../features/admin/restaurants/RestaurantList";
 
 type PageContainerProps = {
   feature: string;

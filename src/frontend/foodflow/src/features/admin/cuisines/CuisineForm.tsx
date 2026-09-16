@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Button, Card, Form } from "react-bootstrap";
 import { Link, useNavigate, useParams } from "react-router";
-import type { Cuisine } from "../../common/types";
-import { createCuisine } from "../../common/utilities/apiHelper";
+import type { Cuisine } from "../../../common/types";
+import { createCuisine } from "../../../common/utilities/apiHelper";
 
 export default function CuisineForm() {
   const { id } = useParams();

@@ -3,11 +3,13 @@ import type {
   AddUpdateBranch,
   Branch,
   BranchInventoryItem,
+  CreateBranchInventoryRequest,
   Cuisine,
   Item,
   Restaurant,
   RestaurantList,
   UpdateBranchStatus,
+  UpdateBranchStockRequest,
 } from "../types";
 
 const delayer = function (value: number) {
@@ -87,7 +89,7 @@ export const getItems = async function (
   categoryName?: string | null,
 ) {
   return await instance.get<Item[]>(
-    `/item/filtered?${restaurantId ? "restauranid=" + restaurantId + "&" : ""}${cuisineId ? "cuisineid=" + cuisineId + "&" : ""}${categoryName ? "categoryName=" + categoryName : ""}`,
+    `/item/filtered?${restaurantId ? "restaurantid=" + restaurantId + "&" : ""}${cuisineId ? "cuisineid=" + cuisineId + "&" : ""}${categoryName ? "categoryName=" + categoryName : ""}`,
   );
 };
 
@@ -117,4 +119,20 @@ export const getBranchInventories = async function (
   return await instance.get<BranchInventoryItem[]>(
     `branch/${branchid}/inventory`,
   );
+};
+
+export const createBranchInventory = async function (
+  data: CreateBranchInventoryRequest,
+) {
+  return await instance.post(`/item/iteminventory`, data);
+};
+
+export const addBranchStock = async function (data: UpdateBranchStockRequest) {
+  return await instance.put(`/item/iteminventory`, data);
+};
+
+export const removeBranchStock = async function (
+  data: UpdateBranchStockRequest,
+) {
+  return await instance.put(`/item/removeitembranchstock`, data);
 };

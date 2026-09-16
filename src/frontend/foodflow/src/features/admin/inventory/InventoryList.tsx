@@ -11,23 +11,26 @@ import {
   Table,
 } from "react-bootstrap";
 import { Link, useParams } from "react-router";
-import type { BranchInventoryItem, Item } from "../../common/types";
-import LoaderContext from "../../common/utilities/appContext";
-import { getItems } from "../../common/utilities/apiHelper";
+import type { BranchInventoryItem, Item } from "../../../common/types";
+import LoaderContext from "../../../common/utilities/appContext";
 import {
   addBranchStock,
   createBranchInventory,
   getBranchInventories,
+  getItems,
   removeBranchStock,
-} from "../../common/utilities/inventoryApiHelper";
+} from "../../../common/utilities/apiHelper";
 
 export default function InventoryList() {
   const { restaurantid, branchid } = useParams();
-  const [branchInventories, setBranchInventories] = useState<BranchInventoryItem[]>([]);
+  const [branchInventories, setBranchInventories] = useState<
+    BranchInventoryItem[]
+  >([]);
   const [items, setItems] = useState<Item[]>([]);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showStockModal, setShowStockModal] = useState(false);
-  const [selectedInventory, setSelectedInventory] = useState<BranchInventoryItem | null>(null);
+  const [selectedInventory, setSelectedInventory] =
+    useState<BranchInventoryItem | null>(null);
   const [stockQuantity, setStockQuantity] = useState(1);
   const [stockMode, setStockMode] = useState<"add" | "remove">("add");
   const [selectedItemId, setSelectedItemId] = useState("");
@@ -49,7 +52,9 @@ export default function InventoryList() {
 
     setLoading(true);
     Promise.all([
-      getBranchInventories(branchid).then((response) => setBranchInventories(response.data)),
+      getBranchInventories(branchid).then((response) =>
+        setBranchInventories(response.data),
+      ),
       getItems(restaurantid).then((response) => setItems(response.data)),
     ]).finally(() => setLoading(false));
   }, [branchid, restaurantid]);
@@ -59,8 +64,13 @@ export default function InventoryList() {
     (item) => item.id && !inventoryItemIds.has(item.id),
   );
 
-  const outOfStockCount = branchInventories.filter((item) => item.quantity === 0).length;
-  const totalStock = branchInventories.reduce((total, item) => total + item.quantity, 0);
+  const outOfStockCount = branchInventories.filter(
+    (item) => item.quantity === 0,
+  ).length;
+  const totalStock = branchInventories.reduce(
+    (total, item) => total + item.quantity,
+    0,
+  );
 
   const closeAddModal = () => {
     setShowAddModal(false);
@@ -161,7 +171,9 @@ export default function InventoryList() {
             <Card className="h-100 border">
               <Card.Body>
                 <div className="text-muted small">Inventory Items</div>
-                <div className="fs-4 fw-semibold">{branchInventories.length}</div>
+                <div className="fs-4 fw-semibold">
+                  {branchInventories.length}
+                </div>
               </Card.Body>
             </Card>
           </Col>
@@ -177,7 +189,9 @@ export default function InventoryList() {
             <Card className="h-100 border">
               <Card.Body>
                 <div className="text-muted small">Out of Stock</div>
-                <div className="fs-4 fw-semibold text-danger">{outOfStockCount}</div>
+                <div className="fs-4 fw-semibold text-danger">
+                  {outOfStockCount}
+                </div>
               </Card.Body>
             </Card>
           </Col>
@@ -203,7 +217,7 @@ export default function InventoryList() {
             )}
           </div>
         ) : (
-          <Table striped bordered hover responsive align="middle">
+          <Table striped bordered hover responsive align="center">
             <thead>
               <tr>
                 <th>Item</th>
@@ -323,10 +337,7 @@ export default function InventoryList() {
         </Form>
       </Modal>
 
-      <Modal
-        show={showStockModal}
-        onHide={() => setShowStockModal(false)}
-      >
+      <Modal show={showStockModal} onHide={() => setShowStockModal(false)}>
         <Form onSubmit={handleStockUpdate}>
           <Modal.Header closeButton>
             <Modal.Title>
@@ -347,13 +358,18 @@ export default function InventoryList() {
                 min="1"
                 step="1"
                 value={stockQuantity}
-                onChange={(event) => setStockQuantity(Number(event.target.value))}
+                onChange={(event) =>
+                  setStockQuantity(Number(event.target.value))
+                }
                 required
               />
             </Form.Group>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={() => setShowStockModal(false)}>
+            <Button
+              variant="secondary"
+              onClick={() => setShowStockModal(false)}
+            >
               Cancel
             </Button>
             <Button

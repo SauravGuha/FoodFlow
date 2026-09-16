@@ -1,8 +1,8 @@
 import { Tab, Tabs } from "react-bootstrap";
-import type { Branch, Cuisine, Restaurant } from "../../common/types";
+import type { Branch, Cuisine, Restaurant } from "../../../common/types";
 import { useContext, useEffect, useState } from "react";
-import { getRestuarantDetails } from "../../common/utilities/apiHelper";
-import LoaderContext from "../../common/utilities/appContext";
+import { getRestuarantDetails } from "../../../common/utilities/apiHelper";
+import LoaderContext from "../../../common/utilities/appContext";
 import { Link, useParams } from "react-router";
 
 export default function RestaurantDetails() {
