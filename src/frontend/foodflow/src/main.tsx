@@ -13,6 +13,7 @@ import CuisineForm from "./features/admin/cuisines/CuisineForm.tsx";
 import ItemList from "./features/admin/item/ItemList.tsx";
 import ItemForm from "./features/admin/item/ItemForm.tsx";
 import InventoryList from "./features/admin/inventory/InventoryList.tsx";
+import BranchMenu from "./features/customer/Menu/BranchMenu.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -43,6 +44,7 @@ createRoot(document.getElementById("root")!).render(
             path="restaurants/:restaurantid/branches/:branchid/inventoryitems"
             element={<InventoryList />}
           />
+          <Route path="/branchmenu" element={<BranchMenu />} />
         </Route>
       </Routes>
     </BrowserRouter>
