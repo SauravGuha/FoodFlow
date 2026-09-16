@@ -1,0 +1,82 @@
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  type ReactNode,
+} from "react";
+import keycloak from "./keycloak";
+
+interface AuthContextType {
+  isAuthenticated: boolean;
+  user: {
+    id?: string;
+    username?: string;
+    name?: string;
+    email?: string;
+  } | null;
+  login: () => void;
+  register: () => void;
+  logout: () => void;
+}
+
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+export function AuthProvider({ children }: { children: ReactNode }) {
+  const [isAuthenticated, setIsAuthenticated] = useState(
+    keycloak.authenticated ?? false,
+  );
+
+  const [user, setUser] = useState<AuthContextType["user"]>(null);
+
+  useEffect(() => {
+    if (!keycloak.authenticated) {
+      return;
+    }
+
+    setUser({
+      id: keycloak.subject,
+      username: keycloak.tokenParsed?.preferred_username,
+      name: keycloak.tokenParsed?.name,
+      email: keycloak.tokenParsed?.email,
+    });
+  }, []);
+
+  const login = () => {
+    keycloak.login();
+  };
+
+  const register = () => {
+    keycloak.register();
+  };
+
+  const logout = () => {
+    keycloak.logout({
+      redirectUri: window.location.origin,
+    });
+  };
+
+  return (
+    <AuthContext.Provider
+      value={{
+        isAuthenticated,
+        user,
+        login,
+        register,
+        logout,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
+}
+
+export function useAuth() {
+  const context = useContext(AuthContext);
+
+  if (!context) {
+    throw new Error("useAuth must be used inside AuthProvider");
+  }
+
+  return context;
+}

@@ -1,0 +1,27 @@
+services:
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.7.3
+    container_name: keycloak
+    hostname: keycloak
+    environment:
+      - KC_BOOTSTRAP_ADMIN_USERNAME=admin
+      - KC_BOOTSTRAP_ADMIN_PASSWORD=admin
+    ports:
+      - "10001:8080"
+    command:
+      - start-dev
+    volumes:
+      - keycloak-data:/opt/keycloak/data
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'      # Maximum 1 CPU core
+          memory: 768M     # Maximum 512 MB RAM
+        reservations:
+          cpus: '0.25'     # Minimum 0.25 CPU cores
+          memory: 256M     # Minimum 128 MB RAM
+
+
+      
+volumes:
+  keycloak-data:

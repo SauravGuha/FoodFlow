@@ -17,45 +17,54 @@ import RestaurantList from "./features/customer/RestaurantList.tsx";
 import BranchList from "./features/customer/BranchList.tsx";
 import BranchMenu from "./features/customer/Menu/BranchMenu.tsx";
 import Cart from "./features/customer/Cart/Cart.tsx";
+import keycloak from "./common/auth/keycloak.ts";
+
+await keycloak.init({
+  onLoad: "login-required",
+  //onLoad: "check-sso",
+  pkceMethod: "S256",
+});
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<App />}>
-          <Route index element={<Dashboard />} />
-          <Route path="restaurants" element={<Restaurants />} />
-          <Route path="restaurants/:id" element={<RestaurantDetails />} />
-          <Route path="restaurants/new" element={<RestaurantForm />} />
-          <Route path="restaurants/:id/edit" element={<RestaurantForm />} />
-          <Route
-            path="/restaurants/:id/branches/new"
-            element={<BranchForm />}
-          />
-          <Route
-            path="/restaurants/:id/branches/:branchId?"
-            element={<BranchForm />}
-          />
-          <Route
-            path="/restaurants/:id/cuisines/new"
-            element={<CuisineForm />}
-          />
-          <Route path="items" element={<ItemList />} />
-          <Route path="items/new" element={<ItemForm />} />
-          <Route path="items/:id/edit" element={<ItemForm />} />
-          <Route
-            path="restaurants/:restaurantid/branches/:branchid/inventoryitems"
-            element={<InventoryList />}
-          />
-          <Route path="/customer/restaurants" element={<RestaurantList />} />
-          <Route
-            path="/customer/restaurants/:id/branches"
-            element={<BranchList />}
-          />
-          <Route path="/customer/menu/:branchid" element={<BranchMenu />} />
-          <Route path="/customer/cart" element={<Cart />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+    <>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<App />}>
+            <Route index element={<Dashboard />} />
+            <Route path="restaurants" element={<Restaurants />} />
+            <Route path="restaurants/:id" element={<RestaurantDetails />} />
+            <Route path="restaurants/new" element={<RestaurantForm />} />
+            <Route path="restaurants/:id/edit" element={<RestaurantForm />} />
+            <Route
+              path="/restaurants/:id/branches/new"
+              element={<BranchForm />}
+            />
+            <Route
+              path="/restaurants/:id/branches/:branchId?"
+              element={<BranchForm />}
+            />
+            <Route
+              path="/restaurants/:id/cuisines/new"
+              element={<CuisineForm />}
+            />
+            <Route path="items" element={<ItemList />} />
+            <Route path="items/new" element={<ItemForm />} />
+            <Route path="items/:id/edit" element={<ItemForm />} />
+            <Route
+              path="restaurants/:restaurantid/branches/:branchid/inventoryitems"
+              element={<InventoryList />}
+            />
+            <Route path="/customer/restaurants" element={<RestaurantList />} />
+            <Route
+              path="/customer/restaurants/:id/branches"
+              element={<BranchList />}
+            />
+            <Route path="/customer/menu/:branchid" element={<BranchMenu />} />
+            <Route path="/customer/cart" element={<Cart />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </>
   </StrictMode>,
 );
