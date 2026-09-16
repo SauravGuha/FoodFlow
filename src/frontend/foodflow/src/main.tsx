@@ -16,6 +16,7 @@ import Restaurants from "./features/admin/restaurants/Restaurants.tsx";
 import RestaurantList from "./features/customer/RestaurantList.tsx";
 import BranchList from "./features/customer/BranchList.tsx";
 import BranchMenu from "./features/customer/Menu/BranchMenu.tsx";
+import Cart from "./features/customer/Cart/Cart.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -52,6 +53,7 @@ createRoot(document.getElementById("root")!).render(
             element={<BranchList />}
           />
           <Route path="/customer/menu/:branchid" element={<BranchMenu />} />
+          <Route path="/customer/cart" element={<Cart />} />
         </Route>
       </Routes>
     </BrowserRouter>

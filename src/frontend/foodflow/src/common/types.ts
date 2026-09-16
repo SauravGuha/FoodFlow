@@ -138,5 +138,6 @@ export type CartItem = BranchInventoryItem & {
 
 export type CartSummary = {
   cartItems: CartItem[];
-  cartTotal: Number;
+  cartTotal: number;
+  branchId: string;
 };

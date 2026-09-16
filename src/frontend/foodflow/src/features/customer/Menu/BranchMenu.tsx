@@ -10,19 +10,31 @@ import {
   Row,
 } from "react-bootstrap";
 import type { CartItem, CartSummary } from "../../../common/types";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { getBranchInventories } from "../../../common/utilities/apiHelper";
 import LoaderContext from "../../../common/utilities/appContext";
 
 export default function BranchMenu() {
   const { branchid } = useParams();
+  const cartSummaryString = sessionStorage.getItem("cart");
+  let prevCartSummary: CartSummary | undefined;
+  if (cartSummaryString) {
+    prevCartSummary = JSON.parse(cartSummaryString) as CartSummary;
+    if (prevCartSummary && prevCartSummary.branchId != branchid) {
+      sessionStorage.removeItem("cart");
+    }
+  }
   const [menuItems, setMenuItems] = useState<CartItem[]>([]);
-  const [cartSummary, setCartSummary] = useState<CartSummary>({
-    cartItems: [] as CartItem[],
-    cartTotal: 0,
-  });
+  const [cartSummary, setCartSummary] = useState<CartSummary>(
+    prevCartSummary ?? {
+      cartItems: [] as CartItem[],
+      cartTotal: 0,
+      branchId: branchid!,
+    },
+  );
   const loaderContext = useContext(LoaderContext);
   const { setLoading, loaderStatus } = loaderContext!;
+  const navigate = useNavigate();
 
   useEffect(() => {
     setLoading(true);
@@ -30,7 +42,13 @@ export default function BranchMenu() {
       .then((response) => {
         setMenuItems(
           response.data.map((bi) => {
-            return { ...bi, orderQuantity: 0 } as CartItem;
+            const cartItem = prevCartSummary?.cartItems.find(
+              (e) => e.inventoryId == bi.inventoryId,
+            );
+            return {
+              ...bi,
+              orderQuantity: cartItem?.orderQuantity ?? 0,
+            } as CartItem;
           }),
         );
       })
@@ -64,6 +82,11 @@ export default function BranchMenu() {
         .reduce((acc, cur) => acc + cur.price * cur.orderQuantity, 0);
       setCartSummary({ ...cartSummary });
     }
+  }
+
+  function handleViewCart() {
+    sessionStorage.setItem("cart", JSON.stringify(cartSummary));
+    navigate("/customer/cart");
   }
 
   return (
@@ -134,7 +157,7 @@ export default function BranchMenu() {
       <Row xs={1} md={2} lg={3} className="g-3">
         {/* Example item with quantity */}
         {menuItems.map((bi) => (
-          <Col>
+          <Col key={bi.inventoryId}>
             <Card className="h-100 border-0 shadow-sm">
               <Card.Body>
                 <div className="d-flex justify-content-between">
@@ -210,7 +233,14 @@ export default function BranchMenu() {
                 </span>
               </div>
 
-              <Button variant="primary">View Cart →</Button>
+              <Button
+                variant="primary"
+                onClick={() => {
+                  handleViewCart();
+                }}
+              >
+                View Cart →
+              </Button>
             </div>
           </Card.Body>
         </Card>
