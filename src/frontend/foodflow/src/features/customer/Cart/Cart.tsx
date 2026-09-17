@@ -1,8 +1,10 @@
 import { Button, Card, Container } from "react-bootstrap";
 import type { CartSummary } from "../../../common/types";
 import { useAuth } from "../../../common/auth/AuthContext";
+import { useNavigate } from "react-router";
 
 export default function Cart() {
+  const navigate = useNavigate();
   const cartSummaryString = sessionStorage.getItem("cart");
   const { isAuthenticated, login } = useAuth();
   if (!cartSummaryString) {
@@ -14,6 +16,8 @@ export default function Cart() {
   function handleProceedToOrder() {
     if (!isAuthenticated) {
       login();
+    } else {
+      navigate("/customer/order");
     }
   }
 

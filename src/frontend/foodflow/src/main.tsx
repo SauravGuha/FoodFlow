@@ -18,6 +18,7 @@ import BranchList from "./features/customer/BranchList.tsx";
 import BranchMenu from "./features/customer/Menu/BranchMenu.tsx";
 import Cart from "./features/customer/Cart/Cart.tsx";
 import keycloak from "./common/auth/keycloak.ts";
+import { Order } from "./features/customer/order/Order.tsx";
 
 await keycloak.init({
   //onLoad: "login-required",
@@ -62,6 +63,7 @@ createRoot(document.getElementById("root")!).render(
             />
             <Route path="/customer/menu/:branchid" element={<BranchMenu />} />
             <Route path="/customer/cart" element={<Cart />} />
+            <Route path="/customer/order" element={<Order />} />
           </Route>
         </Routes>
       </BrowserRouter>
