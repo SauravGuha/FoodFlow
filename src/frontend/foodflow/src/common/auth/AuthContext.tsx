@@ -23,6 +23,7 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
+  //setIsAuthenticated would become useful if we handle Keycloak events such as login/logout/token expiry without a full page reload.
   const [isAuthenticated, setIsAuthenticated] = useState(
     keycloak.authenticated ?? false,
   );

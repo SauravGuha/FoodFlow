@@ -1,13 +1,21 @@
 import { Button, Card, Container } from "react-bootstrap";
 import type { CartSummary } from "../../../common/types";
+import { useAuth } from "../../../common/auth/AuthContext";
 
 export default function Cart() {
   const cartSummaryString = sessionStorage.getItem("cart");
+  const { isAuthenticated, login } = useAuth();
   if (!cartSummaryString) {
     return <>No Cart data found</>;
   }
 
   const cartSummary = JSON.parse(cartSummaryString) as CartSummary;
+
+  function handleProceedToOrder() {
+    if (!isAuthenticated) {
+      login();
+    }
+  }
 
   return (
     <Container fluid className="py-4">
@@ -68,7 +76,13 @@ export default function Cart() {
             <h5 className="mb-0">₹{(cartSummary.cartTotal + 10).toString()}</h5>
           </div>
 
-          <Button variant="primary" className="w-100">
+          <Button
+            variant="primary"
+            className="w-100"
+            onClick={() => {
+              handleProceedToOrder();
+            }}
+          >
             Proceed to Order
           </Button>
         </Card.Body>
