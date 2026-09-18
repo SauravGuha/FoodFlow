@@ -5,6 +5,7 @@ using System.Text.Json.Serialization;
 using FoodFlow.Api.Middlewares;
 using FoodFlow.Application;
 using FoodFlow.Persistence;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 public class Program
 {
@@ -34,8 +35,22 @@ public class Program
                 builder.AllowAnyOrigin()
                     .AllowAnyMethod()
                     .AllowAnyHeader()
-                    .WithExposedHeaders("Location"); ;
+                    //In order for js to access Location header.
+                    .WithExposedHeaders("Location");
             });
+        });
+        builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        .AddJwtBearer(options =>
+        {
+            options.Authority = "http://localhost:10001/realms/foodflowlocal";
+            options.RequireHttpsMetadata = !(builder.Configuration.GetSection("ASPNETCORE_ENVIRONMENT")?.Value == "Development");
+            options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidIssuer = "http://localhost:10001/realms/foodflowlocal",
+                ValidateAudience = true,
+                ValidAudience = "foodflow-api",
+            };
         });
 
         var app = builder.Build();
@@ -52,6 +67,7 @@ public class Program
         }
         app.UseCors();
 
+        app.UseAuthentication();
         app.UseAuthorization();
 
         app.UseMiddleware<ExceptionMiddleware>();
