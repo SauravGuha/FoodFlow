@@ -42,14 +42,14 @@ public class Program
         builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         .AddJwtBearer(options =>
         {
-            options.Authority = "http://localhost:10001/realms/foodflowlocal";
+            options.Authority = builder.Configuration.GetSection("KeyCloak:Issuer")?.Value;
             options.RequireHttpsMetadata = !(builder.Configuration.GetSection("ASPNETCORE_ENVIRONMENT")?.Value == "Development");
             options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
             {
                 ValidateIssuer = true,
-                ValidIssuer = "http://localhost:10001/realms/foodflowlocal",
+                ValidIssuer = builder.Configuration.GetSection("Issuer")?.Value,
                 ValidateAudience = true,
-                ValidAudience = "foodflow-api",
+                ValidAudience = builder.Configuration.GetSection("KeyCloak:Audience")?.Value,
             };
         });
 

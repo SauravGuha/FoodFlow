@@ -4,6 +4,7 @@ using FoodFlow.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FoodFlow.Persistence.Migrations
 {
     [DbContext(typeof(FoodFlowContext))]
-    partial class FoodFlowContextModelSnapshot : ModelSnapshot
+    [Migration("20260919084557_CustomerModel")]
+    partial class CustomerModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -170,108 +173,6 @@ namespace FoodFlow.Persistence.Migrations
                     b.HasIndex("RestaurantId", "CuisineId");
 
                     b.ToTable("Item");
-                });
-
-            modelBuilder.Entity("FoodFlow.Domain.Models.OrderModels.Order", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("BranchId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatedBy")
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
-
-                    b.Property<Guid>("CustomerId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal>("ShippingCost")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BranchId")
-                        .IsUnique();
-
-                    b.HasIndex("CustomerId")
-                        .IsUnique();
-
-                    b.ToTable("Order", (string)null);
-                });
-
-            modelBuilder.Entity("FoodFlow.Domain.Models.OrderModels.OrderItem", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("BranchInventoryId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatedBy")
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
-
-                    b.Property<decimal>("DiscountPercent")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("ItemName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("OrderId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Sku")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TaxCode")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("TaxPercent")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("UnitPrice")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BranchInventoryId");
-
-                    b.HasIndex("OrderId");
-
-                    b.ToTable("OrderItem");
                 });
 
             modelBuilder.Entity("FoodFlow.Domain.Models.RestaurantModels.Branch", b =>
@@ -451,122 +352,6 @@ namespace FoodFlow.Persistence.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("FoodFlow.Domain.Models.OrderModels.Order", b =>
-                {
-                    b.HasOne("FoodFlow.Domain.Models.RestaurantModels.Branch", "Branch")
-                        .WithOne()
-                        .HasForeignKey("FoodFlow.Domain.Models.OrderModels.Order", "BranchId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("FoodFlow.Domain.Models.CustomerModels.Customer", "Customer")
-                        .WithOne()
-                        .HasForeignKey("FoodFlow.Domain.Models.OrderModels.Order", "CustomerId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.OwnsOne("FoodFlow.Domain.Models.RestaurantModels.Address", "BillingAddress", b1 =>
-                        {
-                            b1.Property<Guid>("OrderId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<string>("City")
-                                .IsRequired()
-                                .HasMaxLength(100)
-                                .HasColumnType("nvarchar(100)");
-
-                            b1.Property<string>("Country")
-                                .IsRequired()
-                                .HasMaxLength(100)
-                                .HasColumnType("nvarchar(100)");
-
-                            b1.Property<string>("State")
-                                .IsRequired()
-                                .HasMaxLength(100)
-                                .HasColumnType("nvarchar(100)");
-
-                            b1.Property<string>("Street")
-                                .IsRequired()
-                                .HasMaxLength(200)
-                                .HasColumnType("nvarchar(200)");
-
-                            b1.Property<string>("ZipCode")
-                                .IsRequired()
-                                .HasMaxLength(20)
-                                .HasColumnType("nvarchar(20)");
-
-                            b1.HasKey("OrderId");
-
-                            b1.ToTable("Order");
-
-                            b1.WithOwner()
-                                .HasForeignKey("OrderId");
-                        });
-
-                    b.OwnsOne("FoodFlow.Domain.Models.RestaurantModels.Address", "DeliveryAddress", b1 =>
-                        {
-                            b1.Property<Guid>("OrderId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<string>("City")
-                                .IsRequired()
-                                .HasMaxLength(100)
-                                .HasColumnType("nvarchar(100)");
-
-                            b1.Property<string>("Country")
-                                .IsRequired()
-                                .HasMaxLength(100)
-                                .HasColumnType("nvarchar(100)");
-
-                            b1.Property<string>("State")
-                                .IsRequired()
-                                .HasMaxLength(100)
-                                .HasColumnType("nvarchar(100)");
-
-                            b1.Property<string>("Street")
-                                .IsRequired()
-                                .HasMaxLength(200)
-                                .HasColumnType("nvarchar(200)");
-
-                            b1.Property<string>("ZipCode")
-                                .IsRequired()
-                                .HasMaxLength(20)
-                                .HasColumnType("nvarchar(20)");
-
-                            b1.HasKey("OrderId");
-
-                            b1.ToTable("Order");
-
-                            b1.WithOwner()
-                                .HasForeignKey("OrderId");
-                        });
-
-                    b.Navigation("BillingAddress")
-                        .IsRequired();
-
-                    b.Navigation("Branch");
-
-                    b.Navigation("Customer");
-
-                    b.Navigation("DeliveryAddress")
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("FoodFlow.Domain.Models.OrderModels.OrderItem", b =>
-                {
-                    b.HasOne("FoodFlow.Domain.Models.InventoryModels.BranchInventory", null)
-                        .WithMany()
-                        .HasForeignKey("BranchInventoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("FoodFlow.Domain.Models.OrderModels.Order", null)
-                        .WithMany("OrderItems")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("FoodFlow.Domain.Models.RestaurantModels.Branch", b =>
                 {
                     b.HasOne("FoodFlow.Domain.Models.RestaurantModels.Restaurant", null)
@@ -665,11 +450,6 @@ namespace FoodFlow.Persistence.Migrations
             modelBuilder.Entity("FoodFlow.Domain.Models.InventoryModels.Item", b =>
                 {
                     b.Navigation("BranchInventories");
-                });
-
-            modelBuilder.Entity("FoodFlow.Domain.Models.OrderModels.Order", b =>
-                {
-                    b.Navigation("OrderItems");
                 });
 
             modelBuilder.Entity("FoodFlow.Domain.Models.RestaurantModels.Restaurant", b =>
