@@ -13,7 +13,8 @@ public class OrderItemConfiguration : BaseConfiguration<OrderItem>
 
         builder.HasOne(typeof(BranchInventory))
             .WithMany()
-            .HasForeignKey(nameof(OrderItem.BranchInventoryId));
+            .HasForeignKey(nameof(OrderItem.BranchInventoryId))
+            .OnDelete(Microsoft.EntityFrameworkCore.DeleteBehavior.NoAction);
 
         builder.Property(e => e.Quantity).IsRequired();
 

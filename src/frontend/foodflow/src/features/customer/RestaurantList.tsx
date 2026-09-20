@@ -56,7 +56,7 @@ export default function RestaurantList() {
       <Row xs={1} md={2} lg={3} className="g-4">
         {/* Restaurant Card */}
         {restaurants.map((r) => (
-          <Col>
+          <Col key={r.id}>
             <Card className="h-100 shadow-sm border-0">
               <Card.Body>
                 <div className="d-flex justify-content-between mb-2">

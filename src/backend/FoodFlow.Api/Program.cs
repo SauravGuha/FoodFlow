@@ -4,6 +4,7 @@ namespace FoodFlow.Api;
 using System.Text.Json.Serialization;
 using FoodFlow.Api.Middlewares;
 using FoodFlow.Application;
+using FoodFlow.Infrastructure;
 using FoodFlow.Persistence;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 
@@ -28,6 +29,7 @@ public class Program
         builder.Services.AddScoped<ExceptionMiddleware>();
         builder.Services.AddApplication();
         builder.Services.AddPersistence(builder.Configuration);
+        builder.Services.AddInfrastructure();
         builder.Services.AddCors(corsOption =>
         {
             corsOption.AddDefaultPolicy(builder =>
@@ -52,6 +54,7 @@ public class Program
                 ValidAudience = builder.Configuration.GetSection("KeyCloak:Audience")?.Value,
             };
         });
+        builder.Services.AddHttpContextAccessor();
 
         var app = builder.Build();
 

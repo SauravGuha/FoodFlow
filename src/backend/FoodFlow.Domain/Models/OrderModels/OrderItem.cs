@@ -21,10 +21,9 @@ public class OrderItem : BaseModel
 
     public OrderItem() { }
 
-    public OrderItem(Guid orderId, Guid branchInventoryId, int quantity, string itemName, decimal unitPrice, string sku,
+    public OrderItem(Guid branchInventoryId, int quantity, string itemName, decimal unitPrice, string sku,
         decimal discountPercent = 0, decimal taxPercent = 0, string? taxCode = null)
     {
-        OrderId = orderId;
         BranchInventoryId = branchInventoryId;
         Quantity = quantity;
         ItemName = itemName;

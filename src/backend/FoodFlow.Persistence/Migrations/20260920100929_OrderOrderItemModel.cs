@@ -42,8 +42,7 @@ namespace FoodFlow.Persistence.Migrations
                         name: "FK_Order_Branches_BranchId",
                         column: x => x.BranchId,
                         principalTable: "Branches",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Order_Customer_CustomerId",
                         column: x => x.CustomerId,
@@ -77,8 +76,7 @@ namespace FoodFlow.Persistence.Migrations
                         name: "FK_OrderItem_BranchInventory_BranchInventoryId",
                         column: x => x.BranchInventoryId,
                         principalTable: "BranchInventory",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_OrderItem_Order_OrderId",
                         column: x => x.OrderId,
@@ -90,14 +88,12 @@ namespace FoodFlow.Persistence.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Order_BranchId",
                 table: "Order",
-                column: "BranchId",
-                unique: true);
+                column: "BranchId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Order_CustomerId",
                 table: "Order",
-                column: "CustomerId",
-                unique: true);
+                column: "CustomerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_OrderItem_BranchInventoryId",

@@ -1,6 +1,7 @@
 
 using FoodFlow.Application.Common;
 using FoodFlow.Application.Common.Repositories;
+using FoodFlow.Domain.Models.CustomerModels;
 using FoodFlow.Persistence.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -19,6 +20,9 @@ public static class PersistenceExtension
         services.AddScoped<ICuisineRepository, CuisineRepo>();
         services.AddScoped<IBranchRepository, BranchRepo>();
         services.AddScoped<IItemRepository, ItemRepo>();
+        services.AddScoped<IOrderItemRepository, OrderItemRepo>();
+        services.AddScoped<IOrderRepository, OrderRepo>();
+        services.AddScoped<ICustomerRepository, CustomerRepo>();
         services.AddScoped<IBranchInventoryRepository, BranchInventoryRepo>();
         services.AddScoped<IFoodFlowContext>(sp => sp.GetRequiredService<FoodFlowContext>());
 

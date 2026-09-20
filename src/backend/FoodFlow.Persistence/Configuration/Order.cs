@@ -14,8 +14,8 @@ public class OrderConfiguration : BaseConfiguration<Order>
         builder.ToTable(nameof(Order));
 
         builder.HasOne(e => e.Customer)
-        .WithOne()
-        .HasForeignKey<Order>(e => e.CustomerId)
+        .WithMany()
+        .HasForeignKey(e => e.CustomerId)
         .IsRequired()
         .OnDelete(DeleteBehavior.NoAction);
 
@@ -23,8 +23,9 @@ public class OrderConfiguration : BaseConfiguration<Order>
         .IsRequired();
 
         builder.HasOne(e => e.Branch)
-        .WithOne()
-        .HasForeignKey<Order>(e => e.BranchId);
+        .WithMany()
+        .HasForeignKey(e => e.BranchId)
+        .OnDelete(DeleteBehavior.NoAction);
 
         builder.Property(e => e.Status)
         .HasConversion(o => o.ToString(), o => Enum.Parse<OrderStatus>(o));

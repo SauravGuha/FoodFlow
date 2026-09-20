@@ -207,11 +207,9 @@ namespace FoodFlow.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BranchId")
-                        .IsUnique();
+                    b.HasIndex("BranchId");
 
-                    b.HasIndex("CustomerId")
-                        .IsUnique();
+                    b.HasIndex("CustomerId");
 
                     b.ToTable("Order", (string)null);
                 });
@@ -454,14 +452,14 @@ namespace FoodFlow.Persistence.Migrations
             modelBuilder.Entity("FoodFlow.Domain.Models.OrderModels.Order", b =>
                 {
                     b.HasOne("FoodFlow.Domain.Models.RestaurantModels.Branch", "Branch")
-                        .WithOne()
-                        .HasForeignKey("FoodFlow.Domain.Models.OrderModels.Order", "BranchId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .WithMany()
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("FoodFlow.Domain.Models.CustomerModels.Customer", "Customer")
-                        .WithOne()
-                        .HasForeignKey("FoodFlow.Domain.Models.OrderModels.Order", "CustomerId")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
@@ -557,7 +555,7 @@ namespace FoodFlow.Persistence.Migrations
                     b.HasOne("FoodFlow.Domain.Models.InventoryModels.BranchInventory", null)
                         .WithMany()
                         .HasForeignKey("BranchInventoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("FoodFlow.Domain.Models.OrderModels.Order", null)

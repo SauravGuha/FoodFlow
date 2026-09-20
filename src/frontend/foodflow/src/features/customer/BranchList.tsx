@@ -46,7 +46,7 @@ export default function BranchList() {
       <Row xs={1} md={2} lg={3} className="g-4">
         {/* Branch */}
         {branches.map((b) => (
-          <Col>
+          <Col key={b.id}>
             <Card className="h-100 shadow-sm border-0">
               <Card.Body>
                 <div className="d-flex justify-content-between align-items-start mb-3">

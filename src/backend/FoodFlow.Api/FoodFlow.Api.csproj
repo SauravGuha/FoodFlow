@@ -14,6 +14,7 @@
     <ItemGroup>
     <ProjectReference Include="..\FoodFlow.Application\FoodFlow.Application.csproj" />
     <ProjectReference Include="..\FoodFlow.Persistence\FoodFlow.Persistence.csproj" />
+        <ProjectReference Include="..\FoodFlow.Infrastructure\FoodFlow.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
