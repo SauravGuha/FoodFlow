@@ -44,7 +44,7 @@ public class BranchInventory : BaseModel
         }
         else
         {
-            throw new ArgumentException($"Cannot order {value}");
+            throw new ArgumentException($"{this.Id} : Out of stock");
         }
     }
 }

@@ -156,63 +156,69 @@ export default function BranchMenu() {
 
       <Row xs={1} md={2} lg={3} className="g-3">
         {/* Example item with quantity */}
-        {menuItems.map((bi) => (
-          <Col key={bi.inventoryId}>
-            <Card className="h-100 border-0 shadow-sm">
-              <Card.Body>
-                <div className="d-flex justify-content-between">
-                  <div>
-                    <div className="mb-1">
-                      <span
-                        className="d-inline-block border border-danger rounded-circle me-2"
-                        style={{
-                          width: 12,
-                          height: 12,
-                        }}
-                      />
+        {menuItems.map((bi) =>
+          bi.quantity > 0 ? (
+            <Col key={bi.inventoryId}>
+              <Card className="h-100 border-0 shadow-sm">
+                <Card.Body>
+                  <div className="d-flex justify-content-between">
+                    <div>
+                      <div className="mb-1">
+                        <span
+                          className="d-inline-block border border-danger rounded-circle me-2"
+                          style={{
+                            width: 12,
+                            height: 12,
+                          }}
+                        />
 
-                      <strong>{bi.itemName}</strong>
+                        <strong>{bi.itemName}</strong>
+                      </div>
+
+                      <div className="fw-semibold mb-2">{bi.price}</div>
                     </div>
 
-                    <div className="fw-semibold mb-2">{bi.price}</div>
+                    <Badge bg="light" text="dark">
+                      Main Course
+                    </Badge>
                   </div>
 
-                  <Badge bg="light" text="dark">
-                    Main Course
-                  </Badge>
-                </div>
+                  <p className="text-muted small mb-3">{bi.description}</p>
 
-                <p className="text-muted small mb-3">{bi.description}</p>
+                  <div className="d-flex justify-content-end">
+                    <div className="d-flex align-items-center border rounded">
+                      <Button
+                        variant="light"
+                        size="sm"
+                        onClick={() => {
+                          handleQuantity("-", bi);
+                        }}
+                      >
+                        −
+                      </Button>
 
-                <div className="d-flex justify-content-end">
-                  <div className="d-flex align-items-center border rounded">
-                    <Button
-                      variant="light"
-                      size="sm"
-                      onClick={() => {
-                        handleQuantity("-", bi);
-                      }}
-                    >
-                      −
-                    </Button>
+                      <span className="px-3 fw-semibold">
+                        {bi.orderQuantity}
+                      </span>
 
-                    <span className="px-3 fw-semibold">{bi.orderQuantity}</span>
-
-                    <Button
-                      variant="light"
-                      size="sm"
-                      onClick={() => {
-                        handleQuantity("+", bi);
-                      }}
-                    >
-                      +
-                    </Button>
+                      <Button
+                        variant="light"
+                        size="sm"
+                        onClick={() => {
+                          handleQuantity("+", bi);
+                        }}
+                      >
+                        +
+                      </Button>
+                    </div>
                   </div>
-                </div>
-              </Card.Body>
-            </Card>
-          </Col>
-        ))}
+                </Card.Body>
+              </Card>
+            </Col>
+          ) : (
+            <></>
+          ),
+        )}
       </Row>
 
       {/* Sticky Cart */}

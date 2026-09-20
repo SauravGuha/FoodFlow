@@ -4,6 +4,7 @@ import type {
   Branch,
   BranchInventoryItem,
   CreateBranchInventoryRequest,
+  CreateOrderRequest,
   Cuisine,
   Item,
   Restaurant,
@@ -11,6 +12,7 @@ import type {
   UpdateBranchStatus,
   UpdateBranchStockRequest,
 } from "../types";
+import keycloak from "../auth/keycloak";
 
 const delayer = function (value: number) {
   return new Promise((resolve) => {
@@ -24,6 +26,9 @@ const instance = axios.create({
 
 instance.interceptors.request.use(
   async function (config) {
+    if (keycloak.token)
+      config.headers["Authorization"] = `Bearer ${keycloak.token}`;
+
     await delayer(1);
     // Do something before request is sent
     return config;
@@ -39,9 +44,9 @@ instance.interceptors.response.use(
     return response;
   },
   (error) => {
-    const message = error.message || "Unknown error";
+    const message =
+      error.response.data.error || error.message || "Unknown error";
     const status = error.response?.status || "Unknown";
-
     alert(`API request failed:\nStatus: ${status}\nMessage: ${message}`);
     return Promise.reject(error);
   },
@@ -135,4 +140,8 @@ export const removeBranchStock = async function (
   data: UpdateBranchStockRequest,
 ) {
   return await instance.put(`/item/removeitembranchstock`, data);
+};
+
+export const placeOrder = async function (data: CreateOrderRequest) {
+  return await instance.post(`/order`, data);
 };

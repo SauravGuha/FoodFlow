@@ -34,7 +34,10 @@ export default function Cart() {
         <Card.Body>
           {/* Item */}
           {cartSummary.cartItems.map((e) => (
-            <div className="d-flex justify-content-between align-items-center py-3 border-bottom">
+            <div
+              className="d-flex justify-content-between align-items-center py-3 border-bottom"
+              key={e.inventoryId}
+            >
               <div>
                 <h6 className="mb-1">{e.itemName}</h6>
                 <div className="text-muted small">

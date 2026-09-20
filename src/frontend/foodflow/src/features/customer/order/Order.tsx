@@ -1,12 +1,46 @@
-import { Card, Row, Col, Button } from "react-bootstrap";
-import type { CartItem, CartSummary } from "../../../common/types";
+import { Card, Row, Col, Button, ProgressBar, Spinner } from "react-bootstrap";
+import type {
+  Address,
+  CartItem,
+  CartSummary,
+  CreateOrderRequest,
+  OrderItem,
+} from "../../../common/types";
+import { placeOrder } from "../../../common/utilities/apiHelper";
+import { useState } from "react";
 
 export const Order = () => {
+  const [submitting, setSubmitting] = useState<boolean>(false);
   const cartSummaryString = sessionStorage.getItem("cart");
   if (!cartSummaryString) {
     return <>No Cart data found</>;
   }
   const cartSummary = JSON.parse(cartSummaryString) as CartSummary;
+  debugger;
+  async function handlePlaceOrder() {
+    setSubmitting(true);
+    const orderRequest: CreateOrderRequest = {
+      branchId: cartSummary.branchId,
+      status: "Pending",
+      orderItems: cartSummary.cartItems.map(
+        (e) =>
+          ({
+            branchInventoryId: e.inventoryId,
+            discountPercent: 0,
+            itemName: e.itemName,
+            quantity: e.orderQuantity,
+            sku: e.sku,
+            unitPrice: e.price,
+            taxPercent: 0,
+          }) as OrderItem,
+      ),
+      deliveryAddress: {} as Address,
+      billingAddress: {} as Address,
+    };
+    await placeOrder(orderRequest);
+    setSubmitting(false);
+  }
+
   return (
     <Card className="order-card">
       <Row>
@@ -18,7 +52,7 @@ export const Order = () => {
         <Col xs={12} sm={6}>
           <div className="order-items">
             {cartSummary.cartItems.map((item, idx) => (
-              <OrderItem key={idx} item={item} />
+              <Items key={idx} item={item} />
             ))}
           </div>
         </Col>
@@ -32,7 +66,8 @@ export const Order = () => {
         </Col>
 
         <Col xs={12} sm={6}>
-          <Button variant="primary" onClick={() => console.log("Order placed")}>
+          <Button variant="primary" onClick={() => handlePlaceOrder()}>
+            {submitting ? <Spinner size="sm" /> : <></>}
             Place Order
           </Button>
         </Col>
@@ -41,6 +76,4 @@ export const Order = () => {
   );
 };
 
-export const OrderItem = ({ item }: { item: CartItem }) => (
-  <p>{item.itemName}</p>
-);
+export const Items = ({ item }: { item: CartItem }) => <p>{item.itemName}</p>;

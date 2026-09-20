@@ -49,16 +49,30 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Res
         var billingAddress = this.mapper.Map<Address>(request.BillingAddress);
         var deliveryAddress = this.mapper.Map<Address>(request.DeliveryAddress);
         var order = new Order(customer.Id, request.ShippingCost, request.BranchId, billingAddress, deliveryAddress);
-        request.OrderItems.ForEach(async oi =>
+        foreach (var oi in request.OrderItems)
         {
-            var branchInventory = await branchInventoryRepository.GetByIdAsync(oi.BranchInventoryId, cancellationToken);
+            var branchInventory =
+                await branchInventoryRepository.GetByIdAsync(
+                    oi.BranchInventoryId,
+                    cancellationToken);
+
             if (branchInventory != null)
             {
                 branchInventory.RemoveQuantity(oi.Quantity);
-                await branchInventoryRepository.UpdateAsync(branchInventory, cancellationToken);
+
+                await branchInventoryRepository.UpdateAsync(
+                    branchInventory,
+                    cancellationToken);
             }
-            order.AddOrderItem(new OrderItem(oi.BranchInventoryId, oi.Quantity, oi.ItemName, oi.UnitPrice, oi.Sku));
-        });
+
+            order.AddOrderItem(
+                new OrderItem(
+                    oi.BranchInventoryId,
+                    oi.Quantity,
+                    oi.ItemName,
+                    oi.UnitPrice,
+                    oi.Sku));
+        }
         await orderRepository.AddAsync(order, cancellationToken);
         await foodFlowContext.SaveChangesAsync(cancellationToken);
         return Result<Guid>.SetSuccess(order.Id, null);

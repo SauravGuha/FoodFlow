@@ -1,5 +1,11 @@
 export type RestaurantStatus = "Active" | "Inactive" | "Pending";
 export type Category = "undescribed" | "nonveg" | "veg" | "pureveg";
+export type OrderStatus =
+  | "Pending"
+  | "Paid"
+  | "Shipped"
+  | "Delivered"
+  | "Cancelled";
 
 export interface RestaurantOwner {
   name: string;
@@ -141,3 +147,21 @@ export type CartSummary = {
   cartTotal: number;
   branchId: string;
 };
+
+export interface CreateOrderRequest {
+  status: OrderStatus;
+  deliveryAddress: Address;
+  billingAddress: Address;
+  branchId: string;
+  orderItems: OrderItem[];
+}
+
+export interface OrderItem {
+  branchInventoryId: string;
+  quantity: number;
+  itemName: string;
+  sku: string;
+  unitPrice: number;
+  discountPercent: number;
+  taxPercent: number;
+}
