@@ -1,6 +1,7 @@
 
 using FoodFlow.Api.Controller;
 using FoodFlow.Application.Commands.OrderCommands;
+using FoodFlow.Application.Queries.OrderQueries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,6 +23,7 @@ public class OrderController : AppController
     [HttpGet(template: "{id}")]
     public async Task<IActionResult> GetOrderDetails(Guid id, CancellationToken cancellationToken)
     {
-        return Ok();
+        var restaurantInfo = await Mediator.Send(new OrderRequest { Id = id }, cancellationToken);
+        return this.ReturnResult(restaurantInfo);
     }
 }

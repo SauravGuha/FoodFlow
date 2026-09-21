@@ -8,15 +8,16 @@ import type {
 } from "../../../common/types";
 import { placeOrder } from "../../../common/utilities/apiHelper";
 import { useState } from "react";
+import { useNavigate } from "react-router";
 
 export const Order = () => {
+  const navigate = useNavigate();
   const [submitting, setSubmitting] = useState<boolean>(false);
   const cartSummaryString = sessionStorage.getItem("cart");
   if (!cartSummaryString) {
     return <>No Cart data found</>;
   }
   const cartSummary = JSON.parse(cartSummaryString) as CartSummary;
-  debugger;
   async function handlePlaceOrder() {
     setSubmitting(true);
     const orderRequest: CreateOrderRequest = {
@@ -37,8 +38,12 @@ export const Order = () => {
       deliveryAddress: {} as Address,
       billingAddress: {} as Address,
     };
-    await placeOrder(orderRequest);
+    const orderId = await placeOrder(orderRequest);
+
     setSubmitting(false);
+    sessionStorage.removeItem("cart");
+
+    navigate(`/customer/order-confirmation/${orderId}`);
   }
 
   return (

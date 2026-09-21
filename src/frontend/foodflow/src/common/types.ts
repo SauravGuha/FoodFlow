@@ -165,3 +165,21 @@ export interface OrderItem {
   discountPercent: number;
   taxPercent: number;
 }
+
+export interface Customer {
+  name: string;
+  email: string;
+  userName: string;
+  externalId: string;
+}
+
+export interface Order {
+  customer: Customer;
+  shippingCost: number;
+  branchId: string;
+  branch: Branch;
+  status: string;
+  billingAddress: Address;
+  deliveryAddress: Address;
+  orderItemDtos: OrderItem[];
+}

@@ -20,6 +20,7 @@ import Cart from "./features/customer/Cart/Cart.tsx";
 import keycloak from "./common/auth/keycloak.ts";
 import { Order } from "./features/customer/order/Order.tsx";
 import AuthComponent from "./components/common/AuthComponent.tsx";
+import OrderConfirmation from "./features/customer/order/OrderConfirmation.tsx";
 
 await keycloak.init({
   //onLoad: "login-required",
@@ -66,6 +67,10 @@ createRoot(document.getElementById("root")!).render(
             <Route path="/customer/cart" element={<Cart />} />
             <Route element={<AuthComponent />}>
               <Route path="/customer/order" element={<Order />} />
+              <Route
+                path="/customer/order-confirmation/:orderId"
+                element={<OrderConfirmation />}
+              />
             </Route>
           </Route>
         </Routes>

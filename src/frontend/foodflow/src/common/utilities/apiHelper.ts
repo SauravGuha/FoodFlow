@@ -7,6 +7,8 @@ import type {
   CreateOrderRequest,
   Cuisine,
   Item,
+  Order,
+  OrderItem,
   Restaurant,
   RestaurantList,
   UpdateBranchStatus,
@@ -20,8 +22,10 @@ const delayer = function (value: number) {
   });
 };
 
+const baseUrl = "http://localhost:5243/api";
+
 const instance = axios.create({
-  baseURL: "http://localhost:5243/api",
+  baseURL: baseUrl,
 });
 
 instance.interceptors.request.use(
@@ -143,5 +147,13 @@ export const removeBranchStock = async function (
 };
 
 export const placeOrder = async function (data: CreateOrderRequest) {
-  return await instance.post(`/order`, data);
+  const response = await instance.post(`/order`, data);
+  const orderDetailsUrl = response.headers["location"];
+  if (orderDetailsUrl) {
+    return orderDetailsUrl.replace(`${baseUrl}/Order/`, "");
+  }
+};
+
+export const getOrderDetails = async function (id: string) {
+  return await instance.get<Order>(`/order/${id}`);
 };
