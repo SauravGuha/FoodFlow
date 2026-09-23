@@ -7,12 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FoodFlow.Application\FoodFlow.Application.csproj"/>
+    <ProjectReference Include="..\FoodFlow.Application\FoodFlow.Application.csproj" />
   </ItemGroup>
 
     <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Razorpay" Version="3.3.2" />
+    </ItemGroup>
 
 
 </Project>

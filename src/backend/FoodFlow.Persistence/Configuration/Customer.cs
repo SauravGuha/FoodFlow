@@ -15,6 +15,6 @@ public class CustomerConfiguration : BaseConfiguration<Customer>
         builder.Property(c => c.Name).IsRequired().HasMaxLength(100);
         builder.Property(c => c.Email).IsRequired().HasMaxLength(256);
         builder.Property(e => e.UserName).IsRequired().HasMaxLength(256);
-        builder.Property(u => u.ExternalId).IsRequired().HasMaxLength(32);
+        builder.Property(u => u.ExternalId).IsRequired().HasMaxLength(50);
     }
 }

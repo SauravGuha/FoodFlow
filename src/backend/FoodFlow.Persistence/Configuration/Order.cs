@@ -50,5 +50,8 @@ public class OrderConfiguration : BaseConfiguration<Order>
         .WithOne()
         .HasForeignKey(e => e.OrderId)
         .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Property(e => e.PaymentGateWayId)
+        .IsRequired(false);
     }
 }

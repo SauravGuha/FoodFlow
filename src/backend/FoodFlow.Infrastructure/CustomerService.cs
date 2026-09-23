@@ -18,6 +18,9 @@ public class CustomerService : ICustomerService
     {
         var result = new CustomerDto();
         result.Email = this.accessor.HttpContext?.User.Claims.FirstOrDefault(e => e.Type == ClaimTypes.Email)?.Value ?? "";
+        result.UserName = this.accessor.HttpContext?.User.Claims.FirstOrDefault(e => e.Type == "preferred_username")?.Value ?? "";
+        result.Name = this.accessor.HttpContext?.User.Claims.FirstOrDefault(e => e.Type == "name")?.Value ?? "";
+        result.ExternalId = this.accessor.HttpContext?.User.Claims.FirstOrDefault(e => e.Type == ClaimTypes.NameIdentifier)?.Value ?? "";
 
         return Task.FromResult(result);
     }

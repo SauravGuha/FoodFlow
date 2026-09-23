@@ -39,6 +39,8 @@ public class Order : BaseModel
 
     public Address DeliveryAddress { get; private set; }
 
+    public string PaymentGateWayId { get; set; }
+
     private List<OrderItem> _orderItems = new List<OrderItem>();
 
     public IReadOnlyList<OrderItem> OrderItems => _orderItems.AsReadOnly();
@@ -63,4 +65,13 @@ public class Order : BaseModel
         return totalPrice + ShippingCost;
     }
 
+    public void UpdateOrderStatus(OrderStatus newStatus)
+    {
+        Status = newStatus;
+    }
+
+    public void UpdateExternalId(string externalId)
+    {
+        this.PaymentGateWayId = externalId;
+    }
 }

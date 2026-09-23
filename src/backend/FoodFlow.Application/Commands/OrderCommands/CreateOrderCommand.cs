@@ -6,7 +6,7 @@ using MediatR;
 
 namespace FoodFlow.Application.Commands.OrderCommands;
 
-public class CreateOrderCommand : IRequest<Result<Guid>>
+public class CreateOrderCommand : IRequest<Result<OrderDto>>
 {
     public OrderStatus Status { get; private set; }
     public AddressDto DeliveryAddress { get; set; } = new();

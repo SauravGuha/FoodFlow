@@ -18,5 +18,7 @@ public class OrderDto
 
     public AddressDto DeliveryAddress { get; set; }
 
+    public string PaymentGateWayId { get; set; }
+
     public List<OrderItemDto> OrderItemDtos { get; set; } = new List<OrderItemDto>();
 }

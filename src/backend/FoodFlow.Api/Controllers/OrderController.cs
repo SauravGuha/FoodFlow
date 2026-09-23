@@ -14,16 +14,13 @@ public class OrderController : AppController
     public async Task<IActionResult> CreateOrder([FromBody] CreateOrderCommand createOrderCommand, CancellationToken cancellationToken)
     {
         var result = await this.Mediator.Send(createOrderCommand, cancellationToken);
-        if (result.Status)
-            return CreatedAtAction(nameof(GetOrderDetails), new { id = result.Data }, null);
-        else
-            return this.ReturnResult(result);
+        return this.ReturnResult(result);
     }
 
     [HttpGet(template: "{id}")]
     public async Task<IActionResult> GetOrderDetails(Guid id, CancellationToken cancellationToken)
     {
-        var restaurantInfo = await Mediator.Send(new OrderRequest { Id = id }, cancellationToken);
-        return this.ReturnResult(restaurantInfo);
+        var orderDetails = await Mediator.Send(new OrderRequest { Id = id }, cancellationToken);
+        return this.ReturnResult(orderDetails);
     }
 }
