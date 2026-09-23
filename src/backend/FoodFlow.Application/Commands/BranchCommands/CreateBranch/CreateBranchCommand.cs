@@ -1,5 +1,5 @@
 using FoodFlow.Application.Common;
-using FoodFlow.Domain.Models.RestaurantModels;
+using FoodFlow.Application.DTOModels;
 using MediatR;
 
 namespace FoodFlow.Application.Commands.BranchCommands.CreateBranch;
@@ -15,5 +15,5 @@ public class CreateBranchCommand : IRequest<Result<Guid>>
     public string Country { get; set; } = null!;
     public string PhoneNumber { get; set; } = null!;
     public string Email { get; set; } = null!;
-    public Dictionary<DayOfWeek, IReadOnlyCollection<TimeSlot>> OperatingHours { get; set; } = null!;
+    public OperatingHoursDto OperatingHours { get; set; } = null!;
 }

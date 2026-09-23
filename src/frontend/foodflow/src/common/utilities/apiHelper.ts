@@ -1,0 +1,159 @@
+import axios from "axios";
+import type {
+  AddUpdateBranch,
+  Branch,
+  BranchInventoryItem,
+  CreateBranchInventoryRequest,
+  CreateOrderRequest,
+  Cuisine,
+  Item,
+  Order,
+  OrderItem,
+  Restaurant,
+  RestaurantList,
+  UpdateBranchStatus,
+  UpdateBranchStockRequest,
+} from "../types";
+import keycloak from "../auth/keycloak";
+
+const delayer = function (value: number) {
+  return new Promise((resolve) => {
+    setTimeout(() => resolve(value), value * 1000);
+  });
+};
+
+const baseUrl = "http://localhost:5243/api";
+
+const instance = axios.create({
+  baseURL: baseUrl,
+});
+
+instance.interceptors.request.use(
+  async function (config) {
+    if (keycloak.token)
+      config.headers["Authorization"] = `Bearer ${keycloak.token}`;
+
+    await delayer(1);
+    // Do something before request is sent
+    return config;
+  },
+  function (error) {
+    // Do something with request error
+    return Promise.reject(error);
+  },
+);
+
+instance.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  (error) => {
+    const message =
+      error.response.data.error || error.message || "Unknown error";
+    const status = error.response?.status || "Unknown";
+    alert(`API request failed:\nStatus: ${status}\nMessage: ${message}`);
+    return Promise.reject(error);
+  },
+);
+
+export const getRestaurants = async function () {
+  return await instance.get<Restaurant[]>("/restaurant/filtered");
+};
+
+export const getRestuarantDetails = async function (id: string) {
+  return await instance.get<Restaurant>(`/restaurant/${id}`);
+};
+
+export const addUpdateRestaurant = async function (data: Restaurant) {
+  if (data.id) {
+    return await instance.put(`/restaurant`, data);
+  } else {
+    return await instance.post(`/restaurant`, data);
+  }
+};
+
+export const getBranchDetails = async function (id: string) {
+  return await instance.get<Branch>(`/branch/${id}`);
+};
+
+export const addUpdateBranchDetails = async function (data: AddUpdateBranch) {
+  if (data.id) {
+    return await instance.put(`/branch`, data);
+  } else {
+    return await instance.post(`/branch`, data);
+  }
+};
+
+export const updateBranchStatus = async function (data: UpdateBranchStatus) {
+  return await instance.patch(`/branch`, data);
+};
+
+export const createCuisine = async function (data: Cuisine) {
+  return await instance.post("/restaurant/cuisines", data);
+};
+
+export const getItems = async function (
+  restaurantId?: string | null,
+  cuisineId?: string | null,
+  categoryName?: string | null,
+) {
+  return await instance.get<Item[]>(
+    `/item/filtered?${restaurantId ? "restaurantid=" + restaurantId + "&" : ""}${cuisineId ? "cuisineid=" + cuisineId + "&" : ""}${categoryName ? "categoryName=" + categoryName : ""}`,
+  );
+};
+
+export const getRestaurantList = async function () {
+  return await instance.get<RestaurantList[]>(`/item/restaurants`);
+};
+
+export const getItemDetails = async function (id: string) {
+  return await instance.get<Item>(`/item/${id}`);
+};
+
+export const getRestaurantCuisines = async function (id: string) {
+  return await instance.get<Cuisine[]>(`/restaurant/${id}/cuisines`);
+};
+
+export const createRestaurantItem = async function (data: Item) {
+  if (data.id) {
+    return await instance.put(`/branch`, data);
+  } else {
+    return await instance.post(`/item`, data);
+  }
+};
+
+export const getBranchInventories = async function (
+  branchid: string | null | undefined,
+) {
+  return await instance.get<BranchInventoryItem[]>(
+    `branch/${branchid}/inventory`,
+  );
+};
+
+export const createBranchInventory = async function (
+  data: CreateBranchInventoryRequest,
+) {
+  return await instance.post(`/item/iteminventory`, data);
+};
+
+export const addBranchStock = async function (data: UpdateBranchStockRequest) {
+  return await instance.put(`/item/iteminventory`, data);
+};
+
+export const removeBranchStock = async function (
+  data: UpdateBranchStockRequest,
+) {
+  return await instance.put(`/item/removeitembranchstock`, data);
+};
+
+export const placeOrder = async function (data: CreateOrderRequest) {
+  const response = await instance.post(`/order`, data);
+  const orderDetailsUrl = response.headers["location"];
+  if (orderDetailsUrl) {
+    return orderDetailsUrl.replace(`${baseUrl}/Order/`, "");
+  }
+};
+
+export const getOrderDetails = async function (id: string) {
+  return await instance.get<Order>(`/order/${id}`);
+};

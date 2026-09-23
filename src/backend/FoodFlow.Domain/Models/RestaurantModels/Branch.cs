@@ -83,7 +83,7 @@ public class Branch : BaseModel
         Status = status;
     }
 
-    public void UpdateOperatingHours(Dictionary<DayOfWeek, IReadOnlyCollection<TimeSlot>> schedule)
+    public void UpdateOperatingHours(IReadOnlyDictionary<DayOfWeek, IReadOnlyCollection<TimeSlot>> schedule)
     {
         OperatingHours = new OperatingHours(schedule);
     }

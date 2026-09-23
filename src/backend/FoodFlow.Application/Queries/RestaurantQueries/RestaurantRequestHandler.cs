@@ -20,7 +20,8 @@ public class RestaurantRequestHandler : IRequestHandler<RestaurantRequest, Resul
     }
     public async Task<Result<RestaurantDto>> Handle(RestaurantRequest request, CancellationToken cancellationToken)
     {
-        var restaurantInfo = await this.restaurantRepository.GetByIdAsync(request.Id, cancellationToken);
+        var restaurantInfo = await this.restaurantRepository
+        .GetByIdAsync(request.Id, cancellationToken, nameof(Restaurant.Branches), nameof(Restaurant.Cuisines));
         if (restaurantInfo == null)
         {
             return Result<RestaurantDto>.SetError($"Restaurant not found with ID {request.Id}.", 404);

@@ -32,6 +32,7 @@ public class CreateItemCommandHandler : IRequestHandler<CreateItemCommand, Resul
             if (cuisine == null || cuisine.RestaurantId != request.RestaurantId)
                 return Result<Guid>.SetError("Invalid or invalid cuisine", 400);
             var item = new Item(request.Name, request.Description, request.Sku, request.RestaurantId, request.CuisineId);
+            item.UpdateItemCategory((FoodCategory)Enum.Parse(typeof(FoodCategory), request.CategoryName));
             await this.itemRepository.AddAsync(item, cancellationToken);
             await this.foodFlowContext.SaveChangesAsync(cancellationToken);
             return Result<Guid>.SetSuccess(item.Id, 201);

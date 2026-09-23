@@ -4,7 +4,9 @@ namespace FoodFlow.Api;
 using System.Text.Json.Serialization;
 using FoodFlow.Api.Middlewares;
 using FoodFlow.Application;
+using FoodFlow.Infrastructure;
 using FoodFlow.Persistence;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 public class Program
 {
@@ -27,6 +29,32 @@ public class Program
         builder.Services.AddScoped<ExceptionMiddleware>();
         builder.Services.AddApplication();
         builder.Services.AddPersistence(builder.Configuration);
+        builder.Services.AddInfrastructure();
+        builder.Services.AddCors(corsOption =>
+        {
+            corsOption.AddDefaultPolicy(builder =>
+            {
+                builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    //In order for js to access Location header.
+                    .WithExposedHeaders("Location");
+            });
+        });
+        builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        .AddJwtBearer(options =>
+        {
+            options.Authority = builder.Configuration.GetSection("KeyCloak:Issuer")?.Value;
+            options.RequireHttpsMetadata = !(builder.Configuration.GetSection("ASPNETCORE_ENVIRONMENT")?.Value == "Development");
+            options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidIssuer = builder.Configuration.GetSection("Issuer")?.Value,
+                ValidateAudience = true,
+                ValidAudience = builder.Configuration.GetSection("KeyCloak:Audience")?.Value,
+            };
+        });
+        builder.Services.AddHttpContextAccessor();
 
         var app = builder.Build();
 
@@ -36,8 +64,13 @@ public class Program
             app.MapOpenApi();
         }
 
-        app.UseHttpsRedirection();
+        if (!app.Environment.IsDevelopment())
+        {
+            app.UseHttpsRedirection();
+        }
+        app.UseCors();
 
+        app.UseAuthentication();
         app.UseAuthorization();
 
         app.UseMiddleware<ExceptionMiddleware>();

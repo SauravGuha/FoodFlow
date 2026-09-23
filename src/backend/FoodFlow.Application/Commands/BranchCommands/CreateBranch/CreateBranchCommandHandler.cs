@@ -1,3 +1,4 @@
+using AutoMapper;
 using FoodFlow.Application.Common;
 using FoodFlow.Application.Common.Repositories;
 using FoodFlow.Domain.Models.RestaurantModels;
@@ -10,12 +11,16 @@ public class CreateBranchCommandHandler : IRequestHandler<CreateBranchCommand, R
     private readonly IBranchRepository branchRepository;
     private readonly IRestaurantRepository restaurantRepository;
     private readonly IFoodFlowContext foodFlowContext;
+    private readonly IMapper mapper;
 
-    public CreateBranchCommandHandler(IBranchRepository branchRepository, IRestaurantRepository restaurantRepository, IFoodFlowContext foodFlowContext)
+    public CreateBranchCommandHandler(IBranchRepository branchRepository,
+     IRestaurantRepository restaurantRepository, IFoodFlowContext foodFlowContext,
+     IMapper mapper)
     {
         this.branchRepository = branchRepository;
         this.restaurantRepository = restaurantRepository;
         this.foodFlowContext = foodFlowContext;
+        this.mapper = mapper;
     }
 
     public async Task<Result<Guid>> Handle(CreateBranchCommand request, CancellationToken cancellationToken)
@@ -27,7 +32,7 @@ public class CreateBranchCommandHandler : IRequestHandler<CreateBranchCommand, R
         }
 
         var address = new Address(request.Street, request.City, request.State, request.ZipCode, request.Country);
-        var operatingHours = new OperatingHours(request.OperatingHours);
+        var operatingHours = mapper.Map<OperatingHours>(request.OperatingHours);
 
         var branch = new Branch(request.RestaurantId, request.Name, address, request.PhoneNumber, request.Email, operatingHours);
 

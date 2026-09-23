@@ -11,4 +11,6 @@ public class AddBranchInventoryCommand : IRequest<Result<Guid>>
     public Guid BranchId { get; set; }
 
     public int Quantity { get; set; }
+
+    public decimal Price { get; set; }
 }

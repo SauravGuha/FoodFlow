@@ -4,6 +4,7 @@ using FoodFlow.Application.Commands.InventoryCommands.AddBranchInventory;
 using FoodFlow.Application.Commands.ItemCommands.CreateItem;
 using FoodFlow.Application.Queries.ItemQueries;
 using FoodFlow.Application.Queries.ItemQueries.FilteredItem;
+using FoodFlow.Application.Queries.ItemQueries.RestaurantList;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FoodFlow.Api.Controller;
@@ -47,7 +48,7 @@ public class ItemController : AppController
     /// <param name="token"></param>
     /// <returns></returns>
     [HttpGet(template: "filtered")]
-    public async Task<IActionResult> GetFilteredItem([FromBody] FilteredItemRequest? request, CancellationToken token)
+    public async Task<IActionResult> GetFilteredItem([FromQuery] FilteredItemRequest? request, CancellationToken token)
     {
         var result = await Mediator.Send(request ?? new FilteredItemRequest());
         if (result == null)
@@ -117,6 +118,16 @@ public class ItemController : AppController
             return CreatedAtAction(nameof(GetItembyId), new { id = command.ItemId }, null);
         else
             return ReturnResult(operationResult);
+    }
+
+    [HttpGet("restaurants")]
+    public async Task<IActionResult> RestaurantList()
+    {
+        var result = await Mediator.Send(new RestaurantListQuery());
+        if (result.Status)
+            return Ok(result.Data);
+        else
+            return ReturnResult(result);
     }
 
 }
