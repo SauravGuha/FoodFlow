@@ -5,7 +5,7 @@ namespace FoodFlow.Application.DTOModels;
 
 public class OrderDto
 {
-
+    public Guid Id { get; set; }
     public CustomerDto Customer { get; set; } = null!;
 
     public decimal ShippingCost { get; set; }
@@ -21,4 +21,6 @@ public class OrderDto
     public string PaymentGateWayId { get; set; }
 
     public List<OrderItemDto> OrderItemDtos { get; set; } = new List<OrderItemDto>();
+
+    public decimal OrderTotal { get; set; }
 }

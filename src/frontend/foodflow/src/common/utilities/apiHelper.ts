@@ -147,11 +147,12 @@ export const removeBranchStock = async function (
 };
 
 export const placeOrder = async function (data: CreateOrderRequest) {
-  const response = await instance.post(`/order`, data);
-  const orderDetailsUrl = response.headers["location"];
-  if (orderDetailsUrl) {
-    return orderDetailsUrl.replace(`${baseUrl}/Order/`, "");
-  }
+  const response = await instance.post<Order>(`/order`, data);
+  return response.data;
+  // const orderDetailsUrl = response.headers["location"];
+  // if (orderDetailsUrl) {
+  //   return orderDetailsUrl.replace(`${baseUrl}/Order/`, "");
+  // }
 };
 
 export const getOrderDetails = async function (id: string) {

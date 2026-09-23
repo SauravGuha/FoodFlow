@@ -16,5 +16,7 @@ public interface IPaymentGateway
 
     public Task<string> CreateOrder(Order order);
 
+    public bool VerifyPayment(string gatewayOrderid, string paymentId, string signature);
+
 
 }

@@ -174,6 +174,7 @@ export interface Customer {
 }
 
 export interface Order {
+  id: string;
   customer: Customer;
   shippingCost: number;
   branchId: string;
@@ -182,4 +183,6 @@ export interface Order {
   billingAddress: Address;
   deliveryAddress: Address;
   orderItemDtos: OrderItem[];
+  paymentGateWayId: string;
+  orderTotal: string;
 }

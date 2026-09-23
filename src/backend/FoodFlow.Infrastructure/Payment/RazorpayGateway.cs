@@ -1,4 +1,6 @@
 
+using System.Security.Cryptography;
+using System.Text;
 using FoodFlow.Application.Services;
 using Microsoft.Extensions.Configuration;
 using Razorpay.Api;
@@ -44,5 +46,15 @@ public class RazorpayPaymentGateway : IPaymentGateway
         var razorpayOrder = client.Order.Create(options);
 
         return Task.FromResult(razorpayOrder["id"].ToString());
+    }
+
+    public bool VerifyPayment(string gatewayOrderid, string paymentId, string signature)
+    {
+        using (var hmacsha256 = new HMACSHA256(Encoding.UTF8.GetBytes(ApiSecret)))
+        {
+            byte[] hash = hmacsha256.ComputeHash(Encoding.UTF8.GetBytes($"{gatewayOrderid}|{paymentId}"));
+            var actualSignature = Convert.ToBase64String(hash);
+            return actualSignature == signature;
+        }
     }
 }

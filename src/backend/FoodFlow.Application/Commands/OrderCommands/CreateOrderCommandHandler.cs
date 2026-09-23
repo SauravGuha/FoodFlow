@@ -84,6 +84,7 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Res
         await orderRepository.UpdateAsync(order, cancellationToken);
         await foodFlowContext.SaveChangesAsync(cancellationToken);
         var createdOrder = this.mapper.Map<OrderDto>(order);
+        createdOrder.OrderTotal = order.CalculateTotalPrice();
         return Result<OrderDto>.SetSuccess(createdOrder, null);
     }
 }

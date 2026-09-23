@@ -1,4 +1,4 @@
-import { Card, Row, Col, Button, ProgressBar, Spinner } from "react-bootstrap";
+import { Card, Row, Col, Button, Spinner } from "react-bootstrap";
 import type {
   Address,
   CartItem,
@@ -7,16 +7,33 @@ import type {
   OrderItem,
 } from "../../../common/types";
 import { placeOrder } from "../../../common/utilities/apiHelper";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
+
+declare global {
+  interface Window {
+    Razorpay: any;
+  }
+}
 
 export const Order = () => {
   const navigate = useNavigate();
   const [submitting, setSubmitting] = useState<boolean>(false);
   const cartSummaryString = sessionStorage.getItem("cart");
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    script.async = true;
+    document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
   if (!cartSummaryString) {
     return <>No Cart data found</>;
   }
+
   const cartSummary = JSON.parse(cartSummaryString) as CartSummary;
   async function handlePlaceOrder() {
     setSubmitting(true);
@@ -38,12 +55,62 @@ export const Order = () => {
       deliveryAddress: {} as Address,
       billingAddress: {} as Address,
     };
-    const orderId = await placeOrder(orderRequest);
+    const orderDetails = await placeOrder(orderRequest);
+    var options = {
+      key: "rzp_test_TfMgxfjPgD3rcT",
+      amount: orderDetails.orderTotal,
+      currency: "INR",
+      name: "FoodFlow",
+      description:
+        "Payment for your order-confirmation/${orderDetails.id}`);er",
+      image: "https://example.com/your_logo.png",
+      order_id: orderDetails.paymentGateWayId,
+      handler: function (response: any) {
+        // Send ALL THREE fields to your server for verification (Step 3)
+        fetch("/payment/verify", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            razorpayPaymentId: response.razorpay_payment_id,
+            razorpayOrderId: response.razorpay_order_id,
+            razorpaySignature: response.razorpay_signature,
+          }),
+        }).finally(() => {
+          setSubmitting(false);
+          sessionStorage.removeItem("cart");
+          navigate(`/customer/order-confirmation/${orderDetails.id}`);
+        });
+      },
+      prefill: {
+        name: orderDetails.customer.name,
+        email: orderDetails.customer.email,
+        contact: "",
+      },
+      notes: { address: "Your Office" },
+      theme: { color: "#3399cc" },
+      modal: {
+        confirm_close: true,
+        escape: false,
+        backdropclose: false,
+        animation: true,
+      },
+      retry: { enabled: true, max_count: 4 },
+    };
 
-    setSubmitting(false);
-    sessionStorage.removeItem("cart");
-
-    navigate(`/customer/order-confirmation/${orderId}`);
+    var rzp1 = new window.Razorpay(options);
+    rzp1.on("payment.failed", function (response: any) {
+      console.error("Payment failed:", {
+        code: response.error.code,
+        description: response.error.description,
+        source: response.error.source,
+        step: response.error.step,
+        reason: response.error.reason,
+        order_id: response.error.metadata.order_id,
+        payment_id: response.error.metadata.payment_id,
+      });
+      // Show the error to the customer and offer a retry.
+    });
+    rzp1.open();
   }
 
   return (
