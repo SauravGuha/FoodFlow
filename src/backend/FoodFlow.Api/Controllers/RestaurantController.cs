@@ -23,6 +23,7 @@ public class RestaurantController : AppController
     /// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
     /// <returns>Returns the created restaurant ID in the response.</returns>
     [HttpPost]
+    [ActionName("CreateRestaurant")]
     public async Task<IActionResult> CreateRestaurant([FromBody] CreateRestaurantCommand command, CancellationToken cancellationToken)
     {
         var operationResult = await this.Mediator.Send(command, cancellationToken);
@@ -39,6 +40,7 @@ public class RestaurantController : AppController
     /// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
     /// <returns>Returns the restaurant details if found, otherwise returns a 404 Not Found.</returns>
     [HttpGet("{id}")]
+    [ActionName("GetRestaurantById")]
     public async Task<IActionResult> GetRestaurantById(Guid id, CancellationToken cancellationToken)
     {
         var restaurantInfo = await Mediator.Send(new RestaurantRequest { Id = id }, cancellationToken);
@@ -52,6 +54,7 @@ public class RestaurantController : AppController
     /// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
     /// <returns>Returns the filtered list of restaurants or a 404 Not Found if no results are found.</returns>
     [HttpGet("filtered")]
+    [ActionName("GetFilteredRestaurants")]
     public async Task<IActionResult> GetFilteredRestaurants([FromQuery] FilteredRestaurantRequest? request)
     {
         var result = await Mediator.Send(request ?? new FilteredRestaurantRequest());
@@ -82,6 +85,7 @@ public class RestaurantController : AppController
     /// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
     /// <returns>Returns the updated restaurant ID in the response.</returns>
     [HttpPut]
+    [ActionName("UpdateRestaurant")]
     public async Task<IActionResult> UpdateRestaurant([FromBody] UpdateRestaurantCommand command, CancellationToken cancellationToken)
     {
         var operationResult = await this.Mediator.Send(command, cancellationToken);
@@ -99,6 +103,7 @@ public class RestaurantController : AppController
     /// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
     /// <returns>Returns the updated restaurant ID in the response.</returns>
     [HttpPatch]
+    [ActionName("UpdateRestaurantStatus")]
     public async Task<IActionResult> UpdateRestaurantStatus([FromBody] UpdateRestaurantStatusCommand updateRequest, CancellationToken cancellationToken)
     {
         var result = await this.Mediator.Send(updateRequest, cancellationToken);
@@ -112,6 +117,7 @@ public class RestaurantController : AppController
     /// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
     /// <returns>Returns the created cuisine ID in the response.</returns>
     [HttpPost("cuisines")]
+    [ActionName("CreateCuisine")]
     public async Task<IActionResult> CreateCuisine([FromBody] CreateCuisineCommand command, CancellationToken cancellationToken)
     {
         var operationResult = await this.Mediator.Send(command, cancellationToken);
@@ -128,6 +134,7 @@ public class RestaurantController : AppController
     /// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
     /// <returns>Returns the list of cuisines for the restaurant, or a 404 Not Found if the restaurant doesn't exist.</returns>
     [HttpGet("{id}/cuisines")]
+    [ActionName("GetRestaurantCuisines")]
     public async Task<IActionResult> GetRestaurantCuisines(Guid id, CancellationToken cancellationToken)
     {
         var result = await this.Mediator.Send(new CuisineRequest { RestaurantId = id }, cancellationToken);
@@ -142,6 +149,7 @@ public class RestaurantController : AppController
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     [HttpDelete(template: "{restaurantId}/cuisine/{id}")]
+    [ActionName("DeleteRestaurantCuisine")]
     public async Task<IActionResult> DeleteRestaurantCuisine(Guid restaurantId, Guid id,
     CancellationToken cancellationToken)
     {
@@ -157,6 +165,7 @@ public class RestaurantController : AppController
     /// <param name="token"></param>
     /// <returns></returns>
     [HttpGet("{id}/branches")]
+    [ActionName("GetRestaurantBranches")]
     public async Task<IActionResult> GetRestaurantBranches(Guid id, CancellationToken token)
     {
         var result = await this.Mediator.Send(new RestaurantBranchRequest { RestaurantId = id }, token);

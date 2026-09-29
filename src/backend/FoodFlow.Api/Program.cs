@@ -7,6 +7,7 @@ using FoodFlow.Application;
 using FoodFlow.Infrastructure;
 using FoodFlow.Persistence;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc.Controllers;
 
 public class Program
 {
@@ -23,7 +24,18 @@ public class Program
             });
 
         // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-        builder.Services.AddOpenApi();
+        builder.Services.AddOpenApi(options =>
+        {
+            options.AddOperationTransformer((operation, context, cancellationToken) =>
+            {
+                if (context.Description.ActionDescriptor is ControllerActionDescriptor action)
+                {
+                    operation.OperationId = action.ActionName;
+                }
+
+                return Task.CompletedTask;
+            });
+        });
         builder.Services.AddProblemDetails();
 
         builder.Services.AddScoped<ExceptionMiddleware>();
