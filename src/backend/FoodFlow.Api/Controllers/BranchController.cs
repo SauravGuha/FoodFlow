@@ -20,6 +20,7 @@ public class BranchController : AppController
     /// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
     /// <returns>Returns the created branch ID in the response.</returns>
     [HttpPost]
+    [ActionName("CreateBranch")]
     public async Task<IActionResult> CreateBranch([FromBody] CreateBranchCommand command, CancellationToken cancellationToken)
     {
         var operationResult = await Mediator.Send(command, cancellationToken);
@@ -36,6 +37,7 @@ public class BranchController : AppController
     /// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
     /// <returns>Returns the branch details if found, otherwise returns a 404 Not Found.</returns>
     [HttpGet("{id}")]
+    [ActionName("GetBranchById")]
     public async Task<IActionResult> GetBranchById(Guid id, CancellationToken cancellationToken)
     {
         var result = await Mediator.Send(new BranchRequest { Id = id }, cancellationToken);
@@ -43,6 +45,7 @@ public class BranchController : AppController
     }
 
     [HttpPut]
+    [ActionName("UpdateBranch")]
     public async Task<IActionResult> UpdateBranch([FromBody] UpdateBranchCommand updateBranchCommand, CancellationToken cancellationToken)
     {
         var result = await Mediator.Send(updateBranchCommand, cancellationToken);
@@ -56,6 +59,7 @@ public class BranchController : AppController
     /// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
     /// <returns>Returns the updated branch ID in the response.</returns>
     [HttpPatch]
+    [ActionName("UpdateBranchStatus")]
     public async Task<IActionResult> UpdateBranchStatus([FromBody] UpdateBranchStatusCommand updateRequest, CancellationToken cancellationToken)
     {
         var result = await Mediator.Send(updateRequest, cancellationToken);
@@ -68,6 +72,7 @@ public class BranchController : AppController
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpGet("{id}/inventory")]
+    [ActionName("GetBranchInventory")]
     public async Task<IActionResult> GetBranchInventory(Guid id)
     {
         var result = await this.Mediator.Send(new GetBranchItemQuery { BranchId = id });
@@ -81,6 +86,7 @@ public class BranchController : AppController
     /// <param name="quantity"></param>
     /// <returns></returns>
     [HttpGet("{id}/lowinventory/{quantity}")]
+    [ActionName("GetBranchLowInventoryItem")]
     public async Task<IActionResult> GetBranchLowInventoryItem(Guid id, int quantity)
     {
         var result = await this.Mediator.Send(new GetBranchLowInventoryItemQuery

@@ -19,6 +19,7 @@ public class ItemController : AppController
     /// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
     /// <returns>Returns the created item ID in the response.</returns>
     [HttpPost]
+    [ActionName("CreateItem")]
     public async Task<IActionResult> CreateItem([FromBody] CreateItemCommand command, CancellationToken cancellationToken)
     {
         var operationResult = await Mediator.Send(command, cancellationToken);
@@ -35,6 +36,7 @@ public class ItemController : AppController
     /// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
     /// <returns>Returns the item details if found, otherwise returns a 404 Not Found.</returns>
     [HttpGet("{id:guid}")]
+    [ActionName("GetItembyId")]
     public async Task<IActionResult> GetItembyId(Guid id, CancellationToken cancellationToken)
     {
         var result = await Mediator.Send(new GetItemByIdQuery { Id = id }, cancellationToken);
@@ -48,6 +50,7 @@ public class ItemController : AppController
     /// <param name="token"></param>
     /// <returns></returns>
     [HttpGet(template: "filtered")]
+    [ActionName("GetFilteredItem")]
     public async Task<IActionResult> GetFilteredItem([FromQuery] FilteredItemRequest? request, CancellationToken token)
     {
         var result = await Mediator.Send(request ?? new FilteredItemRequest());
@@ -78,6 +81,7 @@ public class ItemController : AppController
     /// <param name="token"></param>
     /// <returns></returns>
     [HttpPost(template: "iteminventory")]
+    [ActionName("CreateItemInventory")]
     public async Task<IActionResult> CreateItemInventory([FromBody] AddBranchInventoryCommand command, CancellationToken token)
     {
         var operationResult = await Mediator.Send(command, token);
@@ -94,6 +98,7 @@ public class ItemController : AppController
     /// <param name="token"></param>
     /// <returns></returns>
     [HttpPut(template: "iteminventory")]
+    [ActionName("AddBranchStock")]
     public async Task<IActionResult> AddBranchStock([FromBody] UpdateStockCommand command, CancellationToken token)
     {
         var operationResult = await Mediator.Send(command, token);
@@ -110,6 +115,7 @@ public class ItemController : AppController
     /// <param name="token"></param>
     /// <returns></returns>
     [HttpPut(template: "removeitembranchstock")]
+    [ActionName("RemoveBranchStock")]
     public async Task<IActionResult> RemoveBranchStock([FromBody] UpdateStockCommand command, CancellationToken token)
     {
         command.Quantity = -command.Quantity;
@@ -121,6 +127,7 @@ public class ItemController : AppController
     }
 
     [HttpGet("restaurants")]
+    [ActionName("RestaurantList")]
     public async Task<IActionResult> RestaurantList()
     {
         var result = await Mediator.Send(new RestaurantListQuery());

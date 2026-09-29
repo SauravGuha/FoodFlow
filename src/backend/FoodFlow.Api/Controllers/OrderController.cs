@@ -11,6 +11,7 @@ namespace FoodFlow.Api.Controllers;
 public class OrderController : AppController
 {
     [HttpPost]
+    [ActionName("CreateOrder")]
     public async Task<IActionResult> CreateOrder([FromBody] CreateOrderCommand createOrderCommand, CancellationToken cancellationToken)
     {
         var result = await this.Mediator.Send(createOrderCommand, cancellationToken);
@@ -18,6 +19,7 @@ public class OrderController : AppController
     }
 
     [HttpGet(template: "{id}")]
+    [ActionName("GetOrderDetails")]
     public async Task<IActionResult> GetOrderDetails(Guid id, CancellationToken cancellationToken)
     {
         var orderDetails = await Mediator.Send(new OrderRequest { Id = id }, cancellationToken);

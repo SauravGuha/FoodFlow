@@ -30,6 +30,7 @@ public class AppController : ControllerBase
     }
 
     [HttpHead]
+    [ActionName("EndpointActive")]
     public IActionResult EndpointActive()
     {
         return Ok();
