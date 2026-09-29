@@ -4,6 +4,8 @@ using FoodFlow.Application.Commands.CuisineCommands.CreateCuisine;
 using FoodFlow.Application.Commands.CuisineCommands.DeleteCuisine;
 using FoodFlow.Application.Commands.RestaurantCommands.UpdateRestaurant;
 using FoodFlow.Application.Commands.RestaurantCommands.UpdateRestaurantStatus;
+using FoodFlow.Application.Common;
+using FoodFlow.Application.DTOModels;
 using FoodFlow.Application.Queries.CuisineQueries;
 using FoodFlow.Application.Queries.RestaurantQueries;
 using FoodFlow.Application.Queries.RestaurantQueries.FilteredRestaurant;
@@ -24,6 +26,7 @@ public class RestaurantController : AppController
     /// <returns>Returns the created restaurant ID in the response.</returns>
     [HttpPost]
     [ActionName("CreateRestaurant")]
+    [ProducesResponseType(typeof(Result<Guid?>), 201)]
     public async Task<IActionResult> CreateRestaurant([FromBody] CreateRestaurantCommand command, CancellationToken cancellationToken)
     {
         var operationResult = await this.Mediator.Send(command, cancellationToken);
@@ -41,6 +44,7 @@ public class RestaurantController : AppController
     /// <returns>Returns the restaurant details if found, otherwise returns a 404 Not Found.</returns>
     [HttpGet("{id}")]
     [ActionName("GetRestaurantById")]
+    [ProducesResponseType(typeof(Result<RestaurantDto>), 200)]
     public async Task<IActionResult> GetRestaurantById(Guid id, CancellationToken cancellationToken)
     {
         var restaurantInfo = await Mediator.Send(new RestaurantRequest { Id = id }, cancellationToken);
@@ -54,6 +58,7 @@ public class RestaurantController : AppController
     /// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
     /// <returns>Returns the filtered list of restaurants or a 404 Not Found if no results are found.</returns>
     [HttpGet("filtered")]
+    [ProducesResponseType(typeof(Result<IEnumerable<RestaurantDto>>), 200)]
     [ActionName("GetFilteredRestaurants")]
     public async Task<IActionResult> GetFilteredRestaurants([FromQuery] FilteredRestaurantRequest? request)
     {
@@ -85,6 +90,7 @@ public class RestaurantController : AppController
     /// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
     /// <returns>Returns the updated restaurant ID in the response.</returns>
     [HttpPut]
+    [ProducesResponseType(typeof(Result<Guid>), 200)]
     [ActionName("UpdateRestaurant")]
     public async Task<IActionResult> UpdateRestaurant([FromBody] UpdateRestaurantCommand command, CancellationToken cancellationToken)
     {
@@ -103,6 +109,7 @@ public class RestaurantController : AppController
     /// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
     /// <returns>Returns the updated restaurant ID in the response.</returns>
     [HttpPatch]
+    [ProducesResponseType(typeof(Result<Guid>), 200)]
     [ActionName("UpdateRestaurantStatus")]
     public async Task<IActionResult> UpdateRestaurantStatus([FromBody] UpdateRestaurantStatusCommand updateRequest, CancellationToken cancellationToken)
     {
@@ -117,6 +124,7 @@ public class RestaurantController : AppController
     /// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
     /// <returns>Returns the created cuisine ID in the response.</returns>
     [HttpPost("cuisines")]
+    [ProducesResponseType(typeof(Result<Guid>), 201)]
     [ActionName("CreateCuisine")]
     public async Task<IActionResult> CreateCuisine([FromBody] CreateCuisineCommand command, CancellationToken cancellationToken)
     {
@@ -134,6 +142,7 @@ public class RestaurantController : AppController
     /// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
     /// <returns>Returns the list of cuisines for the restaurant, or a 404 Not Found if the restaurant doesn't exist.</returns>
     [HttpGet("{id}/cuisines")]
+    [ProducesResponseType(typeof(Result<IEnumerable<CuisineDto>>), 200)]
     [ActionName("GetRestaurantCuisines")]
     public async Task<IActionResult> GetRestaurantCuisines(Guid id, CancellationToken cancellationToken)
     {
@@ -149,6 +158,7 @@ public class RestaurantController : AppController
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     [HttpDelete(template: "{restaurantId}/cuisine/{id}")]
+    [ProducesResponseType(typeof(Result<bool>), 200)]
     [ActionName("DeleteRestaurantCuisine")]
     public async Task<IActionResult> DeleteRestaurantCuisine(Guid restaurantId, Guid id,
     CancellationToken cancellationToken)
@@ -165,6 +175,7 @@ public class RestaurantController : AppController
     /// <param name="token"></param>
     /// <returns></returns>
     [HttpGet("{id}/branches")]
+    [ProducesResponseType(typeof(Result<IEnumerable<BranchDto>>), 200)]
     [ActionName("GetRestaurantBranches")]
     public async Task<IActionResult> GetRestaurantBranches(Guid id, CancellationToken token)
     {

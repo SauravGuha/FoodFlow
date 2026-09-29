@@ -30,6 +30,7 @@ public class AppController : ControllerBase
     }
 
     [HttpHead]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ActionName("EndpointActive")]
     public IActionResult EndpointActive()
     {

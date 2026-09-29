@@ -20,6 +20,7 @@ public class BranchController : AppController
     /// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
     /// <returns>Returns the created branch ID in the response.</returns>
     [HttpPost]
+    [ProducesResponseType(typeof(FoodFlow.Application.Common.Result<Guid?>), 201)]
     [ActionName("CreateBranch")]
     public async Task<IActionResult> CreateBranch([FromBody] CreateBranchCommand command, CancellationToken cancellationToken)
     {
@@ -37,6 +38,7 @@ public class BranchController : AppController
     /// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
     /// <returns>Returns the branch details if found, otherwise returns a 404 Not Found.</returns>
     [HttpGet("{id}")]
+    [ProducesResponseType(typeof(FoodFlow.Application.Common.Result<FoodFlow.Application.DTOModels.BranchDto>), 200)]
     [ActionName("GetBranchById")]
     public async Task<IActionResult> GetBranchById(Guid id, CancellationToken cancellationToken)
     {
@@ -45,6 +47,7 @@ public class BranchController : AppController
     }
 
     [HttpPut]
+    [ProducesResponseType(typeof(FoodFlow.Application.Common.Result<Guid>), 200)]
     [ActionName("UpdateBranch")]
     public async Task<IActionResult> UpdateBranch([FromBody] UpdateBranchCommand updateBranchCommand, CancellationToken cancellationToken)
     {
@@ -59,6 +62,7 @@ public class BranchController : AppController
     /// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
     /// <returns>Returns the updated branch ID in the response.</returns>
     [HttpPatch]
+    [ProducesResponseType(typeof(FoodFlow.Application.Common.Result<Guid>), 200)]
     [ActionName("UpdateBranchStatus")]
     public async Task<IActionResult> UpdateBranchStatus([FromBody] UpdateBranchStatusCommand updateRequest, CancellationToken cancellationToken)
     {
@@ -72,6 +76,7 @@ public class BranchController : AppController
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpGet("{id}/inventory")]
+    [ProducesResponseType(typeof(FoodFlow.Application.Common.Result<IEnumerable<FoodFlow.Application.DTOModels.ItemBranchInventory>>), 200)]
     [ActionName("GetBranchInventory")]
     public async Task<IActionResult> GetBranchInventory(Guid id)
     {
@@ -86,6 +91,7 @@ public class BranchController : AppController
     /// <param name="quantity"></param>
     /// <returns></returns>
     [HttpGet("{id}/lowinventory/{quantity}")]
+    [ProducesResponseType(typeof(FoodFlow.Application.Common.Result<IEnumerable<FoodFlow.Application.DTOModels.ItemBranchInventory>>), 200)]
     [ActionName("GetBranchLowInventoryItem")]
     public async Task<IActionResult> GetBranchLowInventoryItem(Guid id, int quantity)
     {

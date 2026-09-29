@@ -19,6 +19,7 @@ public class ItemController : AppController
     /// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
     /// <returns>Returns the created item ID in the response.</returns>
     [HttpPost]
+    [ProducesResponseType(typeof(FoodFlow.Application.Common.Result<Guid?>), 201)]
     [ActionName("CreateItem")]
     public async Task<IActionResult> CreateItem([FromBody] CreateItemCommand command, CancellationToken cancellationToken)
     {
@@ -36,6 +37,7 @@ public class ItemController : AppController
     /// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
     /// <returns>Returns the item details if found, otherwise returns a 404 Not Found.</returns>
     [HttpGet("{id:guid}")]
+    [ProducesResponseType(typeof(FoodFlow.Application.Common.Result<FoodFlow.Application.DTOModels.ItemDto>), 200)]
     [ActionName("GetItembyId")]
     public async Task<IActionResult> GetItembyId(Guid id, CancellationToken cancellationToken)
     {
@@ -50,6 +52,7 @@ public class ItemController : AppController
     /// <param name="token"></param>
     /// <returns></returns>
     [HttpGet(template: "filtered")]
+    [ProducesResponseType(typeof(FoodFlow.Application.Common.Result<IEnumerable<FoodFlow.Application.DTOModels.ItemDto>>), 200)]
     [ActionName("GetFilteredItem")]
     public async Task<IActionResult> GetFilteredItem([FromQuery] FilteredItemRequest? request, CancellationToken token)
     {
@@ -81,6 +84,7 @@ public class ItemController : AppController
     /// <param name="token"></param>
     /// <returns></returns>
     [HttpPost(template: "iteminventory")]
+    [ProducesResponseType(typeof(FoodFlow.Application.Common.Result<Guid>), 201)]
     [ActionName("CreateItemInventory")]
     public async Task<IActionResult> CreateItemInventory([FromBody] AddBranchInventoryCommand command, CancellationToken token)
     {
@@ -98,6 +102,7 @@ public class ItemController : AppController
     /// <param name="token"></param>
     /// <returns></returns>
     [HttpPut(template: "iteminventory")]
+    [ProducesResponseType(typeof(FoodFlow.Application.Common.Result<MediatR.Unit>), 200)]
     [ActionName("AddBranchStock")]
     public async Task<IActionResult> AddBranchStock([FromBody] UpdateStockCommand command, CancellationToken token)
     {
@@ -115,6 +120,7 @@ public class ItemController : AppController
     /// <param name="token"></param>
     /// <returns></returns>
     [HttpPut(template: "removeitembranchstock")]
+    [ProducesResponseType(typeof(FoodFlow.Application.Common.Result<MediatR.Unit>), 200)]
     [ActionName("RemoveBranchStock")]
     public async Task<IActionResult> RemoveBranchStock([FromBody] UpdateStockCommand command, CancellationToken token)
     {
@@ -127,6 +133,7 @@ public class ItemController : AppController
     }
 
     [HttpGet("restaurants")]
+    [ProducesResponseType(typeof(FoodFlow.Application.Common.Result<IEnumerable<FoodFlow.Application.DTOModels.RestaurantListDto>>), 200)]
     [ActionName("RestaurantList")]
     public async Task<IActionResult> RestaurantList()
     {

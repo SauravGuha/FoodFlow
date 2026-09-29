@@ -11,6 +11,7 @@ namespace FoodFlow.Api.Controllers;
 public class OrderController : AppController
 {
     [HttpPost]
+    [ProducesResponseType(typeof(FoodFlow.Application.Common.Result<FoodFlow.Application.DTOModels.OrderDto>), 201)]
     [ActionName("CreateOrder")]
     public async Task<IActionResult> CreateOrder([FromBody] CreateOrderCommand createOrderCommand, CancellationToken cancellationToken)
     {
@@ -19,6 +20,7 @@ public class OrderController : AppController
     }
 
     [HttpGet(template: "{id}")]
+    [ProducesResponseType(typeof(FoodFlow.Application.Common.Result<FoodFlow.Application.DTOModels.OrderDto>), 200)]
     [ActionName("GetOrderDetails")]
     public async Task<IActionResult> GetOrderDetails(Guid id, CancellationToken cancellationToken)
     {

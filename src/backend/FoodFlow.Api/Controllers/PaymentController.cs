@@ -8,6 +8,7 @@ namespace FoodFlow.Api.Controllers;
 public class PaymentController : AppController
 {
     [HttpPost("verify")]
+    [ProducesResponseType(typeof(FoodFlow.Application.Common.Result<MediatR.Unit>), 200)]
     [ActionName("Verify")]
     public async Task<IActionResult> Verify([FromBody] PaymentVerificationCommand paymentVerification)
     {
